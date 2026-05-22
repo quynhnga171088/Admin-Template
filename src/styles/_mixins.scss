@@ -1,0 +1,84 @@
+@use 'variables' as *;
+
+// ─── Responsive Breakpoints ───────────────────────────────────────────────────
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: #{$breakpoint-sm}) { @content; }
+  } @else if $breakpoint == md {
+    @media (min-width: #{$breakpoint-md}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: #{$breakpoint-lg}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: #{$breakpoint-xl}) { @content; }
+  } @else if $breakpoint == 2xl {
+    @media (min-width: #{$breakpoint-2xl}) { @content; }
+  }
+}
+
+// ─── Flexbox Helpers ──────────────────────────────────────────────────────────
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// ─── Transitions ──────────────────────────────────────────────────────────────
+@mixin transition($properties: all, $duration: $transition-base) {
+  transition: $properties $duration;
+}
+
+// ─── Scrollbar ────────────────────────────────────────────────────────────────
+@mixin custom-scrollbar($width: 6px, $color: $color-gray-300) {
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $color;
+    border-radius: $border-radius-full;
+  }
+}
+
+// ─── Focus Ring ───────────────────────────────────────────────────────────────
+@mixin focus-ring($color: $color-primary) {
+  outline: 2px solid $color;
+  outline-offset: 2px;
+}
+
+// ─── Absolute Fill ────────────────────────────────────────────────────────────
+@mixin absolute-fill {
+  position: absolute;
+  inset: 0;
+}
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
+@mixin card($padding: $spacing-6) {
+  background-color: $color-white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  padding: $padding;
+}

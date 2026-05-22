@@ -1,0 +1,25 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.overview-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overview-avatar.text-info-500 {
+  background: $color-info;
+}
+
+.overview-avatar.text-success-500 {
+  background: $color-success;
+}
+
+.overview-avatar.text-warning-500 {
+  background: $color-warning;
+}
+
+

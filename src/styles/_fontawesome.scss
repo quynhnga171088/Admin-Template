@@ -1,0 +1,29 @@
+// ─── Font Awesome 6 Pro — Helper Mixins & Variables ──────────────────────────
+// CSS được load global qua index.html: /fontawesome/css/all.css
+//
+// Style weights:
+//   .fas / .fa-solid    → Solid    (900)
+//   .far / .fa-regular  → Regular  (400)
+//   .fal / .fa-light    → Light    (300)
+//   .fat / .fa-thin     → Thin     (100)
+//
+// Cách dùng trong JSX:
+//   <i className="fas fa-house" />
+//   <i className="far fa-bell" />
+//   <i className="fal fa-user" />
+
+// Mixin tạo icon bằng ::before / ::after (dùng trong SCSS)
+@mixin fa-icon($unicode, $weight: 900) {
+  font-family: 'Font Awesome 6 Pro', sans-serif;
+  font-style: normal;
+  font-weight: $weight;
+  content: $unicode;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Shorthand theo style
+@mixin fa-solid($unicode)   { @include fa-icon($unicode, 900); }
+@mixin fa-regular($unicode) { @include fa-icon($unicode, 400); }
+@mixin fa-light($unicode)   { @include fa-icon($unicode, 300); }
+@mixin fa-thin($unicode)    { @include fa-icon($unicode, 100); }

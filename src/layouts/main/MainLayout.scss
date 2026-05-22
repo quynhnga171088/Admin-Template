@@ -1,0 +1,34 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.layout {
+  min-height: 100vh;
+}
+
+@media (min-width: 64rem) {
+  :is(.pc-sidebar.pc-sidebar-hide ~ .pc-container, .pc-sidebar.pc-sidebar-hide ~ .pc-footer):where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+    margin-left: calc(var(--spacing) * 0);
+  }
+}
+@media (min-width: 64rem) {
+  .pc-container:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+    margin-left: var(--spacing-sidebar-width);
+  }
+}
+
+.pc-container {
+  position: relative;
+  top: var(--spacing-header-height);
+  min-height: calc(100vh - 146px);
+  transition-property: all;
+  --tw-duration: .2s;
+  transition-duration: .2s;
+  --tw-ease: var(--ease-in-out);
+  transition-timing-function: var(--ease-in-out);
+
+  .pc-content {
+    padding-inline: calc(var(--spacing) * 10);
+    padding-top: calc(var(--spacing) * 5);
+    padding-bottom: calc(var(--spacing) * 5);
+  }
+}

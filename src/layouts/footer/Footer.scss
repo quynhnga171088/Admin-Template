@@ -1,0 +1,23 @@
+@media (min-width: 64rem) {
+  .pc-footer:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+    margin-left: var(--spacing-sidebar-width);
+  }
+}
+
+.pc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  position: relative;
+  z-index: 995;
+  margin-top: calc(var(--spacing) * 16);
+  padding-block: 15px;
+  transition-property: all;
+  --tw-duration: .2s;
+  transition-duration: .2s;
+  --tw-ease: var(--ease-in-out);
+  transition-timing-function: var(--ease-in-out);
+
+  box-shadow: 4px 0 6px 0 rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,162 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'fontawesome' as *;
+@use 'controls/keyframes';
+@use 'controls/typography';
+@use 'controls/alerts';
+@use 'controls/badge';
+@use 'controls/breadcrumb';
+@use 'controls/buttons';
+@use 'controls/card';
+@use 'controls/dropdown';
+@use 'controls/modal';
+@use 'controls/forms';
+@use 'controls/table';
+
+@reference "./tailwind.css";
+
+@import 'simplebar-react/dist/simplebar.min.css';
+// ─── Base Reset & Defaults ────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #f4f7fa;
+  font-size: var(--text-base);
+  --tw-leading: var(--leading-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-theme-bodycolor);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+// ─── Scrollbar ────────────────────────────────────────────────────────────────
+html {
+  @include custom-scrollbar;
+}
+
+// ─── Utility Classes ──────────────────────────────────────────────────────────
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.container {
+  width: 100%;
+  @media (width >= 40rem) {
+    max-width: 40rem;
+  }
+  @media (width >= 48rem) {
+    max-width: 48rem;
+  }
+  @media (width >= 64rem) {
+    max-width: 64rem;
+  }
+  @media (width >= 80rem) {
+    max-width: 80rem;
+  }
+  @media (width >= 96rem) {
+    max-width: 96rem;
+  }
+}
+.m-0 {
+  margin: calc(var(--spacing) * 0);
+}
+.mx-2 {
+  margin-inline: calc(var(--spacing) * 2);
+}
+.mx-10 {
+  margin-inline: calc(var(--spacing) * 10);
+}
+.mx-auto {
+  margin-inline: auto;
+}
+.my-1 {
+  margin-block: calc(var(--spacing) * 1);
+}
+.my-3 {
+  margin-block: calc(var(--spacing) * 3);
+}
+.my-4 {
+  margin-block: calc(var(--spacing) * 4);
+}
+.my-5 {
+  margin-block: calc(var(--spacing) * 5);
+}
+.ms-3 {
+  margin-inline-start: calc(var(--spacing) * 3);
+}
+.ms-auto {
+  margin-inline-start: auto;
+}
+.me-0 {
+  margin-inline-end: calc(var(--spacing) * 0);
+}
+.me-2 {
+  margin-inline-end: calc(var(--spacing) * 2);
+}
+.me-3 {
+  margin-inline-end: calc(var(--spacing) * 3);
+}
+.me-auto {
+  margin-inline-end: auto;
+}

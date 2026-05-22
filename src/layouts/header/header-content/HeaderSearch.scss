@@ -1,0 +1,22 @@
+@keyframes slideDownFadeIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 300px;
+  }
+}
+
+.pc-header {
+  .header-search {
+    width: 300px;
+    animation: slideDownFadeIn 0.2s ease-out forwards;
+
+    .form-control {
+      border-radius: 23px;
+      height: 46px;
+      padding-left: 50px;
+      font-size: 1.125rem;
+    }
+  }
+}
