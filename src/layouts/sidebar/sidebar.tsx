@@ -47,7 +47,9 @@ const Sidebar = () => {
           <Link to={SCREENS_PATH.HOME} className="b-brand flex items-center gap-3">
             {user ?
               <Fragment>
-                <img src={user.avatarUrl} className="img-fluid logo logo-lg h-[50px]" alt="Avatar" />
+                <img src={user.avatarUrl || 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png'}
+                  className="img-fluid logo logo-lg h-[50px]" alt="Avatar"
+                />
                 <span className="text-white font-semibold">{user.fullName}</span>
               </Fragment>
               :
