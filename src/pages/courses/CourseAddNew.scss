@@ -181,7 +181,11 @@
 
   .can-textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 80px;
+  }
+
+  .can-textarea--tall {
+    min-height: 180px;
   }
 
   .can-error-msg {

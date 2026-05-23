@@ -62,6 +62,7 @@ export interface ICourseItem {
 export interface ICourseCreateRequest {
   title: string
   shortDescription?: string
+  fullDescription?: string
   thumbnailUrl?: string
   price: number
   status: ICourseStatus
