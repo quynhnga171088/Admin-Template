@@ -33,7 +33,7 @@ const CoursesList = () => {
   const pagination = coursesStore((state: ICoursesState) => state.pagination);
 
   useEffect(() => {
-    const params: Record<string, any> = new URLSearchParams(location.search);
+    const params: URLSearchParams = new URLSearchParams(location.search);
 
     const pagination: IPagination = getPagination(params);
 
@@ -117,7 +117,7 @@ const CoursesList = () => {
                   {course.createdAt ? dayjs(course.createdAt).format(DATE_TIME_FORMAT) : 'N/A'}
                 </div>
                 <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">
-                  {course.price}
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
                 </div>
                 <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">
                   <button className="btn btn-xs btn-light-warning btn-icon" type="button" title="Edit">
