@@ -61,6 +61,7 @@ const Pagination = ({ pagination }: PaginationProps) => {
     <div className="card-footer flex items-center justify-between">
       <div className="text-sm text-gray-500">
         Total: <span className="font-medium text-gray-700">{totalElements}</span> items
+        {'     '}Keyword: <span className="font-medium text-gray-700">{search}</span>
       </div>
       <div className="flex items-center gap-1">
         {/* Prev button */}

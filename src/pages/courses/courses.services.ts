@@ -3,7 +3,7 @@ import { coursesApi } from '@/lib/api/coursesApi.ts';
 import { queryKeys } from '@/lib/queryKeys.ts';
 import { modalStore } from '@/stores/modal.store.ts';
 import { coursesStore } from '@/stores/courses.store.ts';
-import type { IPagination } from '@/types/types.ts';
+import type { ICourseCreateRequest, IPagination } from '@/types/types.ts';
 
 export const getCourses = async (pagination: IPagination) => {
   const { setProcessing } = modalStore.getState();
@@ -33,5 +33,17 @@ export const getCourses = async (pagination: IPagination) => {
     });
   } finally {
     if (isStale) setProcessing(false);
+  }
+};
+
+export const createCourse = async (payload: ICourseCreateRequest) => {
+  const { setProcessing } = modalStore.getState();
+  setProcessing(true);
+  try {
+    const response = await coursesApi.createCourse(payload);
+    await queryClient.invalidateQueries({ queryKey: queryKeys.courses.all });
+    return response.data;
+  } finally {
+    setProcessing(false);
   }
 };

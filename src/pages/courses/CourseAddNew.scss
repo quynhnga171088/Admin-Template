@@ -1,0 +1,443 @@
+@use '@/styles/variables' as *;
+
+/* ─────────────────────────────────────────
+   Course Add New — Layout
+───────────────────────────────────────── */
+.course-add-new {
+  padding: 0.5rem 0;
+
+  /* ── Page Header ── */
+  .can-page-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .can-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    color: var(--color-theme-bodycolor, #6c757d);
+    margin-bottom: 0.75rem;
+  }
+
+  .can-breadcrumb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--primary-500, #1890ff);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.75; text-decoration: underline; }
+  }
+
+  .can-breadcrumb-sep {
+    font-size: 0.6rem;
+    opacity: 0.5;
+  }
+
+  .can-breadcrumb-current {
+    font-weight: 500;
+    color: var(--color-theme-headings);
+  }
+
+  .can-page-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .can-page-title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary-500, #1890ff), var(--primary-700, #096dd9));
+    color: #fff;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
+  }
+
+  h1.can-page-title-text {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-theme-headings);
+  }
+
+  /* ── Alert messages ── */
+  .can-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    animation: slideInDown 0.25s ease;
+  }
+
+  .can-alert-success {
+    background: rgba(82, 196, 26, 0.12);
+    border: 1px solid rgba(82, 196, 26, 0.35);
+    color: #389e0d;
+  }
+
+  .can-alert-error {
+    background: rgba(255, 77, 79, 0.10);
+    border: 1px solid rgba(255, 77, 79, 0.35);
+    color: #cf1322;
+  }
+
+  @keyframes slideInDown {
+    from { transform: translateY(-8px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* ── Two-column layout ── */
+  .can-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.25rem;
+    align-items: start;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .can-col-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .can-col-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* ── Card overrides ── */
+  .can-card {
+    margin-bottom: 0 !important;
+    border-radius: 12px !important;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 24px rgba(69, 90, 100, 0.13) !important;
+    }
+  }
+
+  .can-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem !important;
+    color: var(--color-theme-headings) !important;
+
+    i { color: var(--primary-500, #1890ff); font-size: 0.9rem; }
+  }
+
+  .can-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.25rem !important;
+  }
+
+  /* ── Form fields ── */
+  .can-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .can-label {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .can-required {
+    color: #ff4d4f;
+    margin-left: 2px;
+  }
+
+  .can-char-count {
+    font-size: 0.75rem;
+    color: #bec8d0;
+    text-align: right;
+    margin-top: -0.1rem;
+  }
+
+  .can-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .can-error-msg {
+    font-size: 0.78rem;
+    margin-top: 0;
+  }
+
+  /* ── Input group prefix ── */
+  .can-input-prefix {
+    background: var(--primary-500, #1890ff);
+    color: white;
+    border-color: var(--primary-500, #1890ff);
+    font-size: 0.9rem;
+    padding: 0 0.85rem;
+    border-radius: 6px 0 0 6px;
+  }
+
+  /* ── Price display ── */
+  .can-price-display {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--primary-500, #1890ff);
+    margin-top: 0.1rem;
+  }
+
+  .can-price-free {
+    font-size: 0.78rem;
+    color: #52c41a;
+    font-weight: 600;
+    margin-top: 0.1rem;
+  }
+
+  /* ── Status badge ── */
+  .can-status-preview {
+    margin-top: 0.4rem;
+  }
+
+  .can-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.3px;
+    transition: background 0.2s;
+  }
+
+  .can-status-badge--draft {
+    background: linear-gradient(135deg, var(--color-warning-600, #d48806), var(--color-warning-400, #ffc53d));
+  }
+
+  .can-status-badge--published {
+    background: linear-gradient(-135deg, #1de9b6, #1dc4e9);
+  }
+
+  .can-status-badge--archived {
+    background: linear-gradient(135deg, var(--primary-500, #1890ff), var(--primary-700, #096dd9));
+  }
+
+  /* ── Thumbnail ── */
+  .can-dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    border: 2px dashed var(--color-theme-border, #d9d9d9);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: transparent;
+
+    &:hover {
+      border-color: var(--primary-500, #1890ff);
+      background: rgba(24, 144, 255, 0.03);
+    }
+  }
+
+  .can-dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .can-dropzone-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(24,144,255,0.12), rgba(24,144,255,0.04));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary-500, #1890ff);
+    transition: transform 0.2s;
+
+    .can-dropzone:hover & { transform: scale(1.08); }
+  }
+
+  .can-dropzone-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .can-dropzone-primary {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-500, #1890ff);
+  }
+
+  .can-dropzone-secondary {
+    font-size: 0.75rem;
+    color: #bec8d0;
+  }
+
+  .can-thumbnail-preview-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .can-thumbnail-preview {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--color-theme-border, #d9d9d9);
+  }
+
+  .can-thumbnail-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+
+    &:hover { background: rgba(0,0,0,0.8); }
+  }
+
+  .can-change-thumbnail-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid var(--color-theme-border, #d9d9d9);
+    border-radius: 6px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    color: var(--color-theme-headings);
+    transition: border-color 0.2s, color 0.2s;
+
+    &:hover {
+      border-color: var(--primary-500, #1890ff);
+      color: var(--primary-500, #1890ff);
+    }
+  }
+
+  /* ── Summary card ── */
+  .can-summary-card {
+    .can-card-title i { color: #52c41a; }
+  }
+
+  .can-summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .can-summary-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed var(--color-theme-border, #f0f0f0);
+
+    &:last-child { border-bottom: none; padding-bottom: 0; }
+  }
+
+  .can-summary-label {
+    font-size: 0.78rem;
+    color: #8c8c8c;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .can-summary-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-theme-headings);
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60%;
+  }
+
+  .can-summary-empty {
+    font-style: italic;
+    color: #bec8d0;
+    font-weight: 400;
+  }
+
+  /* ── Action buttons ── */
+  .can-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .can-btn-submit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(24, 144, 255, 0.35);
+    }
+  }
+
+  .can-btn-cancel {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
+  }
+}

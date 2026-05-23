@@ -25,9 +25,23 @@ const mainFunctions = {
     {
       id: 'course-management',
       title: 'Course Management',
-      type: 'item',
+      type: 'collapse',
       icon: 'fa-regular fa-school',
-      url: SCREENS_PATH.COURSE_LIST
+      children: [
+        {
+          id: 'courses-list',
+          title: 'List of Courses',
+          type: 'item',
+          icon: 'fa-regular fa-clipboard-list',
+          url: SCREENS_PATH.COURSE_LIST
+        }, {
+          id: 'add-new-course',
+          title: 'New Course',
+          type: 'item',
+          icon: 'fa-regular fa-graduation-cap',
+          url: SCREENS_PATH.COURSE_ADD_NEW
+        }
+      ]
     }, {
       id: 'course-registration',
       title: 'Course Registration',

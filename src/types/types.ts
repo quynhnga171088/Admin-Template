@@ -59,6 +59,14 @@ export interface ICourseItem {
   enrollmentCount?: number
 }
 
+export interface ICourseCreateRequest {
+  title: string
+  shortDescription?: string
+  thumbnailUrl?: string
+  price: number
+  status: ICourseStatus
+}
+
 export interface ICoursesState {
   courses: ICourseItem[];
   courseDraft: ICourseItem | null;
