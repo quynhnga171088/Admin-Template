@@ -1,4 +1,4 @@
-import { useRef, type ChangeEvent } from 'react';
+import { useRef, type ChangeEvent, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@tanstack/react-form';
 
@@ -12,7 +12,7 @@ const CourseAddNew = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* ─── TanStack Form + Zod ─── */
+  /* TanStack Form + Zod */
   const form = useForm({
     defaultValues: initialCourseFormValues as CourseFormData,
     onSubmit: async ({ value }) => {
@@ -21,7 +21,7 @@ const CourseAddNew = () => {
     }
   });
 
-  /* ─── Helpers ─── */
+  /* Helpers */
   const validateField = (fieldName: keyof CourseFormData) =>
     ({ value }: { value: any }) => {
       const result = courseSchema.shape[fieldName].safeParse(value);
@@ -48,53 +48,28 @@ const CourseAddNew = () => {
 
   const handleCancel = () => navigate(SCREENS_PATH.COURSE_LIST);
 
-  /* ─── Render ─── */
   return (
     <div className="course-add-new">
-
-      {/* ── Page Header ── */}
-      <div className="can-page-header">
-        <div className="can-breadcrumb">
-          <button type="button" className="can-breadcrumb-link" onClick={handleCancel}>
-            <i className="fa-regular fa-list" />
-            Course List
-          </button>
-          <i className="fa-regular fa-chevron-right can-breadcrumb-sep" />
-          <span className="can-breadcrumb-current">Add New Course</span>
-        </div>
-        <div className="can-page-title">
-          <div className="can-page-title-icon">
-            <i className="fa-regular fa-graduation-cap" />
-          </div>
-          <h1 className="can-page-title-text">Add New Course</h1>
-        </div>
-      </div>
-
       <form
         id="course-add-form"
         noValidate
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          form.handleSubmit().catch(() => {});
+          form.handleSubmit().catch(() => {
+          });
         }}
       >
         <div className="can-layout">
-
-          {/* ── Left column: Main info ── */}
           <div className="can-col-main">
-
-            {/* Basic Info Card */}
             <div className="card can-card">
               <div className="card-header">
-                <div className="card-header-title can-card-title">
-                  <i className="fa-regular fa-book-open" />
+                <div className="card-header-title">
+                  <i className="fa-regular fa-book-open mr-2!" />
                   Basic Information
                 </div>
               </div>
               <div className="card-body can-card-body">
-
-                {/* Course Title */}
                 <form.Field
                   name="title"
                   validators={{ onChange: validateField('title') }}
@@ -114,11 +89,7 @@ const CourseAddNew = () => {
                         onBlur={field.handleBlur}
                         maxLength={200}
                       />
-                      {field.state.meta.errors.length > 0 && (
-                        <span className="error-message can-error-msg">
-                          {field.state.meta.errors.join(', ')}
-                        </span>
-                      )}
+                      {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <span className="can-char-count">{field.state.value.length}/200</span>
                     </div>
                   )}
@@ -131,7 +102,7 @@ const CourseAddNew = () => {
                   children={field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
-                        Short Description
+                        Short Description <span className="can-required">*</span>
                       </label>
                       <textarea
                         id={field.name}
@@ -144,11 +115,7 @@ const CourseAddNew = () => {
                         maxLength={500}
                         rows={3}
                       />
-                      {field.state.meta.errors.length > 0 && (
-                        <span className="error-message can-error-msg">
-                          {field.state.meta.errors.join(', ')}
-                        </span>
-                      )}
+                      {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <span className="can-char-count">{(field.state.value ?? '').length}/500</span>
                     </div>
                   )}
@@ -156,12 +123,12 @@ const CourseAddNew = () => {
 
                 {/* Full Description */}
                 <form.Field
-                  name="fullDescription"
-                  validators={{ onChange: validateField('fullDescription') }}
+                  name="description"
+                  validators={{ onChange: validateField('description') }}
                   children={field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
-                        Full Description
+                        Full Description <span className="can-required">*</span>
                       </label>
                       <textarea
                         id={field.name}
@@ -174,24 +141,19 @@ const CourseAddNew = () => {
                         maxLength={5000}
                         rows={8}
                       />
-                      {field.state.meta.errors.length > 0 && (
-                        <span className="error-message can-error-msg">
-                          {field.state.meta.errors.join(', ')}
-                        </span>
-                      )}
+                      {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <span className="can-char-count">{(field.state.value ?? '').length}/5000</span>
                     </div>
                   )}
                 />
-
               </div>
             </div>
 
             {/* Thumbnail Card */}
             <div className="card can-card">
               <div className="card-header">
-                <div className="card-header-title can-card-title">
-                  <i className="fa-regular fa-image" />
+                <div className="card-header-title">
+                  <i className="fa-regular fa-image mr-2!" />
                   Course Thumbnail
                 </div>
               </div>
@@ -199,20 +161,11 @@ const CourseAddNew = () => {
                 <form.Field
                   name="thumbnailUrl"
                   children={field => (
-                    <>
+                    <Fragment>
                       {field.state.value ? (
                         <div className="can-thumbnail-preview-wrapper">
-                          <img
-                            src={field.state.value}
-                            alt="Thumbnail preview"
-                            className="can-thumbnail-preview"
-                          />
-                          <button
-                            type="button"
-                            className="can-thumbnail-remove"
-                            onClick={() => handleRemoveThumbnail(field.handleChange)}
-                            title="Remove image"
-                          >
+                          <img src={field.state.value} alt="Thumbnail preview" className="can-thumbnail-preview" />
+                          <button type="button" className="can-thumbnail-remove" onClick={() => handleRemoveThumbnail(field.handleChange)} title="Remove image">
                             <i className="fa-regular fa-xmark" />
                           </button>
                         </div>
@@ -239,36 +192,25 @@ const CourseAddNew = () => {
                         style={{ display: 'none' }}
                       />
                       {field.state.value && (
-                        <button
-                          type="button"
-                          className="can-change-thumbnail-btn"
-                          onClick={() => fileInputRef.current?.click()}
-                        >
+                        <button type="button" className="can-change-thumbnail-btn" onClick={() => fileInputRef.current?.click()}>
                           <i className="fa-regular fa-arrows-rotate" /> Change Image
                         </button>
                       )}
-                    </>
+                    </Fragment>
                   )}
                 />
               </div>
             </div>
-
           </div>
-
-          {/* ── Right column: Settings ── */}
           <div className="can-col-side">
-
-            {/* Status & Price Card */}
             <div className="card can-card">
               <div className="card-header">
                 <div className="card-header-title can-card-title">
-                  <i className="fa-regular fa-gear" />
+                  <i className="fa-regular fa-gear mr-2!" />
                   Course Settings
                 </div>
               </div>
               <div className="card-body can-card-body">
-
-                {/* Status */}
                 <form.Field
                   name="status"
                   validators={{ onChange: validateField('status') }}
@@ -282,18 +224,14 @@ const CourseAddNew = () => {
                         name={field.name}
                         className={`form-select ${field.state.meta.errors.length ? 'error' : ''}`}
                         value={field.state.value}
-                        onChange={e => field.handleChange(e.target.value)}
+                        onChange={e => field.handleChange(e.target.value as ICourseStatus)}
                         onBlur={field.handleBlur}
                       >
                         <option value={STATE.DRAFT}>📝 Draft</option>
                         <option value={STATE.PUBLISHED}>✅ Published</option>
                         <option value={STATE.ARCHIVED}>📦 Archived</option>
                       </select>
-                      {field.state.meta.errors.length > 0 && (
-                        <span className="error-message can-error-msg">
-                          {field.state.meta.errors.join(', ')}
-                        </span>
-                      )}
+                      {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <div className="can-status-preview">
                         <span className={`can-status-badge can-status-badge--${(field.state.value as ICourseStatus).toLowerCase()}`}>
                           {field.state.value === STATE.DRAFT && 'Draft'}
@@ -331,23 +269,19 @@ const CourseAddNew = () => {
                           step={1000}
                         />
                       </div>
-                      {field.state.meta.errors.length > 0 && (
-                        <span className="error-message can-error-msg">
-                          {field.state.meta.errors.join(', ')}
-                        </span>
-                      )}
+                      {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       {field.state.value > 0 && (
                         <span className="can-price-display">
-                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(field.state.value)}
+                          {new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                          }).format(field.state.value)}
                         </span>
                       )}
-                      {field.state.value === 0 && (
-                        <span className="can-price-free">Free course</span>
-                      )}
+                      {field.state.value === 0 && <span className="can-price-free">Free course</span>}
                     </div>
                   )}
                 />
-
               </div>
             </div>
 
@@ -363,7 +297,7 @@ const CourseAddNew = () => {
                 <div className="card can-card can-summary-card">
                   <div className="card-header">
                     <div className="card-header-title can-card-title">
-                      <i className="fa-regular fa-clipboard-list" />
+                      <i className="fa-regular fa-clipboard-list mr-2!" />
                       Summary
                     </div>
                   </div>
@@ -371,9 +305,7 @@ const CourseAddNew = () => {
                     <ul className="can-summary-list">
                       <li className="can-summary-item">
                         <span className="can-summary-label">Title</span>
-                        <span className="can-summary-value">
-                          {title.trim() || <em className="can-summary-empty">Not entered</em>}
-                        </span>
+                        <span className="can-summary-value">{title.trim() || <em className="can-summary-empty">Not entered</em>}</span>
                       </li>
                       <li className="can-summary-item">
                         <span className="can-summary-label">Status</span>
@@ -387,50 +319,59 @@ const CourseAddNew = () => {
                         <span className="can-summary-label">Price</span>
                         <span className="can-summary-value">
                           {price > 0
-                            ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+                            ? new Intl.NumberFormat('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND'
+                            }).format(price)
                             : 'Free'}
                         </span>
                       </li>
                       <li className="can-summary-item">
                         <span className="can-summary-label">Thumbnail</span>
-                        <span className="can-summary-value">
-                          {thumbnailUrl ? '✔ Selected' : <em className="can-summary-empty">Not selected</em>}
-                        </span>
+                        <span className="can-summary-value">{thumbnailUrl ? '✔ Selected' : <em className="can-summary-empty">Not selected</em>}</span>
                       </li>
                     </ul>
                   </div>
                 </div>
               )}
             />
-
-            {/* Action Buttons */}
-            <form.Subscribe
-              selector={state => ({ canSubmit: state.canSubmit, isSubmitting: state.isSubmitting })}
-              children={({ canSubmit, isSubmitting }) => (
-                <div className="can-actions">
-                  <button
-                    type="submit"
-                    form="course-add-form"
-                    className="btn btn-primary can-btn-submit"
-                    disabled={!canSubmit || isSubmitting}
-                  >
-                    {isSubmitting
-                      ? <><i className="fa-regular fa-spinner-third fa-spin" /> Saving...</>
-                      : <><i className="fa-regular fa-floppy-disk" /> Save Course</>
-                    }
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-light can-btn-cancel"
-                    onClick={handleCancel}
-                    disabled={isSubmitting}
-                  >
-                    <i className="fa-regular fa-xmark" /> Cancel
-                  </button>
+          </div>
+        </div>
+        <div className="can-layout mt-[1.25rem]!">
+          <div className="can-col-main">
+            <div className="card can-card">
+              <div className="card-body can-card-body">
+                <div className="can-field">
+                  <form.Subscribe
+                    selector={state => ({
+                      canSubmit: state.canSubmit,
+                      isSubmitting: state.isSubmitting
+                    })}
+                    children={({ canSubmit, isSubmitting }) => (
+                      <div className="can-layout-action">
+                        <button type="button" className="btn btn-light can-btn-cancel " onClick={handleCancel} disabled={isSubmitting}>
+                          <i className="fa-regular fa-xmark" /> Cancel
+                        </button>
+                        <button type="button" className="btn btn-warning can-btn-draft" onClick={handleCancel} disabled={isSubmitting}>
+                          <i className="fa-regular fa-floppy-disk" /> Draft
+                        </button>
+                        <button type="submit" form="course-add-form" className="btn btn-primary can-btn-submit" disabled={!canSubmit || isSubmitting}>
+                          {isSubmitting ? (
+                            <span>
+                              <i className="fa-regular fa-spinner-third fa-spin" /> Saving...
+                            </span>
+                          ) : (
+                            <span>
+                              <i className="fa-regular fa-floppy-disk" /> Save Course
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  />
                 </div>
-              )}
-            />
-
+              </div>
+            </div>
           </div>
         </div>
       </form>

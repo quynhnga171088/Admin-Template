@@ -36,7 +36,7 @@ const mainFunctions = {
           url: SCREENS_PATH.COURSE_LIST
         }, {
           id: 'add-new-course',
-          title: 'New Course',
+          title: 'Add New Course',
           type: 'item',
           icon: 'fa-regular fa-graduation-cap',
           url: SCREENS_PATH.COURSE_ADD_NEW

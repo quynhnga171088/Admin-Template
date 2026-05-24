@@ -1,76 +1,7 @@
 @use '@/styles/variables' as *;
 
-/* ─────────────────────────────────────────
-   Course Add New — Layout
-───────────────────────────────────────── */
 .course-add-new {
   padding: 0.5rem 0;
-
-  /* ── Page Header ── */
-  .can-page-header {
-    margin-bottom: 1.5rem;
-  }
-
-  .can-breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8125rem;
-    color: var(--color-theme-bodycolor, #6c757d);
-    margin-bottom: 0.75rem;
-  }
-
-  .can-breadcrumb-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--primary-500, #1890ff);
-    font-size: 0.8125rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-
-    &:hover { opacity: 0.75; text-decoration: underline; }
-  }
-
-  .can-breadcrumb-sep {
-    font-size: 0.6rem;
-    opacity: 0.5;
-  }
-
-  .can-breadcrumb-current {
-    font-weight: 500;
-    color: var(--color-theme-headings);
-  }
-
-  .can-page-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .can-page-title-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--primary-500, #1890ff), var(--primary-700, #096dd9));
-    color: #fff;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
-  }
-
-  h1.can-page-title-text {
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin: 0;
-    color: var(--color-theme-headings);
-  }
 
   /* ── Alert messages ── */
   .can-alert {
@@ -135,16 +66,6 @@
     &:hover {
       box-shadow: 0 4px 24px rgba(69, 90, 100, 0.13) !important;
     }
-  }
-
-  .can-card-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9375rem !important;
-    color: var(--color-theme-headings) !important;
-
-    i { color: var(--primary-500, #1890ff); font-size: 0.9rem; }
   }
 
   .can-card-body {
@@ -362,10 +283,6 @@
   }
 
   /* ── Summary card ── */
-  .can-summary-card {
-    .can-card-title i { color: #52c41a; }
-  }
-
   .can-summary-list {
     list-style: none;
     margin: 0;
@@ -418,13 +335,12 @@
   }
 
   .can-btn-submit {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.45rem;
     font-weight: 600;
-    padding: 0.65rem 1rem;
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
     border-radius: 8px;
     transition: all 0.2s;
@@ -435,8 +351,8 @@
     }
   }
 
-  .can-btn-cancel {
-    width: 100%;
+  .can-btn-draft {
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -444,4 +360,39 @@
     font-size: 0.875rem;
     border-radius: 8px;
   }
+
+  .can-btn-cancel {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
+  }
+
+  @media screen and (max-width: 499px){
+    .can-layout-action {
+      .can-btn-draft,
+      .can-btn-submit {
+        margin-top: 5px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  @media screen and (min-width: 500px){
+    .can-layout-action {
+      display: flex;
+      justify-content: end;
+
+      .can-btn-draft,
+      .can-btn-submit {
+        margin-left: 5px;
+      }
+    }
+  }
+
 }

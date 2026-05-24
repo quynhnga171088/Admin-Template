@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { STATE } from '@/config/constant';
-import type { ICourseCreateRequest } from '@/types/types';
+import type { ICourseCreateRequest, ICourseStatus } from '@/types/types';
 
 export const initialCourseFormValues: ICourseCreateRequest = {
   title: '',
@@ -19,19 +19,20 @@ export const courseSchema = z.object({
     .max(200, 'Course title must not exceed 200 characters.'),
   shortDescription: z
     .string()
-    .max(500, 'Short description must not exceed 500 characters.')
-    .optional(),
-  fullDescription: z
+    .trim()
+    .min(1, 'Short description is required.')
+    .max(500, 'Short description must not exceed 500 characters.'),
+  description: z
     .string()
-    .max(5000, 'Full description must not exceed 5000 characters.')
-    .optional(),
-  thumbnailUrl: z.string().optional(),
+    .trim()
+    .max(5000, 'Description must not exceed 5000 characters.'),
+  thumbnailUrl: z.string(),
   price: z
-    .number({ invalid_type_error: 'Price must be a number.' })
+    .coerce.number({ error: 'Price must be a number.' })
     .min(0, 'Price cannot be negative.'),
   status: z.enum(
-    [STATE.DRAFT, STATE.PUBLISHED, STATE.ARCHIVED] as [string, ...string[]],
-    { errorMap: () => ({ message: 'Invalid status value.' }) }
+    [STATE.DRAFT, STATE.PUBLISHED, STATE.ARCHIVED] as [ICourseStatus, ...ICourseStatus[]],
+    { error: 'Invalid status value.' }
   )
 });
 
