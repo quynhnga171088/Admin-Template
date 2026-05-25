@@ -5,7 +5,7 @@ import type { ICourseCreateRequest, ICourseStatus } from '@/types/types';
 export const initialCourseFormValues: ICourseCreateRequest = {
   title: '',
   shortDescription: '',
-  fullDescription: '',
+  description: '',
   thumbnailUrl: '',
   price: 0,
   status: 'DRAFT'

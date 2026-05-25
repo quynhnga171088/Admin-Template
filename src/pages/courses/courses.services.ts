@@ -36,6 +36,11 @@ export const getCourses = async (pagination: IPagination) => {
   }
 };
 
+export const uploadImage = async (file: File) => {
+  const response = await coursesApi.uploadImg(file);
+  return response.data.fileUrl || '';
+};
+
 export const createCourse = async (payload: ICourseCreateRequest) => {
   const { setProcessing } = modalStore.getState();
   setProcessing(true);

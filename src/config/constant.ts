@@ -44,9 +44,10 @@ export const FAVICON = favicon;
 
 export const API_URL = {
   LOGIN: '/auth/login',
-  GET_COURSES_LIST: '/courses',
+  GET_COURSES_LIST_OR_CREATE: '/courses',
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
-  ADMIN_REPORT_STUDENT: '/admin/reports/students/'
+  ADMIN_REPORT_STUDENT: '/admin/reports/students/',
+  UPLOAD_IMAGE: '/upload/image'
 };
 

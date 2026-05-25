@@ -2,6 +2,14 @@ export type IRole = 'TEACHER' | 'ADMIN';
 
 export type ICourseStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
+export interface IUploadResponse {
+  fileKey: string
+  fileUrl: string
+  fileName: string
+  contentType: string
+  size: number
+}
+
 export interface ITeacherCourse {
   id: number;
   fullName: string;
@@ -62,7 +70,7 @@ export interface ICourseItem {
 export interface ICourseCreateRequest {
   title: string
   shortDescription?: string
-  fullDescription?: string
+  description?: string
   thumbnailUrl?: string
   price: number
   status: ICourseStatus

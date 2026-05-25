@@ -2,7 +2,7 @@ import { useRef, type ChangeEvent, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@tanstack/react-form';
 
-import { createCourse } from './courses.services.ts';
+import { createCourse, uploadImage } from './courses.services.ts';
 import { courseSchema, initialCourseFormValues, type CourseFormData } from '@/pages/courses/course.schema.ts';
 import type { ICourseStatus } from '@/types/types.ts';
 import { SCREENS_PATH, STATE } from '@/config/constant';
@@ -16,7 +16,20 @@ const CourseAddNew = () => {
   const form = useForm({
     defaultValues: initialCourseFormValues as CourseFormData,
     onSubmit: async ({ value }) => {
-      await createCourse(value);
+
+      /* get File to post to server */
+      const file = fileInputRef.current?.files?.[0];
+      let thumbnailUrl: string;
+      if (file) {
+        thumbnailUrl = await uploadImage(file);
+      } else {
+        thumbnailUrl = '';
+      }
+
+      await createCourse({
+        ...value,
+        thumbnailUrl
+      });
       navigate(SCREENS_PATH.COURSE_LIST);
     }
   });
@@ -31,10 +44,7 @@ const CourseAddNew = () => {
       return undefined;
     };
 
-  const handleThumbnailChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    onChange: (url: string) => void
-  ) => {
+  const handleThumbnailChange = (e: ChangeEvent<HTMLInputElement>, onChange: (url: string) => void) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const objectUrl = URL.createObjectURL(file);
@@ -56,8 +66,7 @@ const CourseAddNew = () => {
         onSubmit={e => {
           e.preventDefault();
           e.stopPropagation();
-          form.handleSubmit().catch(() => {
-          });
+          form.handleSubmit().catch(() => {});
         }}
       >
         <div className="can-layout">
