@@ -1,0 +1,403 @@
+// ─── Page Layout ──────────────────────────────────────────────────────────────
+
+.ccp-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.ccp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1rem;
+  color: var(--color-muted, #6c757d);
+}
+
+// ─── Header Card ──────────────────────────────────────────────────────────────
+
+.ccp-header-card {
+  margin-bottom: 0;
+}
+
+.ccp-header-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ccp-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.ccp-back-btn {
+  gap: 0.35rem;
+}
+
+.ccp-breadcrumb-sep {
+  font-size: 0.7rem;
+  color: var(--color-muted, #6c757d);
+}
+
+.ccp-breadcrumb-title {
+  color: var(--color-muted, #6c757d);
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ccp-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.ccp-page-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// ─── Empty State ──────────────────────────────────────────────────────────────
+
+.ccp-empty {
+  .ccp-empty-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 3rem 1rem;
+  }
+
+  .ccp-empty-icon {
+    font-size: 3rem;
+    color: var(--color-muted, #6c757d);
+    opacity: 0.4;
+  }
+
+  .ccp-empty-text {
+    margin: 0;
+    color: var(--color-muted, #6c757d);
+  }
+}
+
+// ─── Chapters ─────────────────────────────────────────────────────────────────
+
+.ccp-chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ccp-chapter-card {
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.ccp-chapter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    background: var(--color-bg-hover, rgba(0, 0, 0, 0.02));
+  }
+}
+
+.ccp-chapter-left {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.ccp-chevron {
+  font-size: 0.75rem;
+  color: var(--color-muted, #6c757d);
+  transition: transform 0.2s;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.ccp-chapter-index {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary, #4680ff);
+  background: rgba(70, 128, 255, 0.1);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ccp-chapter-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ccp-lesson-count {
+  font-size: 0.78rem;
+  color: var(--color-muted, #6c757d);
+  flex-shrink: 0;
+  background: var(--color-bg-secondary, #f3f3f3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
+
+.ccp-chapter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+}
+
+.ccp-order-btn {
+  padding: 0.2rem 0.4rem !important;
+  line-height: 1;
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+
+// ─── Lessons ──────────────────────────────────────────────────────────────────
+
+.ccp-lessons {
+  border-top: 1px solid var(--color-border, #e9ecef);
+  padding: 0.5rem 0;
+}
+
+.ccp-lessons-empty {
+  padding: 0.75rem 1.75rem;
+  font-size: 0.85rem;
+  color: var(--color-muted, #6c757d);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ccp-lesson-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.25rem 0.5rem 2.25rem;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--color-bg-hover, rgba(0, 0, 0, 0.02));
+  }
+}
+
+.ccp-lesson-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.ccp-lesson-type-icon {
+  font-size: 0.85rem;
+  color: var(--color-muted, #6c757d);
+  flex-shrink: 0;
+}
+
+.ccp-lesson-index {
+  font-size: 0.8rem;
+  color: var(--color-muted, #6c757d);
+  flex-shrink: 0;
+  min-width: 20px;
+}
+
+.ccp-lesson-title {
+  font-size: 0.88rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ccp-lesson-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 8px;
+  flex-shrink: 0;
+
+  &--published {
+    background: rgba(23, 198, 83, 0.12);
+    color: #17c653;
+  }
+
+  &--draft {
+    background: rgba(240, 173, 78, 0.12);
+    color: #f0ad4e;
+  }
+}
+
+.ccp-lesson-type-badge {
+  font-size: 0.7rem;
+  color: var(--color-muted, #6c757d);
+  flex-shrink: 0;
+  border: 1px solid var(--color-border, #e9ecef);
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+}
+
+.ccp-lesson-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.ccp-add-lesson-row {
+  padding: 0.5rem 1.25rem 0.375rem 2.25rem;
+}
+
+.ccp-add-lesson-btn {
+  font-size: 0.82rem;
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+
+.ccp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+  animation: ccp-fade-in 0.15s ease;
+}
+
+.ccp-modal {
+  background: var(--color-bg-card, #fff);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: ccp-slide-up 0.2s ease;
+  overflow: hidden;
+
+  &--wide {
+    max-width: 640px;
+  }
+}
+
+.ccp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-border, #e9ecef);
+}
+
+.ccp-modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ccp-modal-close {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  color: var(--color-muted, #6c757d);
+  border-radius: 6px;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--color-bg-hover, rgba(0, 0, 0, 0.05));
+  }
+}
+
+.ccp-modal-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.ccp-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border, #e9ecef);
+}
+
+.ccp-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.ccp-upload-hint {
+  font-size: 0.82rem;
+  color: var(--color-muted, #6c757d);
+  background: var(--color-bg-secondary, #f8f9fa);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--color-primary, #4680ff);
+
+  code {
+    background: rgba(70, 128, 255, 0.1);
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+}
+
+// ─── Animations ───────────────────────────────────────────────────────────────
+
+@keyframes ccp-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ccp-slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}

@@ -26,6 +26,9 @@ const router = createBrowserRouter([
       }, {
         path: 'courses/:id/edit',
         lazy: () => import('@/pages/courses/CourseEditPage')
+      }, {
+        path: 'courses/:id/chapters',
+        lazy: () => import('@/pages/courses/CourseChaptersPage')
       }
     ]
   }, {

@@ -5,6 +5,7 @@ export const SCREENS_PATH = {
   COURSE_LIST: '/courses',
   COURSE_ADD_NEW: '/courses/add',
   COURSE_EDIT: (id: number | string) => `/courses/${id}/edit`,
+  COURSE_CHAPTERS: (id: number | string) => `/courses/${id}/chapters`,
   COURSE_REGISTRATION: '/course-registration',
   TYPOGRAPHY: '/typography',
   FORGOT_PASSWORD: '/forgot-password',
@@ -52,6 +53,28 @@ export const API_URL = {
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
-  UPLOAD_IMAGE: '/upload/image'
+  UPLOAD_IMAGE: '/upload/image',
+
+  // ─── Chapters ────────────────────────────────────────────────────────────
+  CHAPTERS: (courseId: number | string) =>
+    `/courses/${courseId}/chapters`,
+  CHAPTER: (courseId: number | string, chapterId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}`,
+  REORDER_CHAPTERS: (courseId: number | string) =>
+    `/courses/${courseId}/chapters/reorder`,
+
+  // ─── Lessons ─────────────────────────────────────────────────────────────
+  LESSONS: (courseId: number | string, chapterId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons`,
+  LESSON: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}`,
+  REORDER_LESSONS: (courseId: number | string, chapterId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/reorder`,
+
+  // ─── Attachments ─────────────────────────────────────────────────────────
+  ATTACHMENTS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments`,
+  ATTACHMENT: (courseId: number | string, chapterId: number | string, lessonId: number | string, attachmentId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments/${attachmentId}`,
 };
 

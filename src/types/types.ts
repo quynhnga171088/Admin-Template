@@ -82,6 +82,88 @@ export interface ICourseCreateRequest {
 
 export type ICourseUpdateRequest = Partial<ICourseCreateRequest>
 
+// ─── Lesson ───────────────────────────────────────────────────────────────────
+
+export type ILessonStatus = 'DRAFT' | 'PUBLISHED';
+export type ILessonType = 'VIDEO' | 'TEXT';
+export type IVideoSourceType = 'UPLOAD' | 'YOUTUBE' | 'VIMEO' | 'DRIVE';
+
+export interface ILesson {
+  id: number;
+  chapterId: number;
+  title: string;
+  description?: string;
+  orderIndex: number;
+  type: ILessonType;
+  status: ILessonStatus;
+  // Full fields (null for unauthenticated/unenrolled)
+  textContent?: string;
+  videoSourceType?: IVideoSourceType;
+  videoUrl?: string;
+  videoFileKey?: string;
+  videoDurationSeconds?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ILessonDetail extends ILesson {
+  attachments: IAttachment[];
+}
+
+export interface IAttachment {
+  id: number;
+  lessonId: number;
+  fileName: string;
+  fileKey: string;
+  fileUrl: string;
+  fileType: string;
+  fileSizeBytes: number;
+  orderIndex: number;
+  createdAt: string;
+}
+
+export interface ICreateLessonRequest {
+  title: string;
+  description?: string;
+  type: ILessonType;
+  status?: ILessonStatus;
+  textContent?: string;
+  videoSourceType?: IVideoSourceType;
+  videoUrl?: string;
+  videoFileKey?: string;
+  videoDurationSeconds?: number;
+}
+
+export type IUpdateLessonRequest = Partial<ICreateLessonRequest>;
+
+// ─── Chapter ──────────────────────────────────────────────────────────────────
+
+export interface IChapter {
+  id: number;
+  courseId: number;
+  title: string;
+  orderIndex: number;
+  lessons: ILesson[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ICreateChapterRequest {
+  title: string;
+}
+
+export interface IUpdateChapterRequest {
+  title?: string;
+}
+
+export interface IReorderChaptersRequest {
+  items: { chapterId: number; orderIndex: number }[];
+}
+
+export interface IReorderLessonsRequest {
+  items: { lessonId: number; orderIndex: number }[];
+}
+
 export interface ICoursesState {
   courses: ICourseItem[];
   courseDraft: ICourseItem | null;

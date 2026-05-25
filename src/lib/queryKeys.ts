@@ -23,5 +23,18 @@ export const queryKeys = {
     all: ['courses'] as const,
     list: (pagination: IPagination) => [ ...queryKeys.courses.all, 'list', pagination] as const,
     detail: (id: number | string) => [ ...queryKeys.courses.all, 'detail', id] as const
-  }
+  },
+  chapters: {
+    all: ['chapters'] as const,
+    /** All chapters of a course (with nested lessons) */
+    byCourse: (courseId: number | string) =>
+      [...queryKeys.chapters.all, 'course', courseId] as const,
+    detail: (courseId: number | string, chapterId: number | string) =>
+      [...queryKeys.chapters.all, 'course', courseId, 'chapter', chapterId] as const,
+  },
+  lessons: {
+    all: ['lessons'] as const,
+    detail: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+      [...queryKeys.lessons.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const,
+  },
 } as const;
