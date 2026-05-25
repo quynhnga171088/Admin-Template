@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { chaptersApi, lessonsApi } from '@/lib/api/chaptersApi.ts';
 import { getCourseDetail } from '@/pages/courses/courses.services.ts';
@@ -10,14 +10,11 @@ import type {
   ILessonType,
   ILessonStatus,
   IVideoSourceType,
+  ILessonModalState,
+  IChapterModalState
 } from '@/types/types.ts';
 import { SCREENS_PATH } from '@/config/constant.ts';
 import './CourseChaptersPage.scss';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type ChapterModalState = { open: false } | { open: true; mode: 'create' } | { open: true; mode: 'edit'; chapter: IChapter };
-type LessonModalState = { open: false } | { open: true; mode: 'create'; chapterId: number } | { open: true; mode: 'edit'; chapterId: number; lesson: ILesson };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -31,11 +28,11 @@ const CourseChaptersPage = () => {
   const [loading, setLoading] = useState(true);
   const [expandedChapters, setExpandedChapters] = useState<Set<number>>(new Set());
 
-  // Modal states
-  const [chapterModal, setChapterModal] = useState<ChapterModalState>({ open: false });
-  const [lessonModal, setLessonModal] = useState<LessonModalState>({ open: false });
+  /* Modal states */
+  const [chapterModal, setChapterModal] = useState<IChapterModalState>({ open: false });
+  const [lessonModal, setLessonModal] = useState<ILessonModalState>({ open: false });
 
-  // Form states
+  /* Form states */
   const [chapterTitle, setChapterTitle] = useState('');
   const [chapterDescription, setChapterDescription] = useState('');
   const [chapterAvatarUrl, setChapterAvatarUrl] = useState('');
@@ -46,21 +43,21 @@ const CourseChaptersPage = () => {
     description: '',
     videoSourceType: 'YOUTUBE' as IVideoSourceType,
     videoUrl: '',
-    textContent: '',
+    textContent: ''
   });
   const [submitting, setSubmitting] = useState(false);
 
-  // ─── Load data ──────────────────────────────────────────────────────────────
+  /* Load data */
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const [courseDetail, chaptersData] = await Promise.all([
         getCourseDetail(courseId),
         queryClient.fetchQuery({
           queryKey: queryKeys.chapters.byCourse(courseId),
-          queryFn: () => chaptersApi.list(courseId).then(r => r.data),
-        }),
+          queryFn: () => chaptersApi.list(courseId).then(r => r.data)
+        })
       ]);
       setCourseTitle(courseDetail.title);
       setChapters(chaptersData);
@@ -69,11 +66,13 @@ const CourseChaptersPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [courseId]);
 
-  useEffect(() => { loadData(); }, [courseId]);
+  useEffect(() => {
+    void loadData();
+  }, [loadData]);
 
-  // ─── Chapter actions ─────────────────────────────────────────────────────────
+  /* Chapter actions */
 
   const openCreateChapter = () => {
     setChapterTitle('');
@@ -97,13 +96,13 @@ const CourseChaptersPage = () => {
         await chaptersApi.create(courseId, {
           title: chapterTitle.trim(),
           description: chapterDescription.trim() || undefined,
-          avatarUrl: chapterAvatarUrl.trim() || undefined,
+          avatarUrl: chapterAvatarUrl.trim() || undefined
         });
       } else if (chapterModal.open && chapterModal.mode === 'edit') {
         await chaptersApi.update(courseId, chapterModal.chapter.id, {
           title: chapterTitle.trim(),
           description: chapterDescription.trim() || undefined,
-          avatarUrl: chapterAvatarUrl.trim() || undefined,
+          avatarUrl: chapterAvatarUrl.trim() || undefined
         });
       }
       await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
@@ -137,7 +136,7 @@ const CourseChaptersPage = () => {
     loadData();
   };
 
-  // ─── Lesson actions ──────────────────────────────────────────────────────────
+  /* Lesson actions */
 
   const openCreateLesson = (chapterId: number) => {
     setLessonForm({ title: '', type: 'VIDEO', status: 'PUBLISHED', description: '', videoSourceType: 'YOUTUBE', videoUrl: '', textContent: '' });
@@ -152,7 +151,7 @@ const CourseChaptersPage = () => {
       description: lesson.description ?? '',
       videoSourceType: lesson.videoSourceType ?? 'YOUTUBE',
       videoUrl: lesson.videoUrl ?? '',
-      textContent: lesson.textContent ?? '',
+      textContent: lesson.textContent ?? ''
     });
     setLessonModal({ open: true, mode: 'edit', chapterId, lesson });
   };
@@ -168,7 +167,7 @@ const CourseChaptersPage = () => {
         description: lessonForm.description || undefined,
         ...(lessonForm.type === 'VIDEO'
           ? { videoSourceType: lessonForm.videoSourceType, videoUrl: lessonForm.videoUrl || undefined }
-          : { textContent: lessonForm.textContent || undefined }),
+          : { textContent: lessonForm.textContent || undefined })
       };
 
       if (lessonModal.mode === 'create') {
@@ -188,7 +187,7 @@ const CourseChaptersPage = () => {
     if (!confirm('Delete this lesson?')) return;
     await lessonsApi.delete(courseId, chapterId, lessonId);
     await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
-    loadData();
+    void loadData();
   };
 
   const handleReorderLesson = async (chapterId: number, lessonId: number, direction: 'up' | 'down') => {
@@ -207,10 +206,10 @@ const CourseChaptersPage = () => {
     });
     await lessonsApi.reorder(courseId, chapterId, { items });
     await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
-    loadData();
+    loadData().then(() => {});
   };
 
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
+  /* Helpers */
 
   const toggleChapter = (chapterId: number) => {
     setExpandedChapters(prev => {
@@ -223,7 +222,7 @@ const CourseChaptersPage = () => {
   const lessonTypeIcon = (type: ILessonType) =>
     type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-file-lines';
 
-  // ─── Render ──────────────────────────────────────────────────────────────────
+  /* Render */
 
   if (loading) {
     return (
@@ -257,7 +256,7 @@ const CourseChaptersPage = () => {
         </div>
       </div>
 
-      {/* ── Empty State ── */}
+      {/* Empty State */}
       {chapters.length === 0 && (
         <div className="card ccp-empty">
           <div className="card-body ccp-empty-body">
@@ -270,7 +269,7 @@ const CourseChaptersPage = () => {
         </div>
       )}
 
-      {/* ── Chapter List ── */}
+      {/* Chapter List */}
       <div className="ccp-chapters">
         {chapters.map((chapter, chIdx) => {
           const isExpanded = expandedChapters.has(chapter.id);
@@ -296,7 +295,11 @@ const CourseChaptersPage = () => {
                   <button className="btn btn-xs btn-light ccp-order-btn" title="Move up" onClick={() => handleReorderChapter(chapter.id, 'up')} disabled={chIdx === 0}>
                     <i className="fa-regular fa-chevron-up" />
                   </button>
-                  <button className="btn btn-xs btn-light ccp-order-btn" title="Move down" onClick={() => handleReorderChapter(chapter.id, 'down')} disabled={chIdx === chapters.length - 1}>
+                  <button className="btn btn-xs btn-light ccp-order-btn"
+                    title="Move down"
+                    onClick={() => handleReorderChapter(chapter.id, 'down')}
+                    disabled={chIdx === chapters.length - 1}
+                  >
                     <i className="fa-regular fa-chevron-down" />
                   </button>
                   <button className="btn btn-xs btn-light-warning btn-icon" title="Edit chapter" onClick={() => openEditChapter(chapter)}>
@@ -328,10 +331,18 @@ const CourseChaptersPage = () => {
                         <span className="ccp-lesson-type-badge">{lesson.type}</span>
                       </div>
                       <div className="ccp-lesson-actions">
-                        <button className="btn btn-xs btn-light ccp-order-btn" title="Move up" onClick={() => handleReorderLesson(chapter.id, lesson.id, 'up')} disabled={lIdx === 0}>
+                        <button className="btn btn-xs btn-light ccp-order-btn"
+                          title="Move up"
+                          onClick={() => handleReorderLesson(chapter.id, lesson.id, 'up')}
+                          disabled={lIdx === 0}
+                        >
                           <i className="fa-regular fa-chevron-up" />
                         </button>
-                        <button className="btn btn-xs btn-light ccp-order-btn" title="Move down" onClick={() => handleReorderLesson(chapter.id, lesson.id, 'down')} disabled={lIdx === chapter.lessons.length - 1}>
+                        <button className="btn btn-xs btn-light ccp-order-btn"
+                          title="Move down"
+                          onClick={() => handleReorderLesson(chapter.id, lesson.id, 'down')}
+                          disabled={lIdx === chapter.lessons.length - 1}
+                        >
                           <i className="fa-regular fa-chevron-down" />
                         </button>
                         <button className="btn btn-xs btn-light-warning btn-icon" title="Edit lesson" onClick={() => openEditLesson(chapter.id, lesson)}>
@@ -357,7 +368,7 @@ const CourseChaptersPage = () => {
         })}
       </div>
 
-      {/* ── Chapter Modal ── */}
+      {/* Chapter Modal */}
       {chapterModal.open && (
         <div className="ccp-modal-overlay" onClick={() => setChapterModal({ open: false })}>
           <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>
@@ -427,7 +438,7 @@ const CourseChaptersPage = () => {
         </div>
       )}
 
-      {/* ── Lesson Modal ── */}
+      {/* Lesson Modal */}
       {lessonModal.open && (
         <div className="ccp-modal-overlay" onClick={() => setLessonModal({ open: false })}>
           <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>

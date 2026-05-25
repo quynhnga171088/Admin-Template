@@ -10,19 +10,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        lazy: () => import('@/pages/home/Home.tsx')
+        lazy: () => import('@/pages/home/Home')
       }, {
         path: 'all-controls',
-        lazy: () => import('@/pages/allControlsSample/AllControlsSample.tsx')
+        lazy: () => import('@/pages/allControlsSample/AllControlsSample')
       }, {
         path: 'typography',
-        lazy: () => import('@/pages/typographyPage/TypographyPage.tsx')
+        lazy: () => import('@/pages/typographyPage/TypographyPage')
       }, {
         path: 'courses',
-        lazy: () => import('@/pages/courses/CoursesList.tsx')
+        lazy: () => import('@/pages/courses/CoursesList')
       }, {
         path: 'courses/add',
-        lazy: () => import('@/pages/courses/CourseAddNew.tsx')
+        lazy: () => import('@/pages/courses/CourseAddNew')
       }, {
         path: 'courses/:id/edit',
         lazy: () => import('@/pages/courses/CourseEditPage')

@@ -1,3 +1,9 @@
+/* Chapter Start */
+export type IChapterModalState = { open: false } | { open: true; mode: 'create' } | { open: true; mode: 'edit'; chapter: IChapter };
+
+export type ILessonModalState = { open: false } | { open: true; mode: 'create'; chapterId: number } | { open: true; mode: 'edit'; chapterId: number; lesson: ILesson };
+/* Chapter End */
+
 export type IRole = 'TEACHER' | 'ADMIN';
 
 export type ICourseStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
