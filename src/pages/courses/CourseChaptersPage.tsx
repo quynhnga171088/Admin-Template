@@ -37,6 +37,8 @@ const CourseChaptersPage = () => {
 
   // Form states
   const [chapterTitle, setChapterTitle] = useState('');
+  const [chapterDescription, setChapterDescription] = useState('');
+  const [chapterAvatarUrl, setChapterAvatarUrl] = useState('');
   const [lessonForm, setLessonForm] = useState({
     title: '',
     type: 'VIDEO' as ILessonType,
@@ -75,11 +77,15 @@ const CourseChaptersPage = () => {
 
   const openCreateChapter = () => {
     setChapterTitle('');
+    setChapterDescription('');
+    setChapterAvatarUrl('');
     setChapterModal({ open: true, mode: 'create' });
   };
 
   const openEditChapter = (chapter: IChapter) => {
     setChapterTitle(chapter.title);
+    setChapterDescription(chapter.description ?? '');
+    setChapterAvatarUrl(chapter.avatarUrl ?? '');
     setChapterModal({ open: true, mode: 'edit', chapter });
   };
 
@@ -88,9 +94,17 @@ const CourseChaptersPage = () => {
     setSubmitting(true);
     try {
       if (chapterModal.open && chapterModal.mode === 'create') {
-        await chaptersApi.create(courseId, { title: chapterTitle.trim() });
+        await chaptersApi.create(courseId, {
+          title: chapterTitle.trim(),
+          description: chapterDescription.trim() || undefined,
+          avatarUrl: chapterAvatarUrl.trim() || undefined,
+        });
       } else if (chapterModal.open && chapterModal.mode === 'edit') {
-        await chaptersApi.update(courseId, chapterModal.chapter.id, { title: chapterTitle.trim() });
+        await chaptersApi.update(courseId, chapterModal.chapter.id, {
+          title: chapterTitle.trim(),
+          description: chapterDescription.trim() || undefined,
+          avatarUrl: chapterAvatarUrl.trim() || undefined,
+        });
       }
       await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
       setChapterModal({ open: false });
@@ -267,7 +281,13 @@ const CourseChaptersPage = () => {
                 <div className="ccp-chapter-left">
                   <i className={`fa-regular ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'} ccp-chevron`} />
                   <span className="ccp-chapter-index">{chIdx + 1}</span>
+                  {chapter.avatarUrl && (
+                    <img src={chapter.avatarUrl} alt="" className="ccp-chapter-avatar" />
+                  )}
                   <span className="ccp-chapter-title">{chapter.title}</span>
+                  {chapter.description && (
+                    <span className="ccp-chapter-desc">{chapter.description}</span>
+                  )}
                   <span className="ccp-lesson-count">
                     {chapter.lessons.length} lesson{chapter.lessons.length !== 1 ? 's' : ''}
                   </span>
@@ -340,7 +360,7 @@ const CourseChaptersPage = () => {
       {/* ── Chapter Modal ── */}
       {chapterModal.open && (
         <div className="ccp-modal-overlay" onClick={() => setChapterModal({ open: false })}>
-          <div className="ccp-modal" onClick={e => e.stopPropagation()}>
+          <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>
             <div className="ccp-modal-header">
               <h3 className="ccp-modal-title">
                 <i className="fa-regular fa-layer-group" />
@@ -351,6 +371,7 @@ const CourseChaptersPage = () => {
               </button>
             </div>
             <div className="ccp-modal-body">
+              {/* Title */}
               <div className="can-field">
                 <label className="form-label can-label">Chapter Title <span className="can-required">*</span></label>
                 <input
@@ -362,8 +383,38 @@ const CourseChaptersPage = () => {
                   onChange={e => setChapterTitle(e.target.value)}
                   maxLength={255}
                   autoFocus
-                  onKeyDown={e => e.key === 'Enter' && handleSaveChapter()}
                 />
+              </div>
+
+              {/* Description */}
+              <div className="can-field">
+                <label className="form-label can-label">Description</label>
+                <textarea
+                  id="chapter-description-textarea"
+                  className="form-control can-textarea"
+                  placeholder="Brief description of this chapter (optional)..."
+                  rows={3}
+                  value={chapterDescription}
+                  onChange={e => setChapterDescription(e.target.value)}
+                />
+              </div>
+
+              {/* Avatar URL */}
+              <div className="can-field">
+                <label className="form-label can-label">Avatar / Cover Image URL</label>
+                <input
+                  id="chapter-avatar-url-input"
+                  type="url"
+                  className="form-control"
+                  placeholder="https://example.com/image.jpg (optional)"
+                  value={chapterAvatarUrl}
+                  onChange={e => setChapterAvatarUrl(e.target.value)}
+                />
+                {chapterAvatarUrl.trim() && (
+                  <div className="ccp-avatar-preview">
+                    <img src={chapterAvatarUrl} alt="Chapter avatar preview" onError={e => (e.currentTarget.style.display = 'none')} />
+                  </div>
+                )}
               </div>
             </div>
             <div className="ccp-modal-footer">

@@ -142,6 +142,8 @@ export interface IChapter {
   id: number;
   courseId: number;
   title: string;
+  description?: string;
+  avatarUrl?: string;
   orderIndex: number;
   lessons: ILesson[];
   createdAt?: string;
@@ -150,10 +152,14 @@ export interface IChapter {
 
 export interface ICreateChapterRequest {
   title: string;
+  description?: string;
+  avatarUrl?: string;
 }
 
 export interface IUpdateChapterRequest {
   title?: string;
+  description?: string;
+  avatarUrl?: string;
 }
 
 export interface IReorderChaptersRequest {

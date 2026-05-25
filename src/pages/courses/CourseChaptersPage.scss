@@ -156,9 +156,24 @@
   flex-shrink: 0;
 }
 
+.ccp-chapter-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border, #e9ecef);
+}
+
 .ccp-chapter-title {
   font-weight: 600;
   font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.ccp-chapter-desc {
+  font-size: 0.78rem;
+  color: var(--color-muted, #6c757d);
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -293,6 +308,16 @@
 }
 
 // ─── Modal ────────────────────────────────────────────────────────────────────
+
+.ccp-avatar-preview {
+  margin-top: 0.5rem;
+  img {
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--color-border, #e9ecef);
+  }
+}
 
 .ccp-modal-overlay {
   position: fixed;
