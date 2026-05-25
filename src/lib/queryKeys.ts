@@ -21,6 +21,7 @@ export const queryKeys = {
   },
   courses: {
     all: ['courses'] as const,
-    list: (pagination: IPagination) => [ ...queryKeys.courses.all, 'list', pagination] as const
+    list: (pagination: IPagination) => [ ...queryKeys.courses.all, 'list', pagination] as const,
+    detail: (id: number | string) => [ ...queryKeys.courses.all, 'detail', id] as const
   }
 } as const;

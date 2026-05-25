@@ -3,7 +3,7 @@ import { coursesApi } from '@/lib/api/coursesApi.ts';
 import { queryKeys } from '@/lib/queryKeys.ts';
 import { modalStore } from '@/stores/modal.store.ts';
 import { coursesStore } from '@/stores/courses.store.ts';
-import type { ICourseCreateRequest, IPagination } from '@/types/types.ts';
+import type { ICourseCreateRequest, ICourseUpdateRequest, IPagination } from '@/types/types.ts';
 
 export const getCourses = async (pagination: IPagination) => {
   const { setProcessing } = modalStore.getState();
@@ -47,6 +47,27 @@ export const createCourse = async (payload: ICourseCreateRequest) => {
   try {
     const response = await coursesApi.createCourse(payload);
     await queryClient.invalidateQueries({ queryKey: queryKeys.courses.all });
+    return response.data;
+  } finally {
+    setProcessing(false);
+  }
+};
+
+export const getCourseDetail = async (id: number) => {
+  const queryKey = queryKeys.courses.detail(id);
+  return queryClient.fetchQuery({
+    queryKey,
+    queryFn: () => coursesApi.detail(id).then(res => res.data)
+  });
+};
+
+export const updateCourse = async (id: number, payload: ICourseUpdateRequest) => {
+  const { setProcessing } = modalStore.getState();
+  setProcessing(true);
+  try {
+    const response = await coursesApi.updateCourse(id, payload);
+    await queryClient.invalidateQueries({ queryKey: queryKeys.courses.all });
+    await queryClient.invalidateQueries({ queryKey: queryKeys.courses.detail(id) });
     return response.data;
   } finally {
     setProcessing(false);

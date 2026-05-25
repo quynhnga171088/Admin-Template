@@ -67,6 +67,10 @@ export interface ICourseItem {
   enrollmentCount?: number
 }
 
+export interface ICourseDetail extends ICourseItem {
+  description?: string
+}
+
 export interface ICourseCreateRequest {
   title: string
   shortDescription?: string
@@ -75,6 +79,8 @@ export interface ICourseCreateRequest {
   price: number
   status: ICourseStatus
 }
+
+export type ICourseUpdateRequest = Partial<ICourseCreateRequest>
 
 export interface ICoursesState {
   courses: ICourseItem[];

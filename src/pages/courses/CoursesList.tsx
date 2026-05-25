@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import { getCourses } from './courses.services.ts';
@@ -120,11 +120,11 @@ const CoursesList = () => {
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
                 </div>
                 <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">
-                  <button className="btn btn-xs btn-light-warning btn-icon" type="button" title="Edit">
-                    <i className="fa-thin fa-trash text-sm" aria-hidden="true" />
-                  </button>
-                  <button className="btn btn-xs btn-light-danger btn-icon ml-[2px]!" type="button" title="Delete">
+                  <Link className="btn btn-xs btn-light-warning btn-icon" type="button" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>
                     <i className="fa-thin fa-pen text-sm" aria-hidden="true" />
+                  </Link>
+                  <button className="btn btn-xs btn-light-danger btn-icon ml-[2px]!" type="button" title="Delete">
+                    <i className="fa-thin fa-trash text-sm" aria-hidden="true" />
                   </button>
                 </div>
               </div>

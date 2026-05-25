@@ -4,6 +4,7 @@ export const SCREENS_PATH = {
   REGISTER: '/register',
   COURSE_LIST: '/courses',
   COURSE_ADD_NEW: '/courses/add',
+  COURSE_EDIT: (id: number | string) => `/courses/${id}/edit`,
   COURSE_REGISTRATION: '/course-registration',
   TYPOGRAPHY: '/typography',
   FORGOT_PASSWORD: '/forgot-password',
@@ -44,7 +45,10 @@ export const FAVICON = favicon;
 
 export const API_URL = {
   LOGIN: '/auth/login',
-  GET_COURSES_LIST_OR_CREATE: '/courses',
+  GET_COURSES_LIST: '/courses',
+  GET_COURSE_DETAIL: '/courses',
+  CREATE_COURSE: '/courses',
+  UPDATE_COURSE: '/courses',
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
