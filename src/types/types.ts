@@ -1,7 +1,9 @@
 /* Chapter Start */
-export type IChapterModalState = { open: false } | { open: true; mode: 'create' } | { open: true; mode: 'edit'; chapter: IChapter };
+export type IChapterModalState = { open: false, mode?: string } | { open: true; mode: 'create' } | { open: true; mode: 'edit'; chapter: IChapter };
 
-export type ILessonModalState = { open: false } | { open: true; mode: 'create'; chapterId: number } | { open: true; mode: 'edit'; chapterId: number; lesson: ILesson };
+export type ILessonModalState = { open: false, mode?: string }
+  | { open: true; mode: 'create'; chapterId: number }
+  | { open: true; mode: 'edit'; chapterId: number; lesson: ILesson };
 /* Chapter End */
 
 export type IRole = 'TEACHER' | 'ADMIN';
@@ -88,11 +90,20 @@ export interface ICourseCreateRequest {
 
 export type ICourseUpdateRequest = Partial<ICourseCreateRequest>
 
-// ─── Lesson ───────────────────────────────────────────────────────────────────
-
+/* Lesson Start */
 export type ILessonStatus = 'DRAFT' | 'PUBLISHED';
 export type ILessonType = 'VIDEO' | 'TEXT';
 export type IVideoSourceType = 'UPLOAD' | 'YOUTUBE' | 'VIMEO' | 'DRIVE';
+
+export interface ILessonForm {
+  title: string;
+  type: ILessonType;
+  status: ILessonStatus;
+  description: string;
+  videoSourceType: IVideoSourceType,
+  videoUrl: string;
+  textContent: string;
+}
 
 export interface ILesson {
   id: number;
@@ -102,7 +113,6 @@ export interface ILesson {
   orderIndex: number;
   type: ILessonType;
   status: ILessonStatus;
-  // Full fields (null for unauthenticated/unenrolled)
   textContent?: string;
   videoSourceType?: IVideoSourceType;
   videoUrl?: string;
@@ -111,6 +121,16 @@ export interface ILesson {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export const lessonFormInit: ILessonForm = {
+  title: '',
+  type: 'VIDEO' as ILessonType,
+  status: 'PUBLISHED' as ILessonStatus,
+  description: '',
+  videoSourceType: 'YOUTUBE' as IVideoSourceType,
+  videoUrl: '',
+  textContent: ''
+};
 
 export interface ILessonDetail extends ILesson {
   attachments: IAttachment[];
@@ -142,7 +162,7 @@ export interface ICreateLessonRequest {
 
 export type IUpdateLessonRequest = Partial<ICreateLessonRequest>;
 
-// ─── Chapter ──────────────────────────────────────────────────────────────────
+/* Chapter Start */
 
 export interface IChapter {
   id: number;

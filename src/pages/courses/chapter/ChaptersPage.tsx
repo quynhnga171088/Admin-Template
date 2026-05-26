@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { chaptersApi, lessonsApi } from '@/lib/api/chapters.api.ts';
-import { getCourseDetail } from '@/pages/courses/courses.services.ts';
-import { queryClient } from '@/lib/queryClient.ts';
-import { queryKeys } from '@/lib/queryKeys.ts';
-import type {
-  IChapter,
-  ILesson,
-  ILessonType,
-  ILessonStatus,
-  IVideoSourceType,
-  ILessonModalState,
-  IChapterModalState
-} from '@/types/types.ts';
-import { SCREENS_PATH } from '@/config/constant.ts';
-import './ChaptersPage.scss';
-
-/* Component */
+import { chaptersApi, lessonsApi } from '@/lib/api/chapters.api';
+import { getCourseDetail } from '@/pages/courses/courses.services';
+import { queryClient } from '@/lib/queryClient';
+import { queryKeys } from '@/lib/queryKeys';
+import {
+  type ILesson,
+  type IChapter,
+  type ILessonType,
+  type ILessonModalState,
+  type IChapterModalState,
+  lessonFormInit
+} from '@/types/types';
+import { SCREENS_PATH } from '@/config/constant';
+import '@/pages/courses/chapter/ChaptersPage.scss';
+import ChapterModal from '@/components/ui/course/ChapterModal';
+import LessonModal from '@/components/ui/course/LessonModal';
 
 const ChaptersPage = () => {
   const navigate = useNavigate();
@@ -36,15 +35,7 @@ const ChaptersPage = () => {
   const [chapterTitle, setChapterTitle] = useState('');
   const [chapterDescription, setChapterDescription] = useState('');
   const [chapterAvatarUrl, setChapterAvatarUrl] = useState('');
-  const [lessonForm, setLessonForm] = useState({
-    title: '',
-    type: 'VIDEO' as ILessonType,
-    status: 'PUBLISHED' as ILessonStatus,
-    description: '',
-    videoSourceType: 'YOUTUBE' as IVideoSourceType,
-    videoUrl: '',
-    textContent: ''
-  });
+  const [lessonForm, setLessonForm] = useState(lessonFormInit);
   const [submitting, setSubmitting] = useState(false);
 
   /* Load data */
@@ -155,13 +146,13 @@ const ChaptersPage = () => {
 
   /* Lesson actions */
   const openCreateLesson = (chapterId: number) => {
-    setLessonForm({ title: '', type: 'VIDEO', status: 'PUBLISHED', description: '', videoSourceType: 'YOUTUBE', videoUrl: '', textContent: '' });
+    setLessonForm(lessonFormInit);
     setLessonModal({ open: true, mode: 'create', chapterId });
   };
 
   const openEditLesson = (chapterId: number, lesson: ILesson) => {
     setLessonForm({
-      title: lesson.title,
+      title: lesson.title as string,
       type: lesson.type,
       status: lesson.status,
       description: lesson.description ?? '',
@@ -226,7 +217,6 @@ const ChaptersPage = () => {
   };
 
   /* Helpers */
-
   const toggleChapter = (chapterId: number) => {
     setExpandedChapters(prev => {
       const next = new Set<number>(prev);
@@ -240,7 +230,7 @@ const ChaptersPage = () => {
   };
 
   const lessonTypeIcon = (type: ILessonType) =>
-    type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-file-lines';
+    type === 'VIDEO' ? 'fa-regular fa-circle-play text-lg!' : 'fa-regular fa-book-open text-lg!';
 
   /* Render */
   if (loading) {
@@ -255,7 +245,7 @@ const ChaptersPage = () => {
   return (
     <div className="ccp-page">
       {/* ── Page Header ── */}
-      <div className="card ccp-header-card">
+      <div className="card ccp-header-card mb-0!">
         <div className="card-body ccp-header-body">
           <div className="ccp-breadcrumb">
             <button className="btn btn-sm btn-light ccp-back-btn" onClick={() => navigate(SCREENS_PATH.COURSE_LIST)}>
@@ -293,39 +283,41 @@ const ChaptersPage = () => {
         {chapters.map((chapter, chIdx) => {
           const isExpanded = expandedChapters.has(chapter.id);
           return (
-            <div key={chapter.id} className="card ccp-chapter-card">
+            <div key={chapter.id} className="card ccp-chapter-card mb-0!">
               {/* Chapter Header */}
               <div className="ccp-chapter-header" onClick={() => toggleChapter(chapter.id)}>
                 <div className="ccp-chapter-left">
                   <i className={`fa-regular ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'} ccp-chevron`} />
                   <span className="ccp-chapter-index">{chIdx + 1}</span>
                   {chapter.avatarUrl && (
-                    <img src={chapter.avatarUrl} alt="" className="ccp-chapter-avatar" />
+                    <div className="ccp-chapter-avatar" style={{ backgroundImage: `url(${chapter.avatarUrl})` }} />
                   )}
-                  <span className="ccp-chapter-title">{chapter.title}</span>
-                  {chapter.description && (
-                    <span className="ccp-chapter-desc">{chapter.description}</span>
-                  )}
+                  <div className="ccp-chapter-desc">
+                    <div className="ccp-chapter-title">{chapter.title}</div>
+                    {chapter.description && (
+                      <div className="ccp-chapter-desc">{chapter.description}</div>
+                    )}
+                  </div>
                   <span className="ccp-lesson-count">
                     {chapter.lessons.length} lesson{chapter.lessons.length !== 1 ? 's' : ''}
                   </span>
                 </div>
                 <div className="ccp-chapter-actions" onClick={e => e.stopPropagation()}>
-                  <button className="btn btn-xs btn-light ccp-order-btn" title="Move up" onClick={() => handleReorderChapter(chapter.id, 'up')} disabled={chIdx === 0}>
+                  <button className="btn btn-light-primary btn-icon btn-sm" title="Move up" onClick={() => handleReorderChapter(chapter.id, 'up')} disabled={chIdx === 0}>
                     <i className="fa-regular fa-chevron-up" />
                   </button>
-                  <button className="btn btn-xs btn-light ccp-order-btn"
+                  <button className="btn btn-light-primary btn-icon btn-sm"
                     title="Move down"
                     onClick={() => handleReorderChapter(chapter.id, 'down')}
                     disabled={chIdx === chapters.length - 1}
                   >
                     <i className="fa-regular fa-chevron-down" />
                   </button>
-                  <button className="btn btn-xs btn-light-warning btn-icon" title="Edit chapter" onClick={() => openEditChapter(chapter)}>
-                    <i className="fa-thin fa-pen" />
+                  <button className="btn btn-light-warning btn-icon btn-sm" title="Edit chapter" onClick={() => openEditChapter(chapter)}>
+                    <i className="fa-thin fa-pen text-sm" />
                   </button>
-                  <button className="btn btn-xs btn-light-danger btn-icon" title="Delete chapter" onClick={() => handleDeleteChapter(chapter.id)}>
-                    <i className="fa-thin fa-trash" />
+                  <button className="btn btn-light-danger btn-icon btn-sm" title="Delete chapter" onClick={() => handleDeleteChapter(chapter.id)}>
+                    <i className="fa-thin fa-trash text-sm" />
                   </button>
                 </div>
               </div>
@@ -335,7 +327,7 @@ const ChaptersPage = () => {
                 <div className="ccp-lessons">
                   {chapter.lessons.length === 0 && (
                     <div className="ccp-lessons-empty">
-                      <i className="fa-regular fa-file-slash" /> No lessons yet
+                      <i className="fa-regular fa-file-slash text-lg!" /> No lessons yet
                     </div>
                   )}
                   {chapter.lessons.map((lesson, lIdx) => (
@@ -343,39 +335,43 @@ const ChaptersPage = () => {
                       <div className="ccp-lesson-left">
                         <i className={`${lessonTypeIcon(lesson.type)} ccp-lesson-type-icon`} />
                         <span className="ccp-lesson-index">{lIdx + 1}.</span>
-                        <span className="ccp-lesson-title">{lesson.title}</span>
+                        <div className="ccp-lesson-title">
+                          <div className="ccp-lesson-title">{lesson.title}</div>
+                          <div className="ccp-lesson-desc">{lesson.description}</div>
+                        </div>
                         <span className={`ccp-lesson-status ccp-lesson-status--${lesson.status.toLowerCase()}`}>
                           {lesson.status}
                         </span>
                         <span className="ccp-lesson-type-badge">{lesson.type}</span>
                       </div>
                       <div className="ccp-lesson-actions">
-                        <button className="btn btn-xs btn-light ccp-order-btn"
+                        <button className="btn btn-light-primary btn-icon btn-sm"
                           title="Move up"
                           onClick={() => handleReorderLesson(chapter.id, lesson.id, 'up')}
                           disabled={lIdx === 0}
                         >
                           <i className="fa-regular fa-chevron-up" />
                         </button>
-                        <button className="btn btn-xs btn-light ccp-order-btn"
+                        <button
                           title="Move down"
+                          className="btn btn-light-primary btn-icon btn-sm"
                           onClick={() => handleReorderLesson(chapter.id, lesson.id, 'down')}
                           disabled={lIdx === chapter.lessons.length - 1}
                         >
-                          <i className="fa-regular fa-chevron-down" />
+                          <i className="fa-regular fa-angle-down" />
                         </button>
-                        <button className="btn btn-xs btn-light-warning btn-icon" title="Edit lesson" onClick={() => openEditLesson(chapter.id, lesson)}>
-                          <i className="fa-thin fa-pen" />
+                        <button className="btn  btn-light-warning btn-icon btn-sm" title="Edit lesson" onClick={() => openEditLesson(chapter.id, lesson)}>
+                          <i className="fa-thin fa-pen text-sm" />
                         </button>
-                        <button className="btn btn-xs btn-light-danger btn-icon" title="Delete lesson" onClick={() => handleDeleteLesson(chapter.id, lesson.id)}>
-                          <i className="fa-thin fa-trash" />
+                        <button className="btn btn-light-danger btn-icon btn-sm" title="Delete lesson" onClick={() => handleDeleteLesson(chapter.id, lesson.id)}>
+                          <i className="fa-thin fa-trash text-sm" />
                         </button>
                       </div>
                     </div>
                   ))}
 
                   {/* Add Lesson Button */}
-                  <div className="ccp-add-lesson-row">
+                  <div className="ccp-add-lesson-row text-right">
                     <button className="btn btn-sm btn-light-primary ccp-add-lesson-btn" onClick={() => openCreateLesson(chapter.id)}>
                       <i className="fa-regular fa-plus" /> Add Lesson
                     </button>
@@ -388,207 +384,30 @@ const ChaptersPage = () => {
       </div>
 
       {/* Chapter Modal */}
-      {chapterModal.open && (
-        <div className="ccp-modal-overlay" onClick={() => setChapterModal({ open: false })}>
-          <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>
-            <div className="ccp-modal-header">
-              <h3 className="ccp-modal-title">
-                <i className="fa-regular fa-layer-group" />
-                {chapterModal.mode === 'create' ? ' New Chapter' : ' Edit Chapter'}
-              </h3>
-              <button className="ccp-modal-close" onClick={() => setChapterModal({ open: false })}>
-                <i className="fa-regular fa-xmark" />
-              </button>
-            </div>
-            <div className="ccp-modal-body">
-              {/* Title */}
-              <div className="can-field">
-                <label className="form-label can-label">Chapter Title <span className="can-required">*</span></label>
-                <input
-                  id="chapter-title-input"
-                  type="text"
-                  className="form-control"
-                  placeholder="e.g. Introduction to the Course"
-                  value={chapterTitle}
-                  onChange={e => setChapterTitle(e.target.value)}
-                  maxLength={255}
-                  autoFocus
-                />
-              </div>
-
-              {/* Description */}
-              <div className="can-field">
-                <label className="form-label can-label">Description</label>
-                <textarea
-                  id="chapter-description-textarea"
-                  className="form-control can-textarea"
-                  placeholder="Brief description of this chapter (optional)..."
-                  rows={3}
-                  value={chapterDescription}
-                  onChange={e => setChapterDescription(e.target.value)}
-                />
-              </div>
-
-              {/* Avatar URL */}
-              <div className="can-field">
-                <label className="form-label can-label">Avatar / Cover Image URL</label>
-                <input
-                  id="chapter-avatar-url-input"
-                  type="url"
-                  className="form-control"
-                  placeholder="https://example.com/image.jpg (optional)"
-                  value={chapterAvatarUrl}
-                  onChange={e => setChapterAvatarUrl(e.target.value)}
-                />
-                {chapterAvatarUrl.trim() && (
-                  <div className="ccp-avatar-preview">
-                    <img src={chapterAvatarUrl} alt="Chapter avatar preview" onError={e => (e.currentTarget.style.display = 'none')} />
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="ccp-modal-footer">
-              <button className="btn btn-light" onClick={() => setChapterModal({ open: false })}>Cancel</button>
-              <button className="btn btn-primary" onClick={handleSaveChapter} disabled={!chapterTitle.trim() || submitting}>
-                {submitting ? <><i className="fa-regular fa-spinner-third fa-spin" /> Saving...</> : <><i className="fa-regular fa-floppy-disk" /> Save</>}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {chapterModal.open &&
+        <ChapterModal
+          mode={chapterModal.mode}
+          title={chapterTitle}
+          setTitle={setChapterTitle}
+          description={chapterDescription}
+          setDescription={setChapterDescription}
+          avatarUrl={chapterAvatarUrl}
+          setAvatarUrl={setChapterAvatarUrl}
+          setChapterModal={setChapterModal}
+          submitting={submitting}
+          handleSaveChapter={handleSaveChapter}
+        />}
 
       {/* Lesson Modal */}
-      {lessonModal.open && (
-        <div className="ccp-modal-overlay" onClick={() => setLessonModal({ open: false })}>
-          <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>
-            <div className="ccp-modal-header">
-              <h3 className="ccp-modal-title">
-                <i className="fa-regular fa-file-video" />
-                {lessonModal.mode === 'create' ? ' New Lesson' : ' Edit Lesson'}
-              </h3>
-              <button className="ccp-modal-close" onClick={() => setLessonModal({ open: false })}>
-                <i className="fa-regular fa-xmark" />
-              </button>
-            </div>
-            <div className="ccp-modal-body">
-              {/* Title */}
-              <div className="can-field">
-                <label className="form-label can-label">Lesson Title <span className="can-required">*</span></label>
-                <input
-                  id="lesson-title-input"
-                  type="text"
-                  className="form-control"
-                  placeholder="e.g. Getting Started"
-                  value={lessonForm.title}
-                  onChange={e => setLessonForm(f => ({ ...f, title: e.target.value }))}
-                  maxLength={255}
-                  autoFocus
-                />
-              </div>
-
-              {/* Type + Status row */}
-              <div className="ccp-form-row">
-                <div className="can-field">
-                  <label className="form-label can-label">Type <span className="can-required">*</span></label>
-                  <select
-                    id="lesson-type-select"
-                    className="form-select"
-                    value={lessonForm.type}
-                    onChange={e => setLessonForm(f => ({ ...f, type: e.target.value as ILessonType }))}
-                  >
-                    <option value="VIDEO">🎬 Video</option>
-                    <option value="TEXT">📄 Text</option>
-                  </select>
-                </div>
-                <div className="can-field">
-                  <label className="form-label can-label">Status</label>
-                  <select
-                    id="lesson-status-select"
-                    className="form-select"
-                    value={lessonForm.status}
-                    onChange={e => setLessonForm(f => ({ ...f, status: e.target.value as ILessonStatus }))}
-                  >
-                    <option value="PUBLISHED">✅ Published</option>
-                    <option value="DRAFT">📝 Draft</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="can-field">
-                <label className="form-label can-label">Description</label>
-                <textarea
-                  id="lesson-description-textarea"
-                  className="form-control can-textarea"
-                  placeholder="Brief description of this lesson..."
-                  rows={2}
-                  value={lessonForm.description}
-                  onChange={e => setLessonForm(f => ({ ...f, description: e.target.value }))}
-                />
-              </div>
-
-              {/* VIDEO fields */}
-              {lessonForm.type === 'VIDEO' && (
-                <>
-                  <div className="can-field">
-                    <label className="form-label can-label">Video Source</label>
-                    <select
-                      id="lesson-video-source-select"
-                      className="form-select"
-                      value={lessonForm.videoSourceType}
-                      onChange={e => setLessonForm(f => ({ ...f, videoSourceType: e.target.value as IVideoSourceType }))}
-                    >
-                      <option value="YOUTUBE">▶ YouTube</option>
-                      <option value="VIMEO">🎞 Vimeo</option>
-                      <option value="DRIVE">📁 Google Drive</option>
-                      <option value="UPLOAD">⬆ Upload</option>
-                    </select>
-                  </div>
-                  {lessonForm.videoSourceType !== 'UPLOAD' && (
-                    <div className="can-field">
-                      <label className="form-label can-label">Video URL <span className="can-required">*</span></label>
-                      <input
-                        id="lesson-video-url-input"
-                        type="url"
-                        className="form-control"
-                        placeholder="https://..."
-                        value={lessonForm.videoUrl}
-                        onChange={e => setLessonForm(f => ({ ...f, videoUrl: e.target.value }))}
-                      />
-                    </div>
-                  )}
-                  {lessonForm.videoSourceType === 'UPLOAD' && (
-                    <div className="can-field ccp-upload-hint">
-                      <i className="fa-regular fa-circle-info" /> Use the <strong>Upload</strong> API to get a <code>fileKey</code>, then edit the lesson to attach it.
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* TEXT fields */}
-              {lessonForm.type === 'TEXT' && (
-                <div className="can-field">
-                  <label className="form-label can-label">Content</label>
-                  <textarea
-                    id="lesson-text-content-textarea"
-                    className="form-control can-textarea can-textarea--tall"
-                    placeholder="Write lesson content here..."
-                    rows={6}
-                    value={lessonForm.textContent}
-                    onChange={e => setLessonForm(f => ({ ...f, textContent: e.target.value }))}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="ccp-modal-footer">
-              <button className="btn btn-light" onClick={() => setLessonModal({ open: false })}>Cancel</button>
-              <button className="btn btn-primary" onClick={handleSaveLesson} disabled={!lessonForm.title.trim() || submitting}>
-                {submitting ? <><i className="fa-regular fa-spinner-third fa-spin" /> Saving...</> : <><i className="fa-regular fa-floppy-disk" /> Save</>}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {lessonModal.open &&
+        <LessonModal
+          submitting={submitting}
+          lessonForm={lessonForm}
+          setLessonForm={setLessonForm}
+          lessonModal={lessonModal}
+          setLessonModal={setLessonModal}
+          handleSaveLesson={handleSaveLesson}
+        />}
     </div>
   );
 };

@@ -74,7 +74,7 @@ const Breadcrumbs = () => {
               <div className="text-base font-semibold">{title}</div>
             </div>
             <ul className="breadcrumb mb-2!">
-              <li className="cursor-pointer text-xs font-normal">
+              <li className="cursor-pointer font-normal">
                 <Link to={SCREENS_PATH.HOME}>Home</Link>
               </li>
               {mainContent}
