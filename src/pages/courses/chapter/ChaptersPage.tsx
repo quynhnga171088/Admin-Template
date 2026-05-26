@@ -23,6 +23,7 @@ const ChaptersPage = () => {
   const courseId = Number(id);
 
   const [courseTitle, setCourseTitle] = useState('');
+  const [courseDescription, setCourseDescription] = useState('');
   const [chapters, setChapters] = useState<IChapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedChapters, setExpandedChapters] = useState<Set<number>>(new Set());
@@ -51,6 +52,7 @@ const ChaptersPage = () => {
         })
       ]);
       setCourseTitle(courseDetail.title);
+      setCourseDescription(courseDetail.description || '');
       setChapters(chaptersData);
       /* Expand all chapters by default */
       setExpandedChapters(new Set(chaptersData.map((c: IChapter) => c.id)));
@@ -71,6 +73,7 @@ const ChaptersPage = () => {
           })
         ]);
         setCourseTitle(courseDetail.title);
+        setCourseDescription(courseDetail.description || '');
         setChapters(chaptersData);
         setExpandedChapters(new Set(chaptersData.map((c: IChapter) => c.id)));
       } finally {
@@ -253,17 +256,19 @@ const ChaptersPage = () => {
           </div>
         </div>
         <div className="card-body">
-          <div className="ccp-breadcrumb">
-            <button className="btn btn-sm btn-light ccp-back-btn" onClick={() => navigate(SCREENS_PATH.COURSE_LIST)}>
-              <i className="fa-regular fa-arrow-left" /> Courses
-            </button>
-            <i className="fa-regular fa-chevron-right ccp-breadcrumb-sep" />
-            <span className="ccp-breadcrumb-title">{courseTitle}</span>
-          </div>
-          <div className="ccp-header-actions">
-            <button className="btn btn-sm btn-primary" onClick={openCreateChapter}>
-              <i className="fa-regular fa-plus" /> Add Chapter
-            </button>
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-7 md:col-span-7 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
+              <div className="ccp-course-title">{courseTitle}</div>
+              <div className="ccp-course-desc">{courseDescription}</div>
+            </div>
+            <div className="col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-4 2xl:col-span-3 flex items-center justify-end">
+              <button className="btn btn-sm btn-light ccp-back-btn" onClick={() => navigate(SCREENS_PATH.COURSE_LIST)}>
+                <i className="fa-regular fa-arrow-left" /> Courses
+              </button>
+              <button className="btn btn-sm btn-primary ml-1!" onClick={openCreateChapter}>
+                <i className="fa-regular fa-plus" /> Add Chapter
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -301,7 +306,7 @@ const ChaptersPage = () => {
                     {chapter.lessons.length} Lesson{chapter.lessons.length !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="ccp-chapter-actions" onClick={(e) => e.stopPropagation()}>
+                <div className="ccp-chapter-actions" onClick={e => e.stopPropagation()}>
                   <button className="btn btn-light-primary btn-icon btn-sm" title="Move up" onClick={() => handleReorderChapter(chapter.id, 'up')} disabled={chIdx === 0}>
                     <i className="fa-regular fa-chevron-up" />
                   </button>
