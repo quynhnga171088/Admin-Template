@@ -58,7 +58,7 @@ const ChapterModal = ({
             id="chapter-description-textarea"
             className="form-control can-textarea"
             placeholder="Brief description of this chapter (optional)..."
-            rows={20}
+            rows={10}
             value={description}
             onChange={e => setDescription(e.target.value)}
           />

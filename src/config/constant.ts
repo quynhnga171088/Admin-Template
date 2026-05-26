@@ -11,7 +11,17 @@ export const SCREENS_PATH = {
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   VERIFY_EMAIL: '/verify-email',
-  VERIFY_OTP: '/verify-otp'
+  VERIFY_OTP: '/verify-otp',
+
+};
+
+export const SCREENS_PATH_FOR_SIDEBAR = {
+  HOME: '/',
+  TYPOGRAPHY: '/typography',
+  COURSE_LIST: '/courses',
+  COURSE_ADD_NEW: '/courses/add',
+  COURSE_CHAPTERS: '/chapters',
+  COURSE_REGISTRATION: '/course-registration',
 };
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';

@@ -16,59 +16,9 @@
 }
 
 // Header Card
-
-.ccp-header-card {
-  margin-bottom: 0;
-}
-
-.ccp-header-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.ccp-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-}
-
 .ccp-back-btn {
   gap: 0.35rem;
 }
-
-.ccp-breadcrumb-sep {
-  font-size: 0.7rem;
-  color: var(--color-muted, #6c757d);
-}
-
-.ccp-breadcrumb-title {
-  color: var(--color-muted, #6c757d);
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ccp-header-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.ccp-page-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-// Empty State
 
 .ccp-empty {
   .ccp-empty-body {
@@ -280,27 +230,8 @@
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.15rem 0.45rem;
-  border-radius: 8px;
+  border-radius: 5px;
   flex-shrink: 0;
-
-  &--published {
-    background: rgba(23, 198, 83, 0.12);
-    color: #17c653;
-  }
-
-  &--draft {
-    background: rgba(240, 173, 78, 0.12);
-    color: #f0ad4e;
-  }
-}
-
-.ccp-lesson-type-badge {
-  font-size: 0.7rem;
-  color: var(--color-muted, #6c757d);
-  flex-shrink: 0;
-  border: 1px solid var(--color-border, #e9ecef);
-  padding: 0.1rem 0.4rem;
-  border-radius: 6px;
 }
 
 .ccp-lesson-actions {

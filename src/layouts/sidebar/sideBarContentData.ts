@@ -1,6 +1,6 @@
 /* ------------------------ MENU ITEMS ------------------------ */
 
-import { SCREENS_PATH } from '@/config/constant.ts';
+import { SCREENS_PATH_FOR_SIDEBAR } from '@/config/constant.ts';
 
 const dashboard = {
   id: 'navigation',
@@ -12,7 +12,7 @@ const dashboard = {
       title: 'Dashboard',
       type: 'item',
       icon: 'fa-regular fa-home',
-      url: SCREENS_PATH.HOME
+      url: SCREENS_PATH_FOR_SIDEBAR.HOME
     }
   ]
 };
@@ -33,13 +33,20 @@ const mainFunctions = {
           title: 'List of Courses',
           type: 'item',
           icon: 'fa-regular fa-clipboard-list',
-          url: SCREENS_PATH.COURSE_LIST
+          url: SCREENS_PATH_FOR_SIDEBAR.COURSE_LIST
         }, {
           id: 'add-new-course',
           title: 'Add New Course',
           type: 'item',
           icon: 'fa-regular fa-graduation-cap',
-          url: SCREENS_PATH.COURSE_ADD_NEW
+          url: SCREENS_PATH_FOR_SIDEBAR.COURSE_ADD_NEW
+        }, {
+          id: 'chapters-list',
+          disabled: true,
+          title: 'List of Chapter',
+          type: 'item',
+          icon: 'fa-regular fa-layer-group',
+          url: SCREENS_PATH_FOR_SIDEBAR.COURSE_CHAPTERS
         }
       ]
     }, {
@@ -47,13 +54,13 @@ const mainFunctions = {
       title: 'Course Registration',
       type: 'item',
       icon: 'fa-regular fa-calendar-pen',
-      url: SCREENS_PATH.COURSE_REGISTRATION
+      url: SCREENS_PATH_FOR_SIDEBAR.COURSE_REGISTRATION
     }, {
       id: 'typography',
       title: 'Typography',
       type: 'item',
       icon: 'fa-regular fa-font',
-      url: SCREENS_PATH.TYPOGRAPHY
+      url: SCREENS_PATH_FOR_SIDEBAR.TYPOGRAPHY
     }, {
       id: 'icons',
       title: 'Icons',

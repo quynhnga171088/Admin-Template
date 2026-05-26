@@ -12,7 +12,7 @@ const NavItem = ({ item }: { item: Record<string, any> }) => {
   }
 
   const isSelected = itemPath ? pathname === itemPath : false;
-
+  if (item.disabled) return null;
   return (
     <li className={`pc-item ${isSelected ? 'active' : ''}`}>
       <Link

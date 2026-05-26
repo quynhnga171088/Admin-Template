@@ -109,7 +109,7 @@ const CoursesList = () => {
                   </div>
                 </div>
                 <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-2 2xl:col-span-2 flex items-center cursor-pointer">
-                  <div className={`courses-item-status ${getColorByState(course.status)}`}>
+                  <div className={`course-item-status ${getColorByState(course.status)}`}>
                     {course.status}
                   </div>
                 </div>

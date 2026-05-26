@@ -244,9 +244,15 @@ const ChaptersPage = () => {
 
   return (
     <div className="ccp-page">
-      {/* ── Page Header ── */}
-      <div className="card ccp-header-card mb-0!">
-        <div className="card-body ccp-header-body">
+      {/* Page Header */}
+      <div className="card mb-0!">
+        <div className="card-header">
+          <div className="card-header-title">
+            <i className="fa-regular fa-layer-group" />
+            <span className="ml-2!">Chapters & Lessons</span>
+          </div>
+        </div>
+        <div className="card-body">
           <div className="ccp-breadcrumb">
             <button className="btn btn-sm btn-light ccp-back-btn" onClick={() => navigate(SCREENS_PATH.COURSE_LIST)}>
               <i className="fa-regular fa-arrow-left" /> Courses
@@ -255,9 +261,6 @@ const ChaptersPage = () => {
             <span className="ccp-breadcrumb-title">{courseTitle}</span>
           </div>
           <div className="ccp-header-actions">
-            <h1 className="ccp-page-title">
-              <i className="fa-regular fa-layer-group" /> Chapters & Lessons
-            </h1>
             <button className="btn btn-sm btn-primary" onClick={openCreateChapter}>
               <i className="fa-regular fa-plus" /> Add Chapter
             </button>
@@ -289,24 +292,21 @@ const ChaptersPage = () => {
                 <div className="ccp-chapter-left">
                   <i className={`fa-regular ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'} ccp-chevron`} />
                   <span className="ccp-chapter-index">{chIdx + 1}</span>
-                  {chapter.avatarUrl && (
-                    <div className="ccp-chapter-avatar" style={{ backgroundImage: `url(${chapter.avatarUrl})` }} />
-                  )}
+                  {chapter.avatarUrl && <div className="ccp-chapter-avatar" style={{ backgroundImage: `url(${chapter.avatarUrl})` }} />}
                   <div className="ccp-chapter-desc">
                     <div className="ccp-chapter-title">{chapter.title}</div>
-                    {chapter.description && (
-                      <div className="ccp-chapter-desc">{chapter.description}</div>
-                    )}
+                    {chapter.description && <div className="ccp-chapter-desc">{chapter.description}</div>}
                   </div>
                   <span className="ccp-lesson-count">
-                    {chapter.lessons.length} lesson{chapter.lessons.length !== 1 ? 's' : ''}
+                    {chapter.lessons.length} Lesson{chapter.lessons.length !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="ccp-chapter-actions" onClick={e => e.stopPropagation()}>
+                <div className="ccp-chapter-actions" onClick={(e) => e.stopPropagation()}>
                   <button className="btn btn-light-primary btn-icon btn-sm" title="Move up" onClick={() => handleReorderChapter(chapter.id, 'up')} disabled={chIdx === 0}>
                     <i className="fa-regular fa-chevron-up" />
                   </button>
-                  <button className="btn btn-light-primary btn-icon btn-sm"
+                  <button
+                    className="btn btn-light-primary btn-icon btn-sm"
                     title="Move down"
                     onClick={() => handleReorderChapter(chapter.id, 'down')}
                     disabled={chIdx === chapters.length - 1}
@@ -325,11 +325,7 @@ const ChaptersPage = () => {
               {/* Lesson List */}
               {isExpanded && (
                 <div className="ccp-lessons">
-                  {chapter.lessons.length === 0 && (
-                    <div className="ccp-lessons-empty">
-                      <i className="fa-regular fa-file-slash text-lg!" /> No lessons yet
-                    </div>
-                  )}
+                  {chapter.lessons.length === 0 && <div className="ccp-lessons-empty flext justify-center">No lessons yet</div>}
                   {chapter.lessons.map((lesson, lIdx) => (
                     <div key={lesson.id} className="ccp-lesson-row">
                       <div className="ccp-lesson-left">
@@ -339,13 +335,11 @@ const ChaptersPage = () => {
                           <div className="ccp-lesson-title">{lesson.title}</div>
                           <div className="ccp-lesson-desc">{lesson.description}</div>
                         </div>
-                        <span className={`ccp-lesson-status ccp-lesson-status--${lesson.status.toLowerCase()}`}>
-                          {lesson.status}
-                        </span>
-                        <span className="ccp-lesson-type-badge">{lesson.type}</span>
+                        <span className={`ccp-lesson-status lesson-item-status ${lesson.status.toLowerCase()}`}>{lesson.status}</span>
                       </div>
                       <div className="ccp-lesson-actions">
-                        <button className="btn btn-light-primary btn-icon btn-sm"
+                        <button
+                          className="btn btn-light-primary btn-icon btn-sm"
                           title="Move up"
                           onClick={() => handleReorderLesson(chapter.id, lesson.id, 'up')}
                           disabled={lIdx === 0}
@@ -384,7 +378,7 @@ const ChaptersPage = () => {
       </div>
 
       {/* Chapter Modal */}
-      {chapterModal.open &&
+      {chapterModal.open && (
         <ChapterModal
           mode={chapterModal.mode}
           title={chapterTitle}
@@ -396,10 +390,11 @@ const ChaptersPage = () => {
           setChapterModal={setChapterModal}
           submitting={submitting}
           handleSaveChapter={handleSaveChapter}
-        />}
+        />
+      )}
 
       {/* Lesson Modal */}
-      {lessonModal.open &&
+      {lessonModal.open && (
         <LessonModal
           submitting={submitting}
           lessonForm={lessonForm}
@@ -407,7 +402,8 @@ const ChaptersPage = () => {
           lessonModal={lessonModal}
           setLessonModal={setLessonModal}
           handleSaveLesson={handleSaveLesson}
-        />}
+        />
+      )}
     </div>
   );
 };

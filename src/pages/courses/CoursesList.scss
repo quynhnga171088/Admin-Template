@@ -54,28 +54,4 @@
   .courses-item-des-common {
     padding: 0.85rem 0.75rem;
   }
-
-  .courses-item-status.info {
-    background: var(--primary-500);
-  }
-
-  .courses-item-status.warning {
-    background: linear-gradient(135deg, var(--color-warning-600) 0%, var(--color-warning-200) 100%);
-  }
-
-  .courses-item-status.success {
-    background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%)
-  }
-
-  .courses-item-status {
-    width: 70px;
-    font-size: $font-size-xs;
-    color: white;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
 }

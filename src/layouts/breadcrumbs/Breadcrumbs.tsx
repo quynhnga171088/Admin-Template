@@ -16,7 +16,7 @@ const Breadcrumbs = () => {
         item.children.forEach((collapse: Record<string, any>) => {
           if (collapse.type === 'collapse') {
             getCollapseRecursive(collapse);
-          } else if (collapse.type === 'item' && pathname === collapse.url) {
+          } else if (collapse.type === 'item' && pathname.indexOf(collapse.url) >= 0) {
             setMain({
               type: 'collapse',
               title: typeof item.title === 'string' ? item.title : undefined
@@ -29,9 +29,7 @@ const Breadcrumbs = () => {
           }
         });
       }
-    },
-    [pathname]
-  );
+    }, [pathname]);
 
   useEffect(() => {
     navigation.items.forEach((navItem: Record<string, any>) => {
