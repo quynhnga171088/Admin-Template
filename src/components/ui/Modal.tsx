@@ -1,33 +1,35 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+/* Types */
+
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
 export interface ModalProps {
-  /** Trạng thái hiển thị / ẩn của modal */
+  /* Modal visibility state */
   isOpen: boolean;
-  /** Callback khi người dùng yêu cầu đóng (click overlay, nhấn ESC, hoặc click nút X) */
+  /* Callback triggered when closing the modal (clicking overlay, pressing ESC, or clicking the close button) */
   onClose: () => void;
-  /** Tiêu đề hiển thị trên header của modal */
+  /* Title shown in the modal header */
   title?: React.ReactNode;
-  /** Nội dung chính của modal */
+  /* Main content of the modal */
   children: React.ReactNode;
-  /** Nội dung phần footer (thường chứa các nút hành động) */
+  /* Footer content (usually contains action buttons) */
   footer?: React.ReactNode;
-  /** Kích thước của modal. Mặc định: 'md' */
+  /* Size of the modal. Default: 'md' */
   size?: ModalSize;
-  /** Ẩn nút X đóng trên header */
+  /* Hide the close (X) button in the header */
   hideCloseButton?: boolean;
-  /** Click vào overlay (backdrop) có đóng modal không. Mặc định: true */
+  /* Whether clicking the overlay (backdrop) closes the modal. Default: true */
   closeOnOverlayClick?: boolean;
-  /** Nhấn phím ESC có đóng modal không. Mặc định: true */
+  /* Whether pressing the ESC key closes the modal. Default: true */
   closeOnEsc?: boolean;
-  /** class CSS bổ sung cho modal-dialog */
+  /* Additional CSS class for the modal dialog */
   className?: string;
 }
 
-// ─── Modal Component ──────────────────────────────────────────────────────────
+/* Modal Component */
+
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -42,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // Đóng modal khi nhấn ESC
+  /* Close modal when pressing ESC */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (closeOnEsc && e.key === 'Escape') {
@@ -52,7 +54,7 @@ const Modal: React.FC<ModalProps> = ({
     [closeOnEsc, onClose]
   );
 
-  // Khóa scroll của body khi modal mở
+  /* Prevent body scrolling when the modal is open */
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
@@ -64,7 +66,7 @@ const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen, handleKeyDown]);
 
-  // Focus vào dialog khi mở (accessibility)
+  /* Focus on the dialog when opened for accessibility */
   useEffect(() => {
     if (isOpen) {
       dialogRef.current?.focus();
@@ -105,7 +107,7 @@ const Modal: React.FC<ModalProps> = ({
               <button
                 className="modal-close-btn"
                 onClick={onClose}
-                aria-label="Đóng"
+                aria-label="Close"
                 type="button"
               >
                 <i className="fa-solid fa-xmark" aria-hidden="true" />

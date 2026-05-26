@@ -2,16 +2,29 @@ import { useRef, useState, useEffect, type ChangeEvent, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from '@tanstack/react-form';
 
-import { getCourseDetail, updateCourse } from './courses.services.ts';
+import { getCourseDetail, updateCourse, uploadImage } from './courses.services.ts';
 import { courseSchema, type CourseFormData } from '@/pages/courses/course.schema.ts';
 import type { ICourseStatus } from '@/types/types.ts';
 import { SCREENS_PATH, STATE } from '@/config/constant';
+import { type IModalState, modalStore } from '@/stores/modal.store.ts';
 import '@/pages/courses/CourseAddNew.scss';
 
 const CourseEditPage = () => {
   const navigate = useNavigate();
+
   const { id } = useParams<{ id: string }>();
+
   const courseId = Number(id);
+
+  const setProcessing = modalStore((state: IModalState) => state.setProcessing);
+
+  const setOpen = modalStore((state: IModalState) => state.setOpen);
+
+  const setTitle = modalStore((state: IModalState) => state.setTitle);
+
+  const setMessage = modalStore((state: IModalState) => state.setMessage);
+
+  const setCallback = modalStore((state: IModalState) => state.setCallback);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,7 +50,15 @@ const CourseEditPage = () => {
       status: 'DRAFT'
     } as CourseFormData,
     onSubmit: async ({ value }) => {
-      await updateCourse(courseId, value);
+      const file = fileInputRef.current?.files?.[0];
+      let thumbnailUrl = value.thumbnailUrl;
+      if (file) {
+        thumbnailUrl = await uploadImage(file);
+      }
+      await updateCourse(courseId, {
+        ...value,
+        thumbnailUrl
+      });
       navigate(SCREENS_PATH.COURSE_LIST);
     }
   });
@@ -58,6 +79,10 @@ const CourseEditPage = () => {
       .catch(() => setLoadError('Failed to load course data. Please try again.'))
       .finally(() => setIsLoading(false));
   }, [courseId, isIdInvalid, form]);
+
+  useEffect(() => {
+    setProcessing(isLoading);
+  }, [isLoading, setProcessing]);
 
   /* Helpers */
   const validateField = (fieldName: keyof CourseFormData) =>
@@ -83,35 +108,13 @@ const CourseEditPage = () => {
 
   const handleCancel = () => navigate(SCREENS_PATH.COURSE_LIST);
 
-  /* Loading state */
-  if (isLoading) {
-    return (
-      <div className="course-add-new">
-        <div className="can-layout" style={{ justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-          <div style={{ textAlign: 'center', color: 'var(--color-muted, #6c757d)' }}>
-            <i className="fa-regular fa-spinner-third fa-spin fa-2x" />
-            <p style={{ marginTop: '1rem', fontSize: '0.95rem' }}>Loading course data...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   /* Error state */
   if (loadError) {
-    return (
-      <div className="course-add-new">
-        <div className="can-layout" style={{ justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-          <div style={{ textAlign: 'center' }}>
-            <i className="fa-regular fa-circle-exclamation fa-2x" style={{ color: '#dc3545' }} />
-            <p style={{ marginTop: '1rem', color: '#dc3545' }}>{loadError}</p>
-            <button className="btn btn-light mt-3" onClick={handleCancel}>
-              <i className="fa-regular fa-arrow-left" /> Back to List
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    setMessage('Loading data fail, please comeback to List');
+    setTitle('Loading error');
+    setCallback(handleCancel);
+    setOpen(true);
+    return null;
   }
 
   return (

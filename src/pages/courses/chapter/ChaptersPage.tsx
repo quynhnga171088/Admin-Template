@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { chaptersApi, lessonsApi } from '@/lib/api/chaptersApi.ts';
+import { chaptersApi, lessonsApi } from '@/lib/api/chapters.api.ts';
 import { getCourseDetail } from '@/pages/courses/courses.services.ts';
 import { queryClient } from '@/lib/queryClient.ts';
 import { queryKeys } from '@/lib/queryKeys.ts';
@@ -14,11 +14,11 @@ import type {
   IChapterModalState
 } from '@/types/types.ts';
 import { SCREENS_PATH } from '@/config/constant.ts';
-import './CourseChaptersPage.scss';
+import './ChaptersPage.scss';
 
-// ─── Component ────────────────────────────────────────────────────────────────
+/* Component */
 
-const CourseChaptersPage = () => {
+const ChaptersPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const courseId = Number(id);
@@ -49,7 +49,7 @@ const CourseChaptersPage = () => {
 
   /* Load data */
 
-  const loadData = useCallback(async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
       const [courseDetail, chaptersData] = await Promise.all([
@@ -61,16 +61,33 @@ const CourseChaptersPage = () => {
       ]);
       setCourseTitle(courseDetail.title);
       setChapters(chaptersData);
-      // Expand all chapters by default
+      /* Expand all chapters by default */
       setExpandedChapters(new Set(chaptersData.map((c: IChapter) => c.id)));
     } finally {
       setLoading(false);
     }
-  }, [courseId]);
+  };
 
   useEffect(() => {
-    void loadData();
-  }, [loadData]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [courseDetail, chaptersData] = await Promise.all([
+          getCourseDetail(courseId),
+          queryClient.fetchQuery({
+            queryKey: queryKeys.chapters.byCourse(courseId),
+            queryFn: () => chaptersApi.list(courseId).then(r => r.data)
+          })
+        ]);
+        setCourseTitle(courseDetail.title);
+        setChapters(chaptersData);
+        setExpandedChapters(new Set(chaptersData.map((c: IChapter) => c.id)));
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchData();
+  }, [courseId]);
 
   /* Chapter actions */
 
@@ -107,7 +124,7 @@ const CourseChaptersPage = () => {
       }
       await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
       setChapterModal({ open: false });
-      loadData();
+      void loadData();
     } finally {
       setSubmitting(false);
     }
@@ -133,11 +150,10 @@ const CourseChaptersPage = () => {
     });
     await chaptersApi.reorder(courseId, { items });
     await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
-    loadData();
+    void loadData();
   };
 
   /* Lesson actions */
-
   const openCreateLesson = (chapterId: number) => {
     setLessonForm({ title: '', type: 'VIDEO', status: 'PUBLISHED', description: '', videoSourceType: 'YOUTUBE', videoUrl: '', textContent: '' });
     setLessonModal({ open: true, mode: 'create', chapterId });
@@ -177,7 +193,7 @@ const CourseChaptersPage = () => {
       }
       await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
       setLessonModal({ open: false });
-      loadData();
+      void loadData();
     } finally {
       setSubmitting(false);
     }
@@ -206,15 +222,19 @@ const CourseChaptersPage = () => {
     });
     await lessonsApi.reorder(courseId, chapterId, { items });
     await queryClient.invalidateQueries({ queryKey: queryKeys.chapters.byCourse(courseId) });
-    loadData().then(() => {});
+    void loadData();
   };
 
   /* Helpers */
 
   const toggleChapter = (chapterId: number) => {
     setExpandedChapters(prev => {
-      const next = new Set(prev);
-      next.has(chapterId) ? next.delete(chapterId) : next.add(chapterId);
+      const next = new Set<number>(prev);
+      if (next.has(chapterId)) {
+        next.delete(chapterId);
+      } else {
+        next.add(chapterId);
+      }
       return next;
     });
   };
@@ -223,7 +243,6 @@ const CourseChaptersPage = () => {
     type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-file-lines';
 
   /* Render */
-
   if (loading) {
     return (
       <div className="ccp-loading">
@@ -574,5 +593,5 @@ const CourseChaptersPage = () => {
   );
 };
 
-export default CourseChaptersPage;
-export { CourseChaptersPage as Component };
+export default ChaptersPage;
+export { ChaptersPage as Component };

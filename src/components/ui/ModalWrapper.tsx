@@ -5,7 +5,9 @@ import { modalStore } from '@/stores/modal.store.ts';
 const ModalWrapper = () => {
   const open = modalStore(state => state.open);
   const title = modalStore(state => state.title);
+  const setTitle = modalStore(state => state.setTitle);
   const message = modalStore(state => state.message);
+  const setMessage = modalStore(state => state.setMessage);
   const setOpen = modalStore(state => state.setOpen);
   const callback = modalStore(state => state.callback);
   const enableCancelButton = modalStore(state => state.enableCancelButton);
@@ -26,6 +28,8 @@ const ModalWrapper = () => {
             className="btn btn-primary"
             onClick={() => {
               setOpen(false);
+              setMessage('');
+              setTitle('');
               if (callback) {
                 callback();
               }

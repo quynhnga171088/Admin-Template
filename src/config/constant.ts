@@ -54,8 +54,9 @@ export const API_URL = {
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
   UPLOAD_IMAGE: '/upload/image',
+  UPLOAD_VIDEO: '/upload/video',
 
-  // ─── Chapters ────────────────────────────────────────────────────────────
+  /* chapters */
   CHAPTERS: (courseId: number | string) =>
     `/courses/${courseId}/chapters`,
   CHAPTER: (courseId: number | string, chapterId: number | string) =>
@@ -63,17 +64,13 @@ export const API_URL = {
   REORDER_CHAPTERS: (courseId: number | string) =>
     `/courses/${courseId}/chapters/reorder`,
 
-  // ─── Lessons ─────────────────────────────────────────────────────────────
-  LESSONS: (courseId: number | string, chapterId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons`,
-  LESSON: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}`,
-  REORDER_LESSONS: (courseId: number | string, chapterId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/reorder`,
+  /* Lessons */
+  LESSONS: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons`,
+  LESSON: (courseId: number | string, chapterId: number | string, lessonId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}`,
+  REORDER_LESSONS: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/reorder`,
 
-  // ─── Attachments ─────────────────────────────────────────────────────────
-  ATTACHMENTS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments`,
+  /* Attachments */
+  ATTACHMENTS: (courseId: number | string, chapterId: number | string, lessonId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments`,
   ATTACHMENT: (courseId: number | string, chapterId: number | string, lessonId: number | string, attachmentId: number | string) =>
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments/${attachmentId}`,
 };

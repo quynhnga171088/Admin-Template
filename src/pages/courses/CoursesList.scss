@@ -1,6 +1,11 @@
 @use '@/styles/variables' as *;
 
 .courses-list {
+  .courses-item-action {
+    a:hover {
+      text-decoration: none;
+    }
+  }
 
   .sources-item-label {
     background-color: #F8F8F8;

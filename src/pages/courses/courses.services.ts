@@ -1,8 +1,9 @@
-import { queryClient } from '@/lib/queryClient.ts';
-import { coursesApi } from '@/lib/api/coursesApi.ts';
-import { queryKeys } from '@/lib/queryKeys.ts';
-import { modalStore } from '@/stores/modal.store.ts';
-import { coursesStore } from '@/stores/courses.store.ts';
+import { queryClient } from '@/lib/queryClient';
+import { coursesApi } from '@/lib/api/courses.api';
+import { resourceApi } from '@/lib/api/resource.api';
+import { queryKeys } from '@/lib/queryKeys';
+import { modalStore } from '@/stores/modal.store';
+import { coursesStore } from '@/stores/courses.store';
 import type { ICourseCreateRequest, ICourseUpdateRequest, IPagination } from '@/types/types.ts';
 
 export const getCourses = async (pagination: IPagination) => {
@@ -37,7 +38,7 @@ export const getCourses = async (pagination: IPagination) => {
 };
 
 export const uploadImage = async (file: File) => {
-  const response = await coursesApi.uploadImg(file);
+  const response = await resourceApi.uploadImg(file);
   return response.data.fileUrl || '';
 };
 

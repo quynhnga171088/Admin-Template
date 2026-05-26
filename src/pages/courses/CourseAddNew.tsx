@@ -2,9 +2,9 @@ import { useRef, type ChangeEvent, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@tanstack/react-form';
 
-import { createCourse, uploadImage } from './courses.services.ts';
-import { courseSchema, initialCourseFormValues, type CourseFormData } from '@/pages/courses/course.schema.ts';
-import type { ICourseStatus } from '@/types/types.ts';
+import { createCourse, uploadImage } from './courses.services';
+import { courseSchema, initialCourseFormValues, type CourseFormData } from '@/pages/courses/course.schema';
+import type { ICourseStatus } from '@/types/types';
 import { SCREENS_PATH, STATE } from '@/config/constant';
 import '@/pages/courses/CourseAddNew.scss';
 
