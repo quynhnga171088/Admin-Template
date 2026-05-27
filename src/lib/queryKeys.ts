@@ -37,4 +37,9 @@ export const queryKeys = {
     detail: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
       [...queryKeys.lessons.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const,
   },
+  sections: {
+    all: ['sections'] as const,
+    byLesson: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+      [...queryKeys.sections.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const,
+  },
 } as const;

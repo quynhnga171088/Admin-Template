@@ -9,14 +9,65 @@
   padding: 1rem;
   animation: ccp-fade-in 0.15s ease;
 
-  .ccp-avatar-preview {
-    margin-top: 0.5rem;
-    img {
-      height: 80px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 1px solid var(--color-border, #e9ecef);
+  .can-optional {
+    font-size: 0.78rem;
+    color: var(--color-muted, #6c757d);
+    font-weight: 400;
+    margin-left: 0.25rem;
+  }
+
+  /* ── Upload Zone ─────────────────────────────── */
+  .ccp-file-input-hidden {
+    display: none;
+  }
+
+  .ccp-upload-zone {
+    border: 2px dashed var(--color-border, #dee2e6);
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--color-bg-secondary, #f8f9fa);
+
+    &:hover {
+      border-color: var(--color-primary, #4680ff);
+      background: rgba(70, 128, 255, 0.04);
     }
+
+    .ccp-upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--color-muted, #6c757d);
+      padding: 1.5rem;
+
+      span {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      small {
+        font-size: 0.75rem;
+      }
+    }
+
+    .ccp-upload-preview-img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .ccp-upload-error {
+    margin-top: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--color-red-500, #dc3545);
   }
 
   .ccp-modal {

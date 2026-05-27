@@ -6,6 +6,10 @@ export const SCREENS_PATH = {
   COURSE_ADD_NEW: '/courses/add',
   COURSE_EDIT: (id: number | string) => `/courses/${id}/edit`,
   COURSE_CHAPTERS: (id: number | string) => `/courses/${id}/chapters`,
+  SECTION_ADD: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/add`,
+  SECTION_EDIT: (courseId: number | string, chapterId: number | string, lessonId: number | string, sectionId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}/edit`,
   COURSE_REGISTRATION: '/course-registration',
   TYPOGRAPHY: '/typography',
   FORGOT_PASSWORD: '/forgot-password',
@@ -78,6 +82,14 @@ export const API_URL = {
   LESSONS: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons`,
   LESSON: (courseId: number | string, chapterId: number | string, lessonId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}`,
   REORDER_LESSONS: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/reorder`,
+
+  /* Sections */
+  SECTIONS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections`,
+  SECTION: (courseId: number | string, chapterId: number | string, lessonId: number | string, sectionId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}`,
+  REORDER_SECTIONS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/reorder`,
 
   /* Attachments */
   ATTACHMENTS: (courseId: number | string, chapterId: number | string, lessonId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments`,

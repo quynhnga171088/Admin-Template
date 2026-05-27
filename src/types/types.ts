@@ -1,9 +1,13 @@
 /* Chapter Start */
 export type IChapterModalState = { open: false, mode?: string } | { open: true; mode: 'create' } | { open: true; mode: 'edit'; chapter: IChapter };
 
-export type ILessonModalState = { open: false, mode?: string }
+export type ILessonModalState =
+  | { open: false; mode?: string }
   | { open: true; mode: 'create'; chapterId: number }
   | { open: true; mode: 'edit'; chapterId: number; lesson: ILesson };
+
+export type ISectionType   = 'VIDEO' | 'TEXT';
+export type ISectionStatus = 'DRAFT' | 'PUBLISHED';
 /* Chapter End */
 
 export type IRole = 'TEACHER' | 'ADMIN';
@@ -90,77 +94,74 @@ export interface ICourseCreateRequest {
 
 export type ICourseUpdateRequest = Partial<ICourseCreateRequest>
 
-/* Lesson Start */
-export type ILessonStatus = 'DRAFT' | 'PUBLISHED';
-export type ILessonType = 'VIDEO' | 'TEXT';
-export type IVideoSourceType = 'UPLOAD' | 'YOUTUBE' | 'VIMEO' | 'DRIVE';
+/* Section Start */
+export interface ISection {
+  id: number;
+  lessonId: number;
+  title: string;
+  description?: string;
+  type: ISectionType;
+  status: ISectionStatus;
+  videoUrl?: string;
+  textContent?: string;
+  orderIndex: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
+export interface ICreateSectionRequest {
+  title: string;
+  description?: string;
+  type: ISectionType;
+  status?: ISectionStatus;
+  videoUrl?: string;
+  textContent?: string;
+}
+
+export type IUpdateSectionRequest = Partial<ICreateSectionRequest>;
+
+export interface IReorderSectionsRequest {
+  items: { sectionId: number; orderIndex: number }[];
+}
+/* Section End */
+
+/* Lesson Start */
 export interface ILessonForm {
   title: string;
-  type: ILessonType;
-  status: ILessonStatus;
   description: string;
-  videoSourceType: IVideoSourceType,
-  videoUrl: string;
-  textContent: string;
+  avatarUrl: string;
 }
+
+export const lessonFormInit: ILessonForm = {
+  title: '',
+  description: '',
+  avatarUrl: ''
+};
 
 export interface ILesson {
   id: number;
   chapterId: number;
   title: string;
   description?: string;
+  avatarUrl?: string;
   orderIndex: number;
-  type: ILessonType;
-  status: ILessonStatus;
-  textContent?: string;
-  videoSourceType?: IVideoSourceType;
-  videoUrl?: string;
-  videoFileKey?: string;
-  videoDurationSeconds?: number;
+  sections: ISection[];
   createdAt?: string;
   updatedAt?: string;
-}
-
-export const lessonFormInit: ILessonForm = {
-  title: '',
-  type: 'VIDEO' as ILessonType,
-  status: 'PUBLISHED' as ILessonStatus,
-  description: '',
-  videoSourceType: 'YOUTUBE' as IVideoSourceType,
-  videoUrl: '',
-  textContent: ''
-};
-
-export interface ILessonDetail extends ILesson {
-  attachments: IAttachment[];
-}
-
-export interface IAttachment {
-  id: number;
-  lessonId: number;
-  fileName: string;
-  fileKey: string;
-  fileUrl: string;
-  fileType: string;
-  fileSizeBytes: number;
-  orderIndex: number;
-  createdAt: string;
 }
 
 export interface ICreateLessonRequest {
   title: string;
   description?: string;
-  type: ILessonType;
-  status?: ILessonStatus;
-  textContent?: string;
-  videoSourceType?: IVideoSourceType;
-  videoUrl?: string;
-  videoFileKey?: string;
-  videoDurationSeconds?: number;
+  avatarUrl?: string;
 }
 
 export type IUpdateLessonRequest = Partial<ICreateLessonRequest>;
+
+export interface IReorderLessonsRequest {
+  items: { lessonId: number; orderIndex: number }[];
+}
+/* Lesson End */
 
 /* Chapter Start */
 
@@ -190,10 +191,6 @@ export interface IUpdateChapterRequest {
 
 export interface IReorderChaptersRequest {
   items: { chapterId: number; orderIndex: number }[];
-}
-
-export interface IReorderLessonsRequest {
-  items: { lessonId: number; orderIndex: number }[];
 }
 
 export interface ICoursesState {
