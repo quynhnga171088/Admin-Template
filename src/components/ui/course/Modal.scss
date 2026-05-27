@@ -41,12 +41,13 @@
   }
 
   .ccp-modal-title {
-    font-size: 1rem;
+    font-size: var(--text-base, 0.875rem);
     font-weight: 600;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    color: var(--color-theme-bodycolor);
   }
 
   .ccp-modal-close {
@@ -70,6 +71,10 @@
     gap: 1rem;
     max-height: 70vh;
     overflow-y: auto;
+  }
+
+  .can-required {
+    color: var(--color-red-500);
   }
 
   .ccp-modal-footer {

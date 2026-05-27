@@ -20,7 +20,7 @@ const LessonModal = ({
     <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>
       <div className="ccp-modal-header">
         <h3 className="ccp-modal-title">
-          <i className="fa-regular fa-file-video" />
+          <i className="fa-regular fa-books" />
           {lessonModal.mode === 'create' ? ' New Lesson' : ' Edit Lesson'}
         </h3>
         <button className="ccp-modal-close" onClick={() => setLessonModal({ open: false })}>
@@ -78,7 +78,7 @@ const LessonModal = ({
             id="lesson-description-textarea"
             className="form-control can-textarea"
             placeholder="Brief description of this lesson..."
-            rows={2}
+            rows={5}
             value={lessonForm.description}
             onChange={e => setLessonForm({ ...lessonForm, description: e.target.value })}
           />
