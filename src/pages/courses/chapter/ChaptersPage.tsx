@@ -377,10 +377,8 @@ const ChaptersPage = () => {
                         <div className="ccp-lesson-row" onClick={() => toggleLesson(lesson.id)}>
                           <div className="ccp-lesson-left">
                             <i className={`fa-regular ${isLessonExpanded ? 'fa-chevron-down' : 'fa-chevron-right'} ccp-chevron ccp-chevron--sm`} />
-                            {lesson.avatarUrl && (
-                              <div className="ccp-lesson-avatar" style={{ backgroundImage: `url(${lesson.avatarUrl})` }} />
-                            )}
-                            <span className="ccp-lesson-index">{lIdx + 1}.</span>
+                            <span className="ccp-lesson-index">{lIdx + 1}</span>
+                            {lesson.avatarUrl && <div className="ccp-lesson-avatar" style={{ backgroundImage: `url(${lesson.avatarUrl})` }} />}
                             <div className="ccp-lesson-info">
                               <div className="ccp-lesson-title">{lesson.title}</div>
                               {lesson.description && <div className="ccp-lesson-desc">{lesson.description}</div>}
@@ -389,21 +387,27 @@ const ChaptersPage = () => {
                               {lesson.sections.length} Section{lesson.sections.length !== 1 ? 's' : ''}
                             </span>
                           </div>
-                          <div className="ccp-lesson-actions" onClick={e => e.stopPropagation()}>
-                            <button className="btn btn-light-primary btn-icon btn-sm" title="Move up"
-                              onClick={() => handleReorderLesson(chapter.id, lesson.id, 'up')} disabled={lIdx === 0}>
+                          <div className="ccp-lesson-actions" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              className="btn btn-light-primary btn-icon btn-sm"
+                              title="Move up"
+                              onClick={() => handleReorderLesson(chapter.id, lesson.id, 'up')}
+                              disabled={lIdx === 0}
+                            >
                               <i className="fa-regular fa-chevron-up" />
                             </button>
-                            <button className="btn btn-light-primary btn-icon btn-sm" title="Move down"
-                              onClick={() => handleReorderLesson(chapter.id, lesson.id, 'down')} disabled={lIdx === chapter.lessons.length - 1}>
+                            <button
+                              className="btn btn-light-primary btn-icon btn-sm"
+                              title="Move down"
+                              onClick={() => handleReorderLesson(chapter.id, lesson.id, 'down')}
+                              disabled={lIdx === chapter.lessons.length - 1}
+                            >
                               <i className="fa-regular fa-angle-down" />
                             </button>
-                            <button className="btn btn-light-warning btn-icon btn-sm" title="Edit lesson"
-                              onClick={() => openEditLesson(chapter.id, lesson)}>
+                            <button className="btn btn-light-warning btn-icon btn-sm" title="Edit lesson" onClick={() => openEditLesson(chapter.id, lesson)}>
                               <i className="fa-thin fa-pen text-sm" />
                             </button>
-                            <button className="btn btn-light-danger btn-icon btn-sm" title="Delete lesson"
-                              onClick={() => handleDeleteLesson(chapter.id, lesson.id)}>
+                            <button className="btn btn-light-danger btn-icon btn-sm" title="Delete lesson" onClick={() => handleDeleteLesson(chapter.id, lesson.id)}>
                               <i className="fa-thin fa-trash text-sm" />
                             </button>
                           </div>
@@ -412,39 +416,47 @@ const ChaptersPage = () => {
                         {/* Section List (Level 3) */}
                         {isLessonExpanded && (
                           <div className="ccp-sections">
-                            {lesson.sections.length === 0 && (
-                              <div className="ccp-sections-empty">No sections yet. Click "Add Section" to start.</div>
-                            )}
+                            {lesson.sections.length === 0 && <div className="ccp-sections-empty">No sections yet.</div>}
                             {lesson.sections.map((section, sIdx) => (
                               <div key={section.id} className="ccp-section-row">
                                 <div className="ccp-section-left">
                                   <i className={`${sectionTypeIcon(section.type)} ccp-section-type-icon`} />
-                                  <span className="ccp-section-index">{sIdx + 1}.</span>
+                                  <span className="ccp-section-index">{sIdx + 1}</span>
                                   <div className="ccp-section-info">
                                     <div className="ccp-section-title">{section.title}</div>
                                     {section.description && <div className="ccp-section-desc">{section.description}</div>}
                                   </div>
-                                  <span className={`ccp-section-status ${section.status.toLowerCase()}`}>
-                                    {section.status}
-                                  </span>
+                                  <span className={`ccp-section-status ${section.status.toLowerCase()}`}>{section.status}</span>
                                 </div>
                                 <div className="ccp-section-actions">
-                                  <button className="btn btn-light-primary btn-icon btn-sm" title="Move up"
+                                  <button
+                                    className="btn btn-light-primary btn-icon btn-sm"
+                                    title="Move up"
                                     onClick={() => handleReorderSection(chapter.id, lesson.id, section.id, 'up')}
-                                    disabled={sIdx === 0}>
+                                    disabled={sIdx === 0}
+                                  >
                                     <i className="fa-regular fa-chevron-up" />
                                   </button>
-                                  <button className="btn btn-light-primary btn-icon btn-sm" title="Move down"
+                                  <button
+                                    className="btn btn-light-primary btn-icon btn-sm"
+                                    title="Move down"
                                     onClick={() => handleReorderSection(chapter.id, lesson.id, section.id, 'down')}
-                                    disabled={sIdx === lesson.sections.length - 1}>
+                                    disabled={sIdx === lesson.sections.length - 1}
+                                  >
                                     <i className="fa-regular fa-angle-down" />
                                   </button>
-                                  <button className="btn btn-light-warning btn-icon btn-sm" title="Edit section"
-                                    onClick={() => navigate(SCREENS_PATH.SECTION_EDIT(courseId, chapter.id, lesson.id, section.id))}>
+                                  <button
+                                    className="btn btn-light-warning btn-icon btn-sm"
+                                    title="Edit section"
+                                    onClick={() => navigate(SCREENS_PATH.SECTION_EDIT(courseId, chapter.id, lesson.id, section.id))}
+                                  >
                                     <i className="fa-thin fa-pen text-sm" />
                                   </button>
-                                  <button className="btn btn-light-danger btn-icon btn-sm" title="Delete section"
-                                    onClick={() => handleDeleteSection(chapter.id, lesson.id, section.id)}>
+                                  <button
+                                    className="btn btn-light-danger btn-icon btn-sm"
+                                    title="Delete section"
+                                    onClick={() => handleDeleteSection(chapter.id, lesson.id, section.id)}
+                                  >
                                     <i className="fa-thin fa-trash text-sm" />
                                   </button>
                                 </div>
@@ -452,7 +464,7 @@ const ChaptersPage = () => {
                             ))}
 
                             {/* Add Section Button */}
-                            <div className="ccp-add-section-row">
+                            <div className="ccp-add-section-row text-right">
                               <button
                                 className="btn btn-sm btn-light-primary ccp-add-section-btn"
                                 onClick={() => navigate(SCREENS_PATH.SECTION_ADD(courseId, chapter.id, lesson.id))}

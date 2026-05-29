@@ -43,6 +43,10 @@
 }
 
 // Chapters
+.ccp-chapter-info {
+  flex: 1;
+  min-width: 0;
+}
 
 .ccp-chapters {
   display: flex;
@@ -93,8 +97,8 @@
 .ccp-chapter-index {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-primary, #4680ff);
-  background: rgba(70, 128, 255, 0.1);
+  color: white;
+  background: linear-gradient(-135deg, #4680ff 0%, #9fb8ef 100%);;
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -117,7 +121,7 @@
 
 .ccp-chapter-title {
   font-weight: 600;
-  font-size: 0.925rem;
+  font-size: 0.825rem;
   flex-shrink: 0;
 }
 
@@ -140,7 +144,7 @@
 .ccp-course-title,
 .ccp-lesson-title {
   font-weight: 600;
-  font-size: 0.876rem;
+  font-size: 0.8rem;
   flex-shrink: 0;
 }
 
@@ -171,7 +175,7 @@
   }
 }
 
-// ─── Lessons ──────────────────────────────────────────────────────────────────
+// Lessons
 
 .ccp-lessons {
   border-top: 1px solid var(--color-border, #e9ecef);
@@ -182,6 +186,9 @@
   padding: 0.75rem 1.75rem;
   font-size: 0.85rem;
   color: var(--color-muted, #6c757d);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ccp-lesson-block {
@@ -196,7 +203,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1.25rem 0.5rem 2rem;
+  padding: 0.5rem 1.25rem 0.5rem 3rem;
   cursor: pointer;
   transition: background 0.15s;
   user-select: none;
@@ -231,10 +238,18 @@
 }
 
 .ccp-lesson-index {
-  font-size: 0.78rem;
-  color: var(--color-muted, #6c757d);
   flex-shrink: 0;
   min-width: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ccp-lesson-info {
@@ -269,11 +284,6 @@
   border-radius: 10px;
 }
 
-.ccp-section-count {
-  background: rgba(70, 128, 255, 0.08);
-  color: var(--color-primary, #4680ff);
-}
-
 .ccp-lesson-actions,
 .ccp-section-actions {
   display: flex;
@@ -304,13 +314,16 @@
   font-size: 0.82rem;
   color: var(--color-muted, #6c757d);
   font-style: italic;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ccp-section-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.4rem 1.25rem 0.4rem 3.5rem;
+  padding: 0.4rem 1.25rem 0.4rem 5rem;
   transition: background 0.15s;
 
   &:hover {
@@ -328,17 +341,22 @@
 
 .ccp-section-type-icon {
   font-size: 0.8rem;
-  color: var(--color-primary, #4680ff);
+  color: var(--color-theme-bodycolor);
   flex-shrink: 0;
   width: 16px;
   text-align: center;
 }
 
 .ccp-section-index {
-  font-size: 0.75rem;
-  color: var(--color-muted, #6c757d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: white;
   flex-shrink: 0;
   min-width: 18px;
+  border-radius: 50%;
+  background: linear-gradient(-135deg, rgb(102, 115, 117) 0%, #c8d7da 100%);
 }
 
 .ccp-section-info {

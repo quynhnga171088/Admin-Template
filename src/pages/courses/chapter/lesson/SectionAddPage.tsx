@@ -6,6 +6,7 @@ import { queryKeys } from '@/lib/queryKeys';
 import { SCREENS_PATH } from '@/config/constant';
 import type { ISectionType, ISectionStatus } from '@/types/types';
 import '@/pages/courses/chapter/lesson/SectionPage.scss';
+import RichTextEditor from '@/components/ui/course/RichTextEditor';
 
 const SectionAddPage = () => {
   const navigate = useNavigate();
@@ -29,7 +30,8 @@ const SectionAddPage = () => {
       setError('Video URL là bắt buộc cho loại VIDEO.');
       return;
     }
-    if (type === 'TEXT' && !textContent.trim()) {
+    const plainText = textContent.replace(/<[^>]*>/g, '').trim();
+    if (type === 'TEXT' && !plainText) {
       setError('Nội dung là bắt buộc cho loại TEXT.');
       return;
     }
@@ -158,15 +160,11 @@ const SectionAddPage = () => {
               <label className="form-label sp-label">
                 Content <span className="sp-required">*</span>
               </label>
-              <textarea
-                id="section-text-content-textarea"
-                className="form-control sp-textarea sp-textarea--tall"
-                placeholder="Viết nội dung bài học tại đây..."
-                rows={16}
+              <RichTextEditor
                 value={textContent}
-                onChange={e => setTextContent(e.target.value)}
+                onChange={setTextContent}
+                placeholder="Viết nội dung bài học tại đây..."
               />
-              <small className="sp-hint">Hỗ trợ văn bản thuần. Rich text editor sẽ được tích hợp sau.</small>
             </div>
           )}
 
