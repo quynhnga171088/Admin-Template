@@ -120,7 +120,10 @@ const CoursesList = () => {
                   {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
                 </div>
                 <div className="hidden xl:flex 2xl:flex xl:col-span-3 2xl:col-span-3 items-center card-header-title courses-item-action">
-                  <Link className="btn btn-light-info btn-icon btn-sm no-underline" type="button" title="Chapters" to={SCREENS_PATH.COURSE_CHAPTERS(course.id)}>
+                  <Link className="btn btn-light-secondary btn-icon btn-sm no-underline" type="button" title="Preview" to={SCREENS_PATH.COURSE_PREVIEW(course.id)}>
+                    <i className="fa-regular fa-eye text-sm" aria-hidden="true" />
+                  </Link>
+                  <Link className="btn btn-light-info btn-icon btn-sm ml-[2px]! no-underline" type="button" title="Chapters" to={SCREENS_PATH.COURSE_CHAPTERS(course.id)}>
                     <i className="fa-regular fa-layer-group text-sm" aria-hidden="true" />
                   </Link>
                   <Link className="btn btn-light-warning btn-icon btn-sm ml-[2px]! no-underline" type="button" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>

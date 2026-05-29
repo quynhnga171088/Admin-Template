@@ -7,6 +7,7 @@ import { SCREENS_PATH } from '@/config/constant';
 import type { ISectionType, ISectionStatus } from '@/types/types';
 import '@/pages/courses/chapter/lesson/SectionPage.scss';
 import RichTextEditor from '@/components/ui/course/RichTextEditor';
+import VideoSourcePicker from '@/components/ui/course/VideoSourcePicker';
 
 const SectionAddPage = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const SectionAddPage = () => {
   const [status, setStatus] = useState<ISectionStatus>('PUBLISHED');
   const [videoUrl, setVideoUrl] = useState('');
   const [textContent, setTextContent] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -140,17 +142,15 @@ const SectionAddPage = () => {
           {type === 'VIDEO' && (
             <div className="sp-field">
               <label className="form-label sp-label">
-                Video URL <span className="sp-required">*</span>
+                Video <span className="sp-required">*</span>
               </label>
-              <input
-                id="section-video-url-input"
-                type="url"
-                className="form-control"
-                placeholder="https://youtube.com/watch?v=..."
-                value={videoUrl}
-                onChange={e => setVideoUrl(e.target.value)}
+              <VideoSourcePicker
+                courseId={courseId}
+                videoUrl={videoUrl}
+                onChange={setVideoUrl}
+                onUploadingChange={setUploading}
+                disabled={submitting}
               />
-              <small className="sp-hint">YouTube, Vimeo, hoặc bất kỳ URL video nào.</small>
             </div>
           )}
 
@@ -178,10 +178,12 @@ const SectionAddPage = () => {
             <button
               className="btn btn-primary"
               onClick={handleSave}
-              disabled={!title.trim() || submitting}
+              disabled={!title.trim() || submitting || uploading}
             >
               {submitting
                 ? <><i className="fa-regular fa-spinner-third fa-spin" /> Saving...</>
+                : uploading
+                ? <><i className="fa-regular fa-spinner-third fa-spin" /> Uploading...</>
                 : <><i className="fa-regular fa-floppy-disk" /> Save Section</>}
             </button>
           </div>

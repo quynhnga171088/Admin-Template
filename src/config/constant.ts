@@ -5,6 +5,7 @@ export const SCREENS_PATH = {
   COURSE_LIST: '/courses',
   COURSE_ADD_NEW: '/courses/add',
   COURSE_EDIT: (id: number | string) => `/courses/${id}/edit`,
+  COURSE_PREVIEW: (id: number | string) => `/courses/${id}/preview`,
   COURSE_CHAPTERS: (id: number | string) => `/courses/${id}/chapters`,
   SECTION_ADD: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/add`,
