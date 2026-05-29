@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import { chaptersApi } from '@/lib/api/chapters.api';
 import { getCourseDetail } from '@/pages/courses/courses.services';
 import { queryClient } from '@/lib/queryClient';
@@ -137,9 +138,9 @@ const CoursePreviewPage = () => {
   const statusClass = (status?: string) => {
     switch (status?.toUpperCase()) {
       case 'PUBLISHED': return 'cpv-status-badge--published';
-      case 'DRAFT':     return 'cpv-status-badge--draft';
-      case 'ARCHIVED':  return 'cpv-status-badge--archived';
-      default:          return 'cpv-status-badge--draft';
+      case 'DRAFT': return 'cpv-status-badge--draft';
+      case 'ARCHIVED': return 'cpv-status-badge--archived';
+      default: return 'cpv-status-badge--draft';
     }
   };
 
@@ -255,9 +256,9 @@ const CoursePreviewPage = () => {
                                   >
                                     <i className={
                                       `${isVideo ?
-                                       'fa-regular fa-circle-play cpv-section-type-icon--video' :
+                                        'fa-regular fa-circle-play cpv-section-type-icon--video' :
                                         'fa-regular fa-book-open cpv-section-type-icon--text'} cpv-section-type-icon`
-                                        } />
+                                    } />
                                     <span className="cpv-section-name">{section.title}</span>
                                     {section.status === 'DRAFT' && (
                                       <span className="cpv-section-draft-badge">Draft</span>
