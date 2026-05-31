@@ -1,10 +1,13 @@
 import { useEditor, EditorContent, type Editor } from '@tiptap/react';
+import { useRef, useState } from 'react';
+import { resourceApi } from '@/lib/api/resource.api';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
+import { CustomImage } from '@/components/ui/course/CustomImage';
 
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
@@ -43,6 +46,9 @@ const Divider = () => <span className="rte-divider" />;
 // ── Toolbar ────────────────────────────────────────────────────────────────────
 
 const Toolbar = ({ editor }: { editor: Editor }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const setLink = () => {
     const prev = editor.getAttributes('link').href as string | undefined;
     const url = window.prompt('Enter URL:', prev ?? 'https://');
@@ -51,6 +57,21 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
       editor.chain().focus().extendMarkRange('link').unsetLink().run();
     } else {
       editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    try {
+      setIsUploading(true);
+      const { data } = await resourceApi.uploadImg(file);
+      editor.chain().focus().setImage({ src: data.fileUrl }).run();
+    } catch (err) {
+      console.error('Image upload failed:', err);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -166,6 +187,26 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
 
       <Divider />
 
+      {/* Image Upload */}
+      <ToolbarBtn
+        title={isUploading ? 'Đang tải ảnh...' : 'Insert Image'}
+        disabled={isUploading}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        {isUploading
+          ? <i className="fa-regular fa-spinner fa-spin" />
+          : <i className="fa-regular fa-image" />}
+      </ToolbarBtn>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleImageUpload}
+      />
+
+      <Divider />
+
       {/* Clear */}
       <ToolbarBtn title="Clear Formatting"
         onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}>
@@ -197,6 +238,7 @@ const RichTextEditor = ({
       }),
       Underline,
       Highlight,
+      CustomImage.configure({ inline: false, allowBase64: true }),
 
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Link.configure({ openOnClick: false, HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' } }),
