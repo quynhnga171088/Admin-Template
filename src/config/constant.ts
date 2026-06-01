@@ -27,6 +27,7 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
   COURSE_ADD_NEW: '/courses/add',
   COURSE_CHAPTERS: '/chapters',
   COURSE_REGISTRATION: '/course-registration',
+  COURSE_PREVIEW: '/preview'
 };
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';

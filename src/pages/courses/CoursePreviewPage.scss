@@ -1,5 +1,4 @@
-// ─── Page layout ──────────────────────────────────────────────────────────────
-
+/* Page layout */
 .cpv-page {
   display: flex;
   flex-direction: column;
@@ -17,8 +16,7 @@
   color: var(--color-muted, #6c757d);
 }
 
-// ─── Header card ──────────────────────────────────────────────────────────────
-
+/* Header card */
 .cpv-header-meta {
   display: flex;
   flex-direction: column;
@@ -72,7 +70,7 @@
   }
 }
 
-// ─── Main layout (sidebar + content) ──────────────────────────────────────────
+/* Main layout (sidebar + content)  */
 
 .cpv-layout {
   display: grid;
@@ -85,7 +83,7 @@
   }
 }
 
-// ─── Sidebar ──────────────────────────────────────────────────────────────────
+/* Sidebar */
 
 .cpv-sidebar {
   position: sticky;
@@ -119,8 +117,7 @@
   z-index: 1;
 }
 
-// ─── Chapter ──────────────────────────────────────────────────────────────────
-
+/* Chapter */
 .cpv-chapter {
   border-bottom: 1px solid var(--color-border, #e9ecef);
 
@@ -181,8 +178,7 @@
   flex-shrink: 0;
 }
 
-// ─── Lesson ───────────────────────────────────────────────────────────────────
-
+/* Lesson */
 .cpv-lessons {
   background: rgba(0, 0, 0, 0.015);
   border-top: 1px solid var(--color-border, #e9ecef);
@@ -231,8 +227,7 @@
   flex-shrink: 0;
 }
 
-// ─── Section item ─────────────────────────────────────────────────────────────
-
+/* Section item */
 .cpv-sections {
   padding: 0.25rem 0;
   border-top: 1px solid rgba(0, 0, 0, 0.04);
@@ -294,8 +289,7 @@
   flex-shrink: 0;
 }
 
-// ─── Content area ─────────────────────────────────────────────────────────────
-
+/* Content area */
 .cpv-content {
   display: flex;
   flex-direction: column;
@@ -399,6 +393,12 @@
 
   p { margin-bottom: 1em; }
 
+  /* Marks (vì Tailwind reset mặc định) */
+  strong { font-weight: 700; }
+  em     { font-style: italic; }
+  u      { text-decoration: underline; }
+  s      { text-decoration: line-through; }
+
   ul, ol {
     padding-left: 1.5em;
     margin-bottom: 1em;
@@ -461,7 +461,7 @@
     }
   }
 
-  // ── Callout blocks ──────────────────────────────────────────────────────────
+  /* Callout blocks */
   [data-callout] {
     --callout-border: var(--color-primary, #4680ff);
     --callout-bg:     rgba(70, 128, 255, 0.07);
@@ -507,7 +507,7 @@
   }
 }
 
-// Empty state
+/* Empty state */
 .cpv-empty-state {
   display: flex;
   flex-direction: column;
@@ -533,7 +533,7 @@
   margin: 0;
 }
 
-// Sidebar empty states
+/* Sidebar empty states */
 .cpv-no-lessons,
 .cpv-no-sections {
   padding: 0.5rem 1rem 0.5rem 2.5rem;

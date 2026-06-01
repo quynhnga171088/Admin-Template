@@ -47,6 +47,13 @@ const mainFunctions = {
           type: 'item',
           icon: 'fa-regular fa-layer-group',
           url: SCREENS_PATH_FOR_SIDEBAR.COURSE_CHAPTERS
+        }, {
+          id: 'chapters-preview',
+          disabled: true,
+          title: 'Course Preview',
+          type: 'item',
+          icon: 'fa-regular fa-layer-group',
+          url: SCREENS_PATH_FOR_SIDEBAR.COURSE_PREVIEW
         }
       ]
     }, {
