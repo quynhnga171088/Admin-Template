@@ -8,6 +8,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import { CustomImage } from '@/components/ui/course/CustomImage';
+import { CalloutExtension, type CalloutVariant } from '@/components/ui/course/CalloutExtension';
 
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
@@ -44,6 +45,14 @@ const ToolbarBtn = ({
 const Divider = () => <span className="rte-divider" />;
 
 // ── Toolbar ────────────────────────────────────────────────────────────────────
+
+// Callout variant config
+const CALLOUT_VARIANTS: { variant: CalloutVariant; color: string; title: string }[] = [
+  { variant: 'info',    color: 'var(--color-primary, #4680ff)',  title: 'Info' },
+  { variant: 'warning', color: 'var(--color-warning, #f4c22b)',  title: 'Cảnh báo' },
+  { variant: 'danger',  color: 'var(--color-danger, #f44236)',   title: 'Quan trọng' },
+  { variant: 'success', color: 'var(--color-success, #1de9b6)',  title: 'Ghi nhớ' }
+];
 
 const Toolbar = ({ editor }: { editor: Editor }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -207,6 +216,35 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
 
       <Divider />
 
+      {/* Callout */}
+      <ToolbarBtn
+        title="Insert Callout"
+        active={editor.isActive('callout')}
+        onClick={() => editor.chain().focus().insertCallout().run()}
+      >
+        <i className="fa-solid fa-note-sticky" />
+      </ToolbarBtn>
+
+      {/* Variant switchers — only visible when cursor is inside a callout */}
+      {editor.isActive('callout') && (
+        <>
+          {CALLOUT_VARIANTS.map(({ variant, color, title }) => (
+            <button
+              key={variant}
+              type="button"
+              title={`Đổi sang: ${title}`}
+              className={`rte-callout-variant-dot${
+                editor.isActive('callout', { variant }) ? ' rte-callout-variant-dot--active' : ''
+              }`}
+              style={{ '--dot-color': color } as React.CSSProperties}
+              onClick={() => editor.chain().focus().setCalloutVariant(variant).run()}
+            />
+          ))}
+        </>
+      )}
+
+      <Divider />
+
       {/* Clear */}
       <ToolbarBtn title="Clear Formatting"
         onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}>
@@ -239,6 +277,7 @@ const RichTextEditor = ({
       Underline,
       Highlight,
       CustomImage.configure({ inline: false, allowBase64: true }),
+      CalloutExtension,
 
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Link.configure({ openOnClick: false, HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' } }),
