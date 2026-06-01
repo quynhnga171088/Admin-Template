@@ -9,14 +9,17 @@ import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import { CustomImage } from '@/components/ui/course/CustomImage';
 import { CalloutExtension, type CalloutVariant } from '@/components/ui/course/CalloutExtension';
+import { FontSizeExtension, TextStyle } from '@/components/ui/course/FontSizeExtension';
+import Color from '@tiptap/extension-color';
 
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
+import { type IModalState, modalStore } from '@/stores/modal.store.ts';
 import '@/components/ui/course/RichTextEditor.scss';
 
 const lowlight = createLowlight(common);
 
-// ── Toolbar Button ─────────────────────────────────────────────────────────────
+/* Toolbar Button */
 
 const ToolbarBtn = ({
   onClick,
@@ -44,19 +47,37 @@ const ToolbarBtn = ({
 
 const Divider = () => <span className="rte-divider" />;
 
-// ── Toolbar ────────────────────────────────────────────────────────────────────
+/* Toolbar */
 
-// Callout variant config
+/* Callout variant config */
 const CALLOUT_VARIANTS: { variant: CalloutVariant; color: string; title: string }[] = [
-  { variant: 'info',    color: 'var(--color-primary, #4680ff)',  title: 'Info' },
-  { variant: 'warning', color: 'var(--color-warning, #f4c22b)',  title: 'Cảnh báo' },
-  { variant: 'danger',  color: 'var(--color-danger, #f44236)',   title: 'Quan trọng' },
-  { variant: 'success', color: 'var(--color-success, #1de9b6)',  title: 'Ghi nhớ' }
+  { variant: 'info', color: 'var(--color-primary, #4680ff)', title: 'Info' },
+  { variant: 'warning', color: 'var(--color-warning, #f4c22b)', title: 'Cảnh báo' },
+  { variant: 'danger', color: 'var(--color-danger, #f44236)', title: 'Quan trọng' },
+  { variant: 'success', color: 'var(--color-success, #1de9b6)', title: 'Ghi nhớ' }
+];
+
+/* Font size presets (px) */
+const FONT_SIZES = ['10', '11', '12', '13', '14', '15', '16', '18', '20', '22', '24', '28', '32', '36', '48'];
+
+/* Preset colors for the color palette */
+const COLOR_PRESETS = [
+  '#212529', '#495057', '#868e96', '#adb5bd', // grays
+  '#4680ff', '#2d5fe0', '#0ca678', '#f4c22b', // brand
+  '#f44236', '#e91e63', '#9c27b0', '#673ab7', // vivid
+  '#2196f3', '#00bcd4', '#4caf50', '#ff9800' // material
 ];
 
 const Toolbar = ({ editor }: { editor: Editor }) => {
+  const setOpen = modalStore((state: IModalState) => state.setOpen);
+  const setMessage = modalStore((state: IModalState) => state.setMessage);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+
+  /* Current font size from selection */
+  const currentFontSize = editor.getAttributes('textStyle').fontSize?.replace('px', '') ?? '';
 
   const setLink = () => {
     const prev = editor.getAttributes('link').href as string | undefined;
@@ -78,7 +99,8 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
       const { data } = await resourceApi.uploadImg(file);
       editor.chain().focus().setImage({ src: data.fileUrl }).run();
     } catch (err) {
-      console.error('Image upload failed:', err);
+      setOpen(true);
+      setMessage('Image upload failed, please try again leter!');
     } finally {
       setIsUploading(false);
     }
@@ -137,6 +159,79 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
         onClick={() => editor.chain().focus().toggleCode().run()}>
         <i className="fa-regular fa-code" />
       </ToolbarBtn>
+
+      <Divider />
+
+      {/* Font Size */}
+      <select
+        className="rte-select"
+        title="Font size"
+        value={currentFontSize}
+        onChange={e => {
+          const v = e.target.value;
+          if (v) editor.chain().focus().setFontSize(`${v}px`).run();
+          else editor.chain().focus().unsetFontSize().run();
+        }}
+      >
+        <option value="">Size</option>
+        {FONT_SIZES.map(s => (
+          <option key={s} value={s}>{s}</option>
+        ))}
+      </select>
+
+      {/* Font Color */}
+      <div className="rte-color-wrap">
+        <button
+          type="button"
+          className="rte-color-btn"
+          title="Font color"
+          onClick={() => setShowColorPicker(v => !v)}
+        >
+          <i className="fa-solid fa-font" />
+          <span
+            className="rte-color-indicator"
+            style={{ background: editor.getAttributes('textStyle').color ?? '#212529' }}
+          />
+        </button>
+
+        {showColorPicker && (
+          <div className="rte-color-palette" onMouseDown={e => e.preventDefault()}>
+            <div className="rte-color-swatches">
+              {COLOR_PRESETS.map(c => (
+                <button
+                  key={c}
+                  type="button"
+                  className="rte-color-swatch"
+                  style={{ background: c }}
+                  title={c}
+                  onClick={() => {
+                    editor.chain().focus().setColor(c).run();
+                    setShowColorPicker(false);
+                  }}
+                />
+              ))}
+            </div>
+            <label className="rte-color-custom">
+              <span>Tùy chọn:</span>
+              <input
+                type="color"
+                defaultValue={editor.getAttributes('textStyle').color ?? '#212529'}
+                onChange={e => editor.chain().focus().setColor(e.target.value).run()}
+              />
+            </label>
+            <button
+              type="button"
+              className="rte-color-reset"
+              onClick={() => {
+                editor.chain().focus().unsetColor().run();
+                setShowColorPicker(false);
+              }}
+            >
+              <i className="fa-regular fa-ban" /> Bỏ màu
+            </button>
+          </div>
+        )}
+      </div>
 
       <Divider />
 
@@ -222,7 +317,7 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
         active={editor.isActive('callout')}
         onClick={() => editor.chain().focus().insertCallout().run()}
       >
-        <i className="fa-solid fa-note-sticky" />
+        <i className="fa-solid fa-rectangle-pro" />
       </ToolbarBtn>
 
       {/* Variant switchers — only visible when cursor is inside a callout */}
@@ -276,6 +371,9 @@ const RichTextEditor = ({
       }),
       Underline,
       Highlight,
+      TextStyle,
+      Color,
+      FontSizeExtension,
       CustomImage.configure({ inline: false, allowBase64: true }),
       CalloutExtension,
 

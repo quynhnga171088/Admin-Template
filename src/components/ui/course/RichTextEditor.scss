@@ -1,4 +1,4 @@
-/* ── Wrapper ────────────────────────────────────────────────────────────────── */
+/* Wrapper */
 .rte-wrapper {
   border: 1px solid var(--color-border, #dee2e6);
   border-radius: 10px;
@@ -13,7 +13,7 @@
   }
 }
 
-/* ── Toolbar ────────────────────────────────────────────────────────────────── */
+/* Toolbar */
 .rte-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -73,7 +73,7 @@
   flex-shrink: 0;
 }
 
-/* ── Editor Content ─────────────────────────────────────────────────────────── */
+/* Editor Content */
 .rte-content {
   flex: 1;
   padding: 1rem 1.25rem;
@@ -325,7 +325,7 @@
     .rte-callout {
       --callout-border: var(--color-primary, #4680ff);
       --callout-bg:     rgba(70, 128, 255, 0.07);
-      --callout-text:   #2d5fe0;
+      --callout-text:   #0369a1;
 
       background: var(--callout-bg);
       border-radius: 1rem;

@@ -21,9 +21,7 @@ const ModalWrapper = () => {
       size="md"
       footer={
         <React.Fragment>
-          {enableCancelButton && <button className="btn btn-light" onClick={() => setOpen(false)}>
-            Cancel
-          </button>}
+          {enableCancelButton && <button className="btn btn-light" onClick={() => setOpen(false)}>Cancel</button>}
           {enableOkButton && <button
             className="btn btn-primary"
             onClick={() => {

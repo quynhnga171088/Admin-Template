@@ -28,7 +28,7 @@ export const modalStore = create<IModalState>(set => ({
   title: '',
   message: '',
   callback: null,
-  enableCancelButton: true,
+  enableCancelButton: false,
   disableOkButton: false,
   enableOkButton: true,
   /* Processing modal */
