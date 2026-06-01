@@ -321,7 +321,7 @@
       &.resizing { background: var(--color-primary-dark, #2d5fe0); }
     }
 
-    /* ── Callout block ─────────────────────────────────────────────────────── */
+    /* Callout block */
     .rte-callout {
       --callout-border: var(--color-primary, #4680ff);
       --callout-bg:     rgba(70, 128, 255, 0.07);
@@ -334,9 +334,9 @@
       transition: border-color 0.2s, background 0.2s, color 0.2s;
 
       &--info {
-        --callout-border: var(--color-primary, #4680ff);
-        --callout-bg:     rgba(70, 128, 255, 0.07);
-        --callout-text:   #2d5fe0;
+        --callout-border: var(--color-primary, #bae6fd);
+        --callout-bg:     #f0f9ff;
+        --callout-text:   #0369a1;
       }
 
       &--warning {
@@ -370,7 +370,7 @@
   }
 }
 
-/* ── Callout variant-dot buttons in toolbar ─────────────────────────────────── */
+/* Callout variant-dot buttons in toolbar */
 .rte-callout-variant-dot {
   width: 14px;
   height: 14px;
