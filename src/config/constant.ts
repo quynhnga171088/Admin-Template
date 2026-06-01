@@ -95,6 +95,13 @@ export const API_URL = {
   /* Attachments */
   ATTACHMENTS: (courseId: number | string, chapterId: number | string, lessonId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments`,
   ATTACHMENT: (courseId: number | string, chapterId: number | string, lessonId: number | string, attachmentId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments/${attachmentId}`,
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments/${attachmentId}`
+};
+
+export const VIDEO_HOST = {
+  VIMEO: 'vimeo.com',
+  YOUBUTE: 'youtube.com',
+  YOUBUTE_SHORT: 'youtu.be',
+  DAILY_MOTION: 'dailymotion.com'
 };
 

@@ -5,13 +5,12 @@ import { chaptersApi } from '@/lib/api/chapters.api';
 import { getCourseDetail } from '@/pages/courses/courses.services';
 import { queryClient } from '@/lib/queryClient';
 import { queryKeys } from '@/lib/queryKeys';
-import { SCREENS_PATH } from '@/config/constant';
+import { SCREENS_PATH, VIDEO_HOST } from '@/config/constant';
 import type { IChapter, ISection, ICourseItem } from '@/types/types';
 import '@/pages/courses/CoursePreviewPage.scss';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const EXTERNAL_VIDEO_HOSTS = ['youtube.com', 'youtu.be', 'vimeo.com', 'dailymotion.com'];
+/* Helpers */
+const EXTERNAL_VIDEO_HOSTS = [VIDEO_HOST.YOUBUTE, VIDEO_HOST.YOUBUTE_SHORT, VIDEO_HOST.VIMEO, VIDEO_HOST.DAILY_MOTION];
 
 const isExternalVideo = (url: string): boolean => {
   try {
@@ -25,17 +24,17 @@ const isExternalVideo = (url: string): boolean => {
 const buildEmbedUrl = (url: string): string => {
   try {
     const u = new URL(url);
-    // YouTube watch URL → embed
-    if (u.hostname.includes('youtube.com') && u.pathname === '/watch') {
+    /* YouTube watch URL → embed */
+    if (u.hostname.includes(VIDEO_HOST.YOUBUTE) && u.pathname === '/watch') {
       const v = u.searchParams.get('v');
       if (v) return `https://www.youtube.com/embed/${v}`;
     }
-    // youtu.be short URL → embed
-    if (u.hostname === 'youtu.be') {
+    /* youtu.be short URL → embed */
+    if (u.hostname === VIDEO_HOST.YOUBUTE_SHORT) {
       return `https://www.youtube.com/embed${u.pathname}`;
     }
-    // Vimeo
-    if (u.hostname.includes('vimeo.com')) {
+    /* Vimeo */
+    if (u.hostname.includes(VIDEO_HOST.VIMEO)) {
       const id = u.pathname.replace('/', '');
       return `https://player.vimeo.com/video/${id}`;
     }
@@ -43,8 +42,7 @@ const buildEmbedUrl = (url: string): string => {
   return url;
 };
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
+/* Sub-components */
 interface VideoContentProps { url: string }
 
 const VideoContent = ({ url }: VideoContentProps) => {
@@ -66,8 +64,7 @@ const VideoContent = ({ url }: VideoContentProps) => {
   );
 };
 
-// ─── Main component ───────────────────────────────────────────────────────────
-
+/* Main component */
 const CoursePreviewPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -80,7 +77,7 @@ const CoursePreviewPage = () => {
   const [expandedChapters, setExpandedChapters] = useState<Set<number>>(new Set());
   const [expandedLessons, setExpandedLessons] = useState<Set<number>>(new Set());
 
-  // ── Load data ──────────────────────────────────────────────────────────────
+  /* Load data */
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -96,12 +93,12 @@ const CoursePreviewPage = () => {
         setCourseDetail(detail);
         setChapters(chaptersData);
 
-        // Expand all chapters and their lessons by default
+        /* Expand all chapters and their lessons by default */
         setExpandedChapters(new Set(chaptersData.map((c: IChapter) => c.id)));
         const lessonIds = chaptersData.flatMap((c: IChapter) => c.lessons.map(l => l.id));
         setExpandedLessons(new Set(lessonIds));
 
-        // Auto-select first section
+        /* Auto-select first section */
         for (const chapter of chaptersData) {
           for (const lesson of chapter.lessons) {
             if (lesson.sections.length > 0) {
@@ -117,11 +114,11 @@ const CoursePreviewPage = () => {
     void fetchData();
   }, [courseId]);
 
-  // ── Toggle helpers ─────────────────────────────────────────────────────────
+  /* Toggle helpers */
   const toggleChapter = useCallback((chapterId: number) => {
     setExpandedChapters(prev => {
       const next = new Set(prev);
-      next.has(chapterId) ? next.delete(chapterId) : next.add(chapterId);
+      if (next.has(chapterId)) { next.delete(chapterId); } else { next.add(chapterId); }
       return next;
     });
   }, []);
@@ -129,12 +126,12 @@ const CoursePreviewPage = () => {
   const toggleLesson = useCallback((lessonId: number) => {
     setExpandedLessons(prev => {
       const next = new Set(prev);
-      next.has(lessonId) ? next.delete(lessonId) : next.add(lessonId);
+      if (next.has(lessonId)) { next.delete(lessonId); } else { next.add(lessonId); }
       return next;
     });
   }, []);
 
-  // ── Status badge ───────────────────────────────────────────────────────────
+  /* Status badge */
   const statusClass = (status?: string) => {
     switch (status?.toUpperCase()) {
       case 'PUBLISHED': return 'cpv-status-badge--published';
@@ -144,7 +141,7 @@ const CoursePreviewPage = () => {
     }
   };
 
-  // ── Loading state ──────────────────────────────────────────────────────────
+  /* Loading state */
   if (loading) {
     return (
       <div className="cpv-loading">
@@ -154,11 +151,11 @@ const CoursePreviewPage = () => {
     );
   }
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  /* Render */
   return (
     <div className="cpv-page">
 
-      {/* ── Header ── */}
+      {/* Header */}
       <div className="card mb-0!">
         <div className="card-body">
           <div className="grid grid-cols-12 gap-4 items-center">
@@ -185,18 +182,18 @@ const CoursePreviewPage = () => {
         </div>
       </div>
 
-      {/* ── Main layout ── */}
+      {/* Main layout */}
       <div className="cpv-layout">
 
-        {/* ── Sidebar ── */}
+        {/* Sidebar */}
         <div className="cpv-sidebar">
           <div className="cpv-sidebar-header">
-            <i className="fa-regular fa-list-ul" /> Nội dung khoá học
+            <i className="fa-regular fa-list-ul" /> Course Content
           </div>
 
           {chapters.length === 0 && (
             <div className="cpv-no-lessons" style={{ padding: '1rem' }}>
-              Chưa có nội dung nào.
+              No content yet.
             </div>
           )}
 
@@ -210,7 +207,7 @@ const CoursePreviewPage = () => {
                   <span className="cpv-chapter-num">{chIdx + 1}</span>
                   <span className="cpv-chapter-title">{chapter.title}</span>
                   <span className="cpv-chapter-count">
-                    {chapter.lessons.length} bài
+                    {chapter.lessons.length} {chapter.lessons.length === 1 ? 'lesson' : 'lessons'}
                   </span>
                 </div>
 
@@ -218,7 +215,7 @@ const CoursePreviewPage = () => {
                 {isChOpen && (
                   <div className="cpv-lessons">
                     {chapter.lessons.length === 0 && (
-                      <div className="cpv-no-lessons">Chưa có bài học.</div>
+                      <div className="cpv-no-lessons">No lessons yet.</div>
                     )}
 
                     {chapter.lessons.map((lesson, lIdx) => {
@@ -239,7 +236,7 @@ const CoursePreviewPage = () => {
                           {isLessonOpen && (
                             <div className="cpv-sections">
                               {lesson.sections.length === 0 && (
-                                <div className="cpv-no-sections">Chưa có section.</div>
+                                <div className="cpv-no-sections">No sections yet.</div>
                               )}
 
                               {lesson.sections.map(section => {
@@ -278,12 +275,12 @@ const CoursePreviewPage = () => {
           })}
         </div>
 
-        {/* ── Content area ── */}
+        {/* Content area */}
         <div className="cpv-content">
           {!activeSection ? (
             <div className="cpv-empty-state">
               <i className="fa-regular fa-play-circle cpv-empty-icon" />
-              <p className="cpv-empty-text">Chọn một section từ danh sách bên trái để xem nội dung</p>
+              <p className="cpv-empty-text">Select a section from the list on the left to view its content</p>
             </div>
           ) : (
             <>
@@ -295,7 +292,7 @@ const CoursePreviewPage = () => {
               {activeSection.type === 'VIDEO' && !activeSection.videoUrl && (
                 <div className="cpv-empty-state">
                   <i className="fa-regular fa-video-slash cpv-empty-icon" />
-                  <p className="cpv-empty-text">Section này chưa có video.</p>
+                  <p className="cpv-empty-text">This section has no video yet.</p>
                 </div>
               )}
 
@@ -310,7 +307,7 @@ const CoursePreviewPage = () => {
               <div className="cpv-section-info">
                 <div className="cpv-section-info-type">
                   <i className={activeSection.type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
-                  {activeSection.type === 'VIDEO' ? 'Video' : 'Bài đọc'}
+                  {activeSection.type === 'VIDEO' ? 'Video' : 'Reading'}
                 </div>
                 <div className="cpv-section-info-title">{activeSection.title}</div>
                 {activeSection.description && (

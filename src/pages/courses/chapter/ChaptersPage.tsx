@@ -147,7 +147,7 @@ const ChaptersPage = () => {
     void loadData();
   };
 
-  /* ── Lesson actions ───────────────────────────────────────────── */
+  /* Lesson actions */
 
   const openCreateLesson = (chapterId: number) => {
     setLessonForm(lessonFormInit);
@@ -212,7 +212,7 @@ const ChaptersPage = () => {
     void loadData();
   };
 
-  /* ── Section actions ──────────────────────────────────────────── */
+  /* Section actions */
 
   const handleDeleteSection = async (chapterId: number, lessonId: number, sectionId: number) => {
     if (!confirm('Xóa section này?')) return;
@@ -247,12 +247,16 @@ const ChaptersPage = () => {
     void loadData();
   };
 
-  /* ── Helpers ──────────────────────────────────────────────────── */
+  /* Helpers */
 
   const toggleChapter = (chapterId: number) => {
     setExpandedChapters(prev => {
       const next = new Set<number>(prev);
-      next.has(chapterId) ? next.delete(chapterId) : next.add(chapterId);
+      if (next.has(chapterId)) {
+        next.delete(chapterId);
+      } else {
+        next.add(chapterId);
+      }
       return next;
     });
   };
@@ -260,7 +264,11 @@ const ChaptersPage = () => {
   const toggleLesson = (lessonId: number) => {
     setExpandedLessons(prev => {
       const next = new Set<number>(prev);
-      next.has(lessonId) ? next.delete(lessonId) : next.add(lessonId);
+      if (next.has(lessonId)) {
+        next.delete(lessonId);
+      } else {
+        next.add(lessonId);
+      }
       return next;
     });
   };
@@ -268,7 +276,7 @@ const ChaptersPage = () => {
   const sectionTypeIcon = (type: ISection['type']) =>
     type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open';
 
-  /* ── Render ───────────────────────────────────────────────────── */
+  /* Render */
 
   if (loading) {
     return (
@@ -387,7 +395,7 @@ const ChaptersPage = () => {
                               {lesson.sections.length} Section{lesson.sections.length !== 1 ? 's' : ''}
                             </span>
                           </div>
-                          <div className="ccp-lesson-actions" onClick={(e) => e.stopPropagation()}>
+                          <div className="ccp-lesson-actions" onClick={e => e.stopPropagation()}>
                             <button
                               className="btn btn-light-primary btn-icon btn-sm"
                               title="Move up"

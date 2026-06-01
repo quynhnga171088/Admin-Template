@@ -443,6 +443,22 @@
   img {
     max-width: 100%;
     border-radius: 8px;
+    display: block; // allow margin-based centering
+
+    &[data-align='center'] {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &[data-align='right'] {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    &[data-align='left'] {
+      margin-left: 0;
+      margin-right: auto;
+    }
   }
 
   a {
