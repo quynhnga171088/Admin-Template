@@ -62,6 +62,8 @@ export const FAVICON = favicon;
 
 export const API_URL = {
   LOGIN: '/auth/login',
+  TEACH_REGISTER: '/auth/teach/register',
+  STUDENT_REGISTER: '/auth/register',
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
   CREATE_COURSE: '/courses',
@@ -98,6 +100,8 @@ export const API_URL = {
   ATTACHMENT: (courseId: number | string, chapterId: number | string, lessonId: number | string, attachmentId: number | string) =>
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments/${attachmentId}`
 };
+
+export const AVATAR_DEFAULT = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
 
 export const VIDEO_HOST = {
   VIMEO: 'vimeo.com',

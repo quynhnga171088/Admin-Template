@@ -12,7 +12,7 @@ import type {
 import { getPagination, getColorByState } from '@/util/util.ts';
 import { coursesStore } from '@/stores/courses.store.ts';
 import '@/pages/courses/CoursesList.scss';
-import { DATE_TIME_FORMAT, SCREENS_PATH } from '@/config/constant';
+import { DATE_TIME_FORMAT, SCREENS_PATH, AVATAR_DEFAULT } from '@/config/constant';
 import Pagination from '@/components/ui/Pagination.tsx';
 import { userStore } from '@/stores/user.store.ts';
 
@@ -84,12 +84,17 @@ const CoursesList = () => {
                 Action
               </div>
             </div>
+            {!courses || courses.length === 0 ?
+              <div className="col-span-24 flex items-center justify-center text-center text-gray-500 py-4 mt-2! mb-2!">
+                No courses found.
+              </div>
+              : ''}
             {courses.map((course: ICourseItem) => (
               <div key={course.id} className="grid grid-cols-24 gap-4 courses-item">
                 <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 courses-item-full-name flex items-center cursor-pointer">
                   <img
                     className="img-fluid logo logo-lg h-12.5"
-                    src={course.teacher.avatarUrl}
+                    src={course.teacher.avatarUrl || AVATAR_DEFAULT}
                     alt={course.teacher.fullName}
                   />
                   {course.teacher.fullName}

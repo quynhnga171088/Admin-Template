@@ -6,9 +6,12 @@ import { modalStore } from '@/stores/modal.store.ts';
 import { SCREENS_PATH } from '@/config/constant.ts';
 import HomeHeaderContent from '@/pages/home/homeDetail/HomeHeaderContent.tsx';
 import { queryKeys } from '@/lib/queryKeys.ts';
+import { authStore } from '@/stores/auth.store.ts';
 
 const HomePage = () => {
   const setProcessing = modalStore.getState().setProcessing;
+
+  const accessToken: string | null = authStore(state => state.accessToken);
 
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.overview.all,
@@ -22,7 +25,11 @@ const HomePage = () => {
   setProcessing(isLoading);
 
   if (data && data.status && (data.status === 403 || data.status === 404)) {
-    return <Navigate to={SCREENS_PATH.LOGIN} />;
+    if (accessToken) {
+      return <Navigate to={SCREENS_PATH.COURSE_LIST} />;
+    } else {
+      return <Navigate to={SCREENS_PATH.LOGIN} />;
+    }
   }
 
   return (
