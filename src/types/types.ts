@@ -205,6 +205,13 @@ export interface ICoursesState {
   setCourseDraftByFieldName: (fieldName: keyof ICourseItem, fieldValue: any) => void;
 }
 
+export interface IRegisterForm {
+  fullName: string;
+  phone: string;
+  email: string;
+  password: string;
+}
+
 export interface IAuthForm {
   email: string;
   password: string;
@@ -224,6 +231,24 @@ export interface IAuthResponse {
   accessToken: string
   refreshToken: string
   user: IAdminUser
+}
+
+export interface IRegisterState {
+  errorMessage: string | null;
+  fullName: string | null;
+  phone: string | null;
+  email: string | null;
+  password: string | null;
+  avatarUrl?: string | null;
+  confirmPassword: string | null;
+  setPhone: (phone: string | null) => void;
+  setFullName: (fullName: string | null) => void;
+  setEmail: (email: string | null) => void;
+  setPassword: (password: string | null) => void;
+  setAvatarUrl: (avatarUrl: string | null) => void;
+  setConfirmPassword: (confirmPassword: string | null) => void;
+  setErrorMessage: (errorMessage: string | null) => void;
+  reset: () => void;
 }
 
 export interface IAuthState {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { type IAdminUser, type IAuthState } from '@/types/types';
+import type { IAdminUser, IAuthState } from '@/types/types';
 
 export const authStore = create<IAuthState>()(
   persist(

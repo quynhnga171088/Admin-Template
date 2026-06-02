@@ -46,6 +46,9 @@ const router = createBrowserRouter([
       {
         path: SCREENS_PATH.LOGIN,
         lazy: () => import('@/pages/login/Login.tsx')
+      }, {
+        path: SCREENS_PATH.REGISTER,
+        lazy: () => import('@/pages/register/Register.tsx')
       }
     ]
   }, {

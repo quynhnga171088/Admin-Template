@@ -98,9 +98,9 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
       setIsUploading(true);
       const { data } = await resourceApi.uploadImg(file);
       editor.chain().focus().setImage({ src: data.fileUrl }).run();
-    } catch (err) {
+    } catch (err: any) {
       setOpen(true);
-      setMessage('Image upload failed, please try again leter!');
+      setMessage('Image upload failed, please try again later!');
     } finally {
       setIsUploading(false);
     }

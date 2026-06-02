@@ -62,6 +62,8 @@ export const FAVICON = favicon;
 
 export const API_URL = {
   LOGIN: '/auth/login',
+  TEACH_REGISTER: '/auth/teach/register',
+  STUDENT_REGISTER: '/auth/register',
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
   CREATE_COURSE: '/courses',

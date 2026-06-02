@@ -8,6 +8,7 @@ import '@/pages/login/Login.scss';
 import { type AuthFormData, authSchema, initialAuthFormValues } from '@/pages/login/auth.schema.ts';
 import type { IAuthForm } from '@/types/types.ts';
 import { authStore } from '@/stores/auth.store.ts';
+import { SCREENS_PATH } from '@/config/constant.ts';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -166,6 +167,18 @@ const Login = () => {
                   </button>
                 )}
               />
+              <div className="login-redirect" style={{ textAlign: 'center', fontSize: '0.875rem', color: '#6b7280', marginTop: '0.5rem' }}>
+                Don't have an account?{' '}
+                <span
+                  style={{ color: '#41c3df', fontWeight: 600, cursor: 'pointer' }}
+                  onClick={() => navigate(SCREENS_PATH.REGISTER)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === 'Enter' && navigate(SCREENS_PATH.REGISTER)}
+                >
+                  Create one here
+                </span>
+              </div>
             </form>
           </div>
         </div>
