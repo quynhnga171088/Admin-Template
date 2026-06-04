@@ -1,3 +1,5 @@
+import { type CalloutVariant } from '@/components/ui/course/CalloutExtension';
+
 export const SCREENS_PATH = {
   HOME: '/',
   LOGIN: '/login',
@@ -16,7 +18,7 @@ export const SCREENS_PATH = {
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   VERIFY_EMAIL: '/verify-email',
-  VERIFY_OTP: '/verify-otp',
+  VERIFY_OTP: '/verify-otp'
 
 };
 
@@ -110,3 +112,46 @@ export const VIDEO_HOST = {
   DAILY_MOTION: 'dailymotion.com'
 };
 
+/* All Params for RichTextEditor Start */
+/* Table size for extension table */
+export const TABLE_SIZE = {
+  rows: 3,
+  columns: 3
+};
+
+/* Preset colors for the color palette */
+export const COLOR_PRESETS = [
+  '#212529', '#495057', '#868e96', '#adb5bd', // grays
+  '#4680ff', '#2d5fe0', '#0ca678', '#f4c22b', // brand
+  '#f44236', '#e91e63', '#9c27b0', '#673ab7', // vivid
+  '#2196f3', '#00bcd4', '#4caf50', '#ff9800' // material
+];
+
+/* Callout variant config */
+export const CALLOUT_VARIANTS: { variant: CalloutVariant; color: string; title: string }[] = [
+  { variant: 'info', color: 'var(--color-primary, #4680ff)', title: 'Info' },
+  { variant: 'warning', color: 'var(--color-warning, #f4c22b)', title: 'Warning' },
+  { variant: 'danger', color: 'var(--color-danger, #f44236)', title: 'Danger' },
+  { variant: 'success', color: 'var(--color-success, #1de9b6)', title: 'Success' }
+];
+
+/* Font size presets (rem) */
+export const FONT_SIZES = [
+  { label: '10', value: '0.625' },
+  { label: '11', value: '0.6875' },
+  { label: '12', value: '0.75' },
+  { label: '13', value: '0.8125' },
+  { label: '14', value: '0.875' },
+  { label: '15', value: '0.9375' },
+  { label: '16', value: '1' },
+  { label: '18', value: '1.125' },
+  { label: '20', value: '1.25' },
+  { label: '22', value: '1.375' },
+  { label: '24', value: '1.5' },
+  { label: '28', value: '1.75' },
+  { label: '32', value: '2' },
+  { label: '36', value: '2.25' },
+  { label: '48', value: '3' }
+];
+
+/* All Params for RichTextEditor Start End */

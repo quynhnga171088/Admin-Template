@@ -8,66 +8,27 @@ import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import { CustomImage } from '@/components/ui/course/CustomImage';
-import { CalloutExtension, type CalloutVariant } from '@/components/ui/course/CalloutExtension';
+import { CalloutExtension } from '@/components/ui/course/CalloutExtension';
 import { FontSizeExtension, TextStyle } from '@/components/ui/course/FontSizeExtension';
 import Color from '@tiptap/extension-color';
+import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table';
 
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
-import { type IModalState, modalStore } from '@/stores/modal.store.ts';
+import { type IModalState, modalStore } from '@/stores/modal.store';
 import '@/components/ui/course/RichTextEditor.scss';
 
+import { TableMenu } from '@/components/ui/extension/ExtensionTable';
+import { ToolbarBtn } from '@/components/ui/extension/ToolbarBtn';
+import { FontColor } from '@/components/ui/extension/FontColor';
+import { FontSize } from '@/components/ui/extension/FontSize';
+import { CalloutContent } from '@/components/ui/extension/CalloutContent';
+
 const lowlight = createLowlight(common);
-
-/* Toolbar Button */
-
-const ToolbarBtn = ({
-  onClick,
-  active,
-  disabled,
-  title,
-  children
-}: {
-  onClick: () => void;
-  active?: boolean;
-  disabled?: boolean;
-  title: string;
-  children: React.ReactNode;
-}) => (
-  <button
-    type="button"
-    title={title}
-    className={`rte-btn${active ? ' rte-btn--active' : ''}`}
-    onClick={onClick}
-    disabled={disabled}
-  >
-    {children}
-  </button>
-);
 
 const Divider = () => <span className="rte-divider" />;
 
 /* Toolbar */
-
-/* Callout variant config */
-const CALLOUT_VARIANTS: { variant: CalloutVariant; color: string; title: string }[] = [
-  { variant: 'info', color: 'var(--color-primary, #4680ff)', title: 'Info' },
-  { variant: 'warning', color: 'var(--color-warning, #f4c22b)', title: 'Cảnh báo' },
-  { variant: 'danger', color: 'var(--color-danger, #f44236)', title: 'Quan trọng' },
-  { variant: 'success', color: 'var(--color-success, #1de9b6)', title: 'Ghi nhớ' }
-];
-
-/* Font size presets (px) */
-const FONT_SIZES = ['10', '11', '12', '13', '14', '15', '16', '18', '20', '22', '24', '28', '32', '36', '48'];
-
-/* Preset colors for the color palette */
-const COLOR_PRESETS = [
-  '#212529', '#495057', '#868e96', '#adb5bd', // grays
-  '#4680ff', '#2d5fe0', '#0ca678', '#f4c22b', // brand
-  '#f44236', '#e91e63', '#9c27b0', '#673ab7', // vivid
-  '#2196f3', '#00bcd4', '#4caf50', '#ff9800' // material
-];
-
 const Toolbar = ({ editor }: { editor: Editor }) => {
   const setOpen = modalStore((state: IModalState) => state.setOpen);
   const setMessage = modalStore((state: IModalState) => state.setMessage);
@@ -75,9 +36,6 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
-
-  /* Current font size from selection */
-  const currentFontSize = editor.getAttributes('textStyle').fontSize?.replace('px', '') ?? '';
 
   const setLink = () => {
     const prev = editor.getAttributes('link').href as string | undefined;
@@ -98,7 +56,7 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
       setIsUploading(true);
       const { data } = await resourceApi.uploadImg(file);
       editor.chain().focus().setImage({ src: data.fileUrl }).run();
-    } catch (err: any) {
+    } catch {
       setOpen(true);
       setMessage('Image upload failed, please try again later!');
     } finally {
@@ -163,76 +121,11 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
       <Divider />
 
       {/* Font Size */}
-      <select
-        className="rte-select"
-        title="Font size"
-        value={currentFontSize}
-        onChange={e => {
-          const v = e.target.value;
-          if (v) editor.chain().focus().setFontSize(`${v}px`).run();
-          else editor.chain().focus().unsetFontSize().run();
-        }}
-      >
-        <option value="">Size</option>
-        {FONT_SIZES.map(s => (
-          <option key={s} value={s}>{s}</option>
-        ))}
-      </select>
+      <FontSize editor={editor} />
+      <Divider />
 
       {/* Font Color */}
-      <div className="rte-color-wrap">
-        <button
-          type="button"
-          className="rte-color-btn"
-          title="Font color"
-          onClick={() => setShowColorPicker(v => !v)}
-        >
-          <i className="fa-solid fa-font" />
-          <span
-            className="rte-color-indicator"
-            style={{ background: editor.getAttributes('textStyle').color ?? '#212529' }}
-          />
-        </button>
-
-        {showColorPicker && (
-          <div className="rte-color-palette" onMouseDown={e => e.preventDefault()}>
-            <div className="rte-color-swatches">
-              {COLOR_PRESETS.map(c => (
-                <button
-                  key={c}
-                  type="button"
-                  className="rte-color-swatch"
-                  style={{ background: c }}
-                  title={c}
-                  onClick={() => {
-                    editor.chain().focus().setColor(c).run();
-                    setShowColorPicker(false);
-                  }}
-                />
-              ))}
-            </div>
-            <label className="rte-color-custom">
-              <span>Tùy chọn:</span>
-              <input
-                type="color"
-                defaultValue={editor.getAttributes('textStyle').color ?? '#212529'}
-                onChange={e => editor.chain().focus().setColor(e.target.value).run()}
-              />
-            </label>
-            <button
-              type="button"
-              className="rte-color-reset"
-              onClick={() => {
-                editor.chain().focus().unsetColor().run();
-                setShowColorPicker(false);
-              }}
-            >
-              <i className="fa-regular fa-ban" /> Bỏ màu
-            </button>
-          </div>
-        )}
-      </div>
-
+      <FontColor editor={editor} showColorPicker={showColorPicker} setShowColorPicker={setShowColorPicker} />
       <Divider />
 
       {/* Alignment */}
@@ -276,7 +169,6 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
         onClick={() => editor.chain().focus().setHorizontalRule().run()}>
         <i className="fa-regular fa-horizontal-rule" />
       </ToolbarBtn>
-
       <Divider />
 
       {/* Link */}
@@ -288,7 +180,6 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
         disabled={!editor.isActive('link')}>
         <i className="fa-regular fa-link-slash" />
       </ToolbarBtn>
-
       <Divider />
 
       {/* Image Upload */}
@@ -308,38 +199,15 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
         style={{ display: 'none' }}
         onChange={handleImageUpload}
       />
-
       <Divider />
 
       {/* Callout */}
-      <ToolbarBtn
-        title="Insert Callout"
-        active={editor.isActive('callout')}
-        onClick={() => editor.chain().focus().insertCallout().run()}
-      >
-        <i className="fa-solid fa-rectangle-pro" />
-      </ToolbarBtn>
-
-      {/* Variant switchers — only visible when cursor is inside a callout */}
-      {editor.isActive('callout') && (
-        <>
-          {CALLOUT_VARIANTS.map(({ variant, color, title }) => (
-            <button
-              key={variant}
-              type="button"
-              title={`Đổi sang: ${title}`}
-              className={`rte-callout-variant-dot${
-                editor.isActive('callout', { variant }) ? ' rte-callout-variant-dot--active' : ''
-              }`}
-              style={{ '--dot-color': color } as React.CSSProperties}
-              onClick={() => editor.chain().focus().setCalloutVariant(variant).run()}
-            />
-          ))}
-        </>
-      )}
+      <CalloutContent editor={editor} />
 
       <Divider />
-
+      {/* Table */}
+      <TableMenu editor={editor} />
+      <Divider />
       {/* Clear */}
       <ToolbarBtn title="Clear Formatting"
         onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}>
@@ -349,7 +217,7 @@ const Toolbar = ({ editor }: { editor: Editor }) => {
   );
 };
 
-// ── Main Component ─────────────────────────────────────────────────────────────
+/* Main Component */
 
 interface RichTextEditorProps {
   value: string;
@@ -361,7 +229,7 @@ interface RichTextEditorProps {
 const RichTextEditor = ({
   value,
   onChange,
-  placeholder = 'Viết nội dung bài học tại đây...',
+  placeholder = 'Write your content here...',
   minHeight = 360
 }: RichTextEditorProps) => {
   const editor = useEditor({
@@ -380,7 +248,11 @@ const RichTextEditor = ({
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Link.configure({ openOnClick: false, HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' } }),
       Placeholder.configure({ placeholder }),
-      CodeBlockLowlight.configure({ lowlight })
+      CodeBlockLowlight.configure({ lowlight }),
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell
     ],
     content: value,
     onUpdate: ({ editor }) => {

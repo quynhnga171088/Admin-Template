@@ -1,0 +1,51 @@
+.rte-color-palette {
+
+  .rte-color-custom {
+    display: flex;
+    align-items: center;
+
+    .rte-color-select-label {
+      font-weight: 500;
+      font-size: 0.825rem;
+    }
+
+    .rte-color-reset {
+      font-weight: 500;
+      font-size: 0.825rem;
+      color: red;
+    }
+
+    input[type="color"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      outline: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: none;
+    }
+
+    input[type="color"]::-moz-color-swatch {
+      border: none;
+    }
+  }
+
+  .rte-color-swatches {
+
+    .rte-color-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .rte-color-swatch.margin-left-2 {
+      margin-left: 2px;
+    }
+  }
+}

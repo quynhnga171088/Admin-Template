@@ -163,7 +163,7 @@ const SectionAddPage = () => {
               <RichTextEditor
                 value={textContent}
                 onChange={setTextContent}
-                placeholder="Viết nội dung bài học tại đây..."
+                placeholder="Write your content here..."
               />
             </div>
           )}
@@ -183,8 +183,8 @@ const SectionAddPage = () => {
               {submitting
                 ? <><i className="fa-regular fa-spinner-third fa-spin" /> Saving...</>
                 : uploading
-                ? <><i className="fa-regular fa-spinner-third fa-spin" /> Uploading...</>
-                : <><i className="fa-regular fa-floppy-disk" /> Save Section</>}
+                  ? <><i className="fa-regular fa-spinner-third fa-spin" /> Uploading...</>
+                  : <><i className="fa-regular fa-floppy-disk" /> Save Section</>}
             </button>
           </div>
         </div>
