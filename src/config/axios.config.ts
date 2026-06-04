@@ -57,7 +57,8 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
       const { refreshToken, logout } = authStore.getState();
       if (!refreshToken) {
-        logout(); return Promise.reject(error);
+        logout();
+        return Promise.reject(error);
       }
       try {
         const { data } = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
