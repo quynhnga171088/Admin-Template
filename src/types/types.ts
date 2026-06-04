@@ -6,7 +6,7 @@ export type ILessonModalState =
   | { open: true; mode: 'create'; chapterId: number }
   | { open: true; mode: 'edit'; chapterId: number; lesson: ILesson };
 
-export type ISectionType   = 'VIDEO' | 'TEXT';
+export type ISectionType = 'VIDEO' | 'TEXT';
 export type ISectionStatus = 'DRAFT' | 'PUBLISHED';
 /* Chapter End */
 
@@ -325,4 +325,11 @@ export interface IStudentReport {
   studentName: string
   studentEmail: string
   courses: IStudentCourseProgress[]
+}
+
+/* For Dropdown controls */
+export interface IDropdownOption {
+  icon?: string;
+  label: string;
+  value: string | number;
 }

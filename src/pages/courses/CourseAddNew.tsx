@@ -7,6 +7,7 @@ import { courseSchema, initialCourseFormValues, type CourseFormData } from '@/pa
 import type { ICourseStatus } from '@/types/types';
 import { SCREENS_PATH, STATE } from '@/config/constant';
 import '@/pages/courses/CourseAddNew.scss';
+import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
 const CourseAddNew = () => {
   const navigate = useNavigate();
@@ -228,6 +229,24 @@ const CourseAddNew = () => {
                       <label htmlFor={field.name} className="form-label can-label">
                         Status <span className="can-required">*</span>
                       </label>
+                      <Dropdown
+                        dataSelected={null}
+                        itemData={[
+                          {
+                            icon: 'fa-thin fa-gear',
+                            label: STATE.DRAFT,
+                            value: STATE.DRAFT
+                          }, {
+                            icon: 'fa-thin fa-share-all',
+                            label: STATE.PUBLISHED,
+                            value: STATE.PUBLISHED
+                          }, {
+                            icon: 'fa-thin fa-lock',
+                            label: STATE.ARCHIVED,
+                            value: STATE.ARCHIVED
+                          }
+                        ]}
+                        setDataSelected={field.handleChange} />
                       <select
                         id={field.name}
                         name={field.name}

@@ -1,0 +1,14 @@
+.dropdown-control-wrap {
+  .dropdown-body {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .dropdown-menu.dropdown-menu-end {
+    left: 0 !important;
+    right: 0;
+  }
+
+  .dropdown-selected-text-content {
+    font-weight: 500;
+  }
+}

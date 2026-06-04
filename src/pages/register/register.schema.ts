@@ -1,13 +1,5 @@
 import { z } from 'zod';
 
-export const initialRegisterFormValues = {
-  fullName: '',
-  email: '',
-  phone: '',
-  password: '',
-  avatarUrl: ''
-};
-
 export const registerSchema = z
   .object({
     fullName: z
@@ -40,3 +32,13 @@ export const registerSchema = z
     message: 'Passwords do not match!',
     path: ['confirmPassword']
   });
+
+export type RegisterFormData = z.infer<typeof registerSchema>;
+
+export const initialRegisterFormValues: RegisterFormData = {
+  fullName: '',
+  email: '',
+  phone: '',
+  password: '',
+  confirmPassword: ''
+};
