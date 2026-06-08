@@ -5,7 +5,11 @@ import { useForm } from '@tanstack/react-form';
 import { createCourse, uploadImage } from './courses.services';
 import { courseSchema, initialCourseFormValues, type CourseFormData } from '@/pages/courses/course.schema';
 import type { ICourseStatus } from '@/types/types';
-import { SCREENS_PATH, STATE } from '@/config/constant';
+import {
+  STATE,
+  SCREENS_PATH,
+  STATUS_DATA_FOR_DROPDOWN
+} from '@/config/constant';
 import '@/pages/courses/CourseAddNew.scss';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
@@ -230,37 +234,11 @@ const CourseAddNew = () => {
                         Status <span className="can-required">*</span>
                       </label>
                       <Dropdown
-                        dataSelected={null}
-                        itemData={[
-                          {
-                            icon: 'fa-thin fa-gear',
-                            label: STATE.DRAFT,
-                            value: STATE.DRAFT
-                          }, {
-                            icon: 'fa-thin fa-share-all',
-                            label: STATE.PUBLISHED,
-                            value: STATE.PUBLISHED
-                          }, {
-                            icon: 'fa-thin fa-lock',
-                            label: STATE.ARCHIVED,
-                            value: STATE.ARCHIVED
-                          }
-                        ]}
+                        dataSelected={field.state.value}
+                        itemData={STATUS_DATA_FOR_DROPDOWN}
                         setDataSelected={field.handleChange} />
-                      <select
-                        id={field.name}
-                        name={field.name}
-                        className={`form-select ${field.state.meta.errors.length ? 'error' : ''}`}
-                        value={field.state.value}
-                        onChange={e => field.handleChange(e.target.value as ICourseStatus)}
-                        onBlur={field.handleBlur}
-                      >
-                        <option value={STATE.DRAFT}>📝 Draft</option>
-                        <option value={STATE.PUBLISHED}>✅ Published</option>
-                        <option value={STATE.ARCHIVED}>📦 Archived</option>
-                      </select>
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
-                      <div className="can-status-preview">
+                      <div className="can-status-preview text-right">
                         <span className={`can-status-badge can-status-badge--${(field.state.value as ICourseStatus).toLowerCase()}`}>
                           {field.state.value === STATE.DRAFT && 'Draft'}
                           {field.state.value === STATE.PUBLISHED && 'Published'}

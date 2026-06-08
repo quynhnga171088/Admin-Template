@@ -149,7 +149,8 @@
     align-items: center;
     justify-content: center;
     padding: 0.15rem 0.65rem;
-    border-radius: 20px;
+    border-radius: 5px;
+    width: 70px;
     font-size: 0.72rem;
     font-weight: 600;
     color: #fff;
@@ -158,18 +159,18 @@
   }
 
   .can-status-badge--draft {
-    background: linear-gradient(135deg, var(--color-warning-600, #d48806), var(--color-warning-400, #ffc53d));
+    background: $draft-bg;
   }
 
   .can-status-badge--published {
-    background: linear-gradient(-135deg, #1de9b6, #1dc4e9);
+    background: $published-bg;
   }
 
   .can-status-badge--archived {
-    background: linear-gradient(135deg, var(--primary-500, #1890ff), var(--primary-700, #096dd9));
+    background: $archived-bg;
   }
 
-  /* ── Thumbnail ── */
+  /* Thumbnail */
   .can-dropzone {
     display: flex;
     align-items: center;

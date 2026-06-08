@@ -1,14 +1,60 @@
+@use 'src/styles/variables' as *;
+
 .dropdown-control-wrap {
+
+  .dropdown-item-status.published {
+    border: none;
+    background: $published-bg;
+    color: $published-color;
+  }
+
+  .dropdown-item-status.published:hover {
+    background: $published-bg-hover;
+  }
+
+  .dropdown-item-status.draft {
+    border: none;
+    background: $draft-bg;
+    color: $draft-colort;
+  }
+
+  .dropdown-item-status.draft:hover {
+    background: $draft-bg-hover;
+  }
+
+  .dropdown-item-status.archived {
+    border: none;
+    background: $archived-bg;
+    color: $archived-color;
+  }
+
+  .dropdown-item-status.archived:hover {
+    background: $archived-bg-hover;
+  }
+
+  .dropdown-menu {
+    left: 0;
+  }
+
   .dropdown-body {
-    padding: 0.25rem 0.5rem;
-  }
+    padding: 0.75rem;
 
-  .dropdown-menu.dropdown-menu-end {
-    left: 0 !important;
-    right: 0;
-  }
+    .simplebar-content {
+      display: grid;
+      gap: calc(var(--spacing) * 1);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
 
-  .dropdown-selected-text-content {
-    font-weight: 500;
+      .dropdown-item-status {
+        grid-column: span 12 / span 12;
+      }
+      .dropdown-menu.dropdown-menu-end {
+        left: 0 !important;
+        right: 0;
+      }
+
+      .dropdown-selected-text-content {
+        font-weight: 500;
+      }
+    }
   }
 }

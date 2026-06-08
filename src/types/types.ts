@@ -332,4 +332,5 @@ export interface IDropdownOption {
   icon?: string;
   label: string;
   value: string | number;
+  className?: string | null | undefined
 }

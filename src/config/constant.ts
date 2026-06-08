@@ -58,6 +58,7 @@ export const COMMON_MESSAGES = {
 
 import logoWhite from '@/assets/logo/logo-white.svg';
 import favicon from '@/assets/logo/favicon.svg';
+import type { IDropdownOption } from '@/types/types.ts';
 
 export const LOGO_WHITE = logoWhite;
 export const FAVICON = favicon;
@@ -153,5 +154,23 @@ export const FONT_SIZES = [
   { label: '36', value: '2.25' },
   { label: '48', value: '3' }
 ];
-
 /* All Params for RichTextEditor Start End */
+
+export const STATUS_DATA_FOR_DROPDOWN: IDropdownOption[] = [
+  {
+    icon: 'fa-thin fa-pen-to-square',
+    label: STATE.DRAFT,
+    value: STATE.DRAFT,
+    className: 'dropdown-item-status draft'
+  }, {
+    icon: 'fa-thin fa-books',
+    label: STATE.PUBLISHED,
+    value: STATE.PUBLISHED,
+    className: 'dropdown-item-status published'
+  }, {
+    icon: 'fa-thin fa-circle-v',
+    label: STATE.ARCHIVED,
+    value: STATE.ARCHIVED,
+    className: 'dropdown-item-status archived'
+  }
+];
