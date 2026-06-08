@@ -26,6 +26,7 @@
     padding: 1rem 1rem;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    text-decoration: none;
   }
 
   .courses-item:hover {
@@ -53,5 +54,10 @@
 
   .courses-item-des-common {
     padding: 0.85rem 0.75rem;
+  }
+
+  .course-free {
+    color: var(--color-success-700, #2f855a);
+    font-weight: 500;
   }
 }

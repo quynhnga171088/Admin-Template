@@ -14,3 +14,8 @@ export const getPagination = (params: URLSearchParams): IPagination => {
 export const getColorByState = (state: string): string => {
   return state ? state === STATE.DRAFT ? 'warning' : state === STATE.PUBLISHED ? 'success' : state === STATE.ARCHIVED ? 'info' : 'info' : 'info';
 };
+
+export const getFormatVNCurrency = (price: number) => new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND'
+}).format(price);

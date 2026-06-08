@@ -2,19 +2,23 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
-import { getCourses } from './courses.services.ts';
+import { getCourses } from './courses.services';
 import type {
   ICoursesState,
   ICourseItem,
   IPagination,
   IUserState
-} from '@/types/types.ts';
-import { getPagination, getColorByState } from '@/util/util.ts';
-import { coursesStore } from '@/stores/courses.store.ts';
+} from '@/types/types';
+import {
+  getPagination,
+  getColorByState,
+  getFormatVNCurrency
+} from '@/util/util';
+import { coursesStore } from '@/stores/courses.store';
 import '@/pages/courses/CoursesList.scss';
 import { DATE_TIME_FORMAT, SCREENS_PATH, AVATAR_DEFAULT } from '@/config/constant';
-import Pagination from '@/components/ui/Pagination.tsx';
-import { userStore } from '@/stores/user.store.ts';
+import Pagination from '@/components/ui/Pagination';
+import { userStore } from '@/stores/user.store';
 
 const CoursesList = () => {
 
@@ -80,7 +84,7 @@ const CoursesList = () => {
               <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">
                 Price
               </div>
-              <div className="hidden xl:flex 2xl:flex xl:col-span-3 2xl:col-span-3 items-center card-header-title">
+              <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-3 items-center card-header-title">
                 Action
               </div>
             </div>
@@ -90,7 +94,11 @@ const CoursesList = () => {
               </div>
               : ''}
             {courses.map((course: ICourseItem) => (
-              <div key={course.id} className="grid grid-cols-24 gap-4 courses-item">
+              <div
+                key={course.id}
+                className="grid grid-cols-24 gap-4 courses-item cursor-pointer"
+                onClick={() => navigate(SCREENS_PATH.COURSE_PREVIEW(course.id))}
+              >
                 <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 courses-item-full-name flex items-center cursor-pointer">
                   <img
                     className="img-fluid logo logo-lg h-12.5"
@@ -122,19 +130,19 @@ const CoursesList = () => {
                   {course.createdAt ? dayjs(course.createdAt).format(DATE_TIME_FORMAT) : 'N/A'}
                 </div>
                 <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(course.price)}
+                  {course.price ? getFormatVNCurrency(course.price) : <span className="course-free">Free</span> }
                 </div>
-                <div className="hidden xl:flex 2xl:flex xl:col-span-3 2xl:col-span-3 items-center card-header-title courses-item-action">
-                  <Link className="btn btn-light-secondary btn-icon btn-sm no-underline" type="button" title="Preview" to={SCREENS_PATH.COURSE_PREVIEW(course.id)}>
-                    <i className="fa-regular fa-eye text-sm" aria-hidden="true" />
-                  </Link>
-                  <Link className="btn btn-light-info btn-icon btn-sm ml-[2px]! no-underline" type="button" title="Chapters" to={SCREENS_PATH.COURSE_CHAPTERS(course.id)}>
+                <div
+                  className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-3 items-center card-header-title text-right courses-item-action"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <Link className="btn btn-light-info btn-icon btn-sm ml-0.5! no-underline" title="Chapters" to={SCREENS_PATH.COURSE_CHAPTERS(course.id)}>
                     <i className="fa-regular fa-layer-group text-sm" aria-hidden="true" />
                   </Link>
-                  <Link className="btn btn-light-warning btn-icon btn-sm ml-[2px]! no-underline" type="button" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>
+                  <Link className="btn btn-light-warning btn-icon btn-sm ml-0.5! no-underline" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>
                     <i className="fa-regular fa-pen text-sm" aria-hidden="true" />
                   </Link>
-                  <button className="btn btn-light-danger btn-icon btn-sm ml-[2px]! no-underline" type="button" title="Delete">
+                  <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" type="button" title="Delete">
                     <i className="fa-regular fa-trash text-sm" aria-hidden="true" />
                   </button>
                 </div>

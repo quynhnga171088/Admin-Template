@@ -74,12 +74,12 @@ $transition-base: 250ms ease-in-out;
 $transition-slow: 400ms ease-in-out;
 
 /* Status Theme */
-$published-bg: linear-gradient(135deg, var(--color-success-600) 0%, var(--color-success-200) 100%);
-$published-bg-hover: linear-gradient(5deg, var(--color-success-600) 0%, var(--color-success-200) 100%);
+$published-bg: linear-gradient(135deg, var(--color-success-700) 0%, var(--color-success-300) 100%);
+$published-bg-hover: linear-gradient(5deg, var(--color-success-700) 0%, var(--color-success-300) 100%);
 $published-color: white;
-$draft-bg: linear-gradient(135deg, var(--color-warning-600) 0%, var(--color-warning-200) 100%);
-$draft-bg-hover: linear-gradient(5deg, var(--color-warning-600) 0%, var(--color-warning-200) 100%);
+$draft-bg: linear-gradient(135deg, var(--color-warning-700) 0%, var(--color-warning-300) 100%);
+$draft-bg-hover: linear-gradient(5deg, var(--color-warning-700) 0%, var(--color-warning-300) 100%);
 $draft-colort: white;
-$archived-bg: linear-gradient(135deg, var(--color-info-600), var(--color-info-200) 100%);
-$archived-bg-hover: linear-gradient(5deg, var(--color-info-600), var(--color-info-200) 100%);
+$archived-bg: linear-gradient(135deg, var(--color-info-700), var(--color-info-300) 100%);
+$archived-bg-hover: linear-gradient(5deg, var(--color-info-700), var(--color-info-300) 100%);
 $archived-color: white;

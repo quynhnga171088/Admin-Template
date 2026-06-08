@@ -10,6 +10,7 @@ import {
   SCREENS_PATH,
   STATUS_DATA_FOR_DROPDOWN
 } from '@/config/constant';
+import { getFormatVNCurrency } from '@/util/util';
 import '@/pages/courses/CourseAddNew.scss';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
@@ -24,11 +25,9 @@ const CourseAddNew = () => {
 
       /* get File to post to server */
       const file = fileInputRef.current?.files?.[0];
-      let thumbnailUrl: string;
+      let thumbnailUrl: string = '';
       if (file) {
         thumbnailUrl = await uploadImage(file);
-      } else {
-        thumbnailUrl = '';
       }
 
       await createCourse({
@@ -234,17 +233,15 @@ const CourseAddNew = () => {
                         Status <span className="can-required">*</span>
                       </label>
                       <Dropdown
+                        id={field.name}
+                        name={field.name}
                         dataSelected={field.state.value}
                         itemData={STATUS_DATA_FOR_DROPDOWN}
-                        setDataSelected={field.handleChange} />
+                        setDataSelected={val => field.handleChange(val as ICourseStatus)}
+                        onBlur={field.handleBlur}
+                        hasError={field.state.meta.errors.length > 0}
+                      />
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
-                      <div className="can-status-preview text-right">
-                        <span className={`can-status-badge can-status-badge--${(field.state.value as ICourseStatus).toLowerCase()}`}>
-                          {field.state.value === STATE.DRAFT && 'Draft'}
-                          {field.state.value === STATE.PUBLISHED && 'Published'}
-                          {field.state.value === STATE.ARCHIVED && 'Archived'}
-                        </span>
-                      </div>
                     </div>
                   )}
                 />
@@ -255,12 +252,10 @@ const CourseAddNew = () => {
                   validators={{ onChange: validateField('price') }}
                   children={field => (
                     <div className="can-field">
-                      <label htmlFor={field.name} className="form-label can-label">
-                        Price (VND)
-                      </label>
+                      <label htmlFor={field.name} className="form-label can-label">Price (VND)</label>
                       <div className="input-group">
                         <span className="input-group-text can-input-prefix">
-                          <i className="fa-regular fa-dong-sign" />
+                          <i className="fa-thin fa-dong-sign" />
                         </span>
                         <input
                           id={field.name}
@@ -277,11 +272,8 @@ const CourseAddNew = () => {
                       </div>
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       {field.state.value > 0 && (
-                        <span className="can-price-display">
-                          {new Intl.NumberFormat('vi-VN', {
-                            style: 'currency',
-                            currency: 'VND'
-                          }).format(field.state.value)}
+                        <span className="can-price-display text-right">
+                          {getFormatVNCurrency(field.state.value)}
                         </span>
                       )}
                       {field.state.value === 0 && <span className="can-price-free">Free course</span>}
@@ -324,17 +316,14 @@ const CourseAddNew = () => {
                       <li className="can-summary-item">
                         <span className="can-summary-label">Price</span>
                         <span className="can-summary-value">
-                          {price > 0
-                            ? new Intl.NumberFormat('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND'
-                            }).format(price)
-                            : 'Free'}
+                          {price > 0 ? getFormatVNCurrency(price) : 'Free'}
                         </span>
                       </li>
                       <li className="can-summary-item">
                         <span className="can-summary-label">Thumbnail</span>
-                        <span className="can-summary-value">{thumbnailUrl ? '✔ Selected' : <em className="can-summary-empty">Not selected</em>}</span>
+                        <span className="can-summary-value">
+                          {thumbnailUrl ? <span><i className="fa-regular fa-check" /> Selected</span> : <em className="can-summary-empty">Not selected</em>}
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -362,15 +351,14 @@ const CourseAddNew = () => {
                           <i className="fa-regular fa-floppy-disk" /> Draft
                         </button>
                         <button type="submit" form="course-add-form" className="btn btn-primary can-btn-submit" disabled={!canSubmit || isSubmitting}>
-                          {isSubmitting ? (
+                          {isSubmitting ?
                             <span>
                               <i className="fa-regular fa-spinner-third fa-spin" /> Saving...
                             </span>
-                          ) : (
+                            :
                             <span>
                               <i className="fa-regular fa-floppy-disk" /> Save Course
-                            </span>
-                          )}
+                            </span>}
                         </button>
                       </div>
                     )}

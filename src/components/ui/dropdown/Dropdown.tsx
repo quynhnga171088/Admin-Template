@@ -2,16 +2,25 @@ import { useMemo } from 'react';
 import { useDetectOutsideClick } from '@/components/useDetectOutsideClick';
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import '@/components/ui/dropdown/Dropdown.scss';
-import type { IDropdownOption } from '@/types/types.ts';
+import type { ICourseStatus, IDropdownOption } from '@/types/types.ts';
+import { STATE } from '@/config/constant.ts';
 
 export const Dropdown = ({
   dataSelected,
   setDataSelected,
-  itemData
+  itemData,
+  id,
+  name,
+  onBlur,
+  hasError
 }: {
   dataSelected: string | null;
   setDataSelected: (dataSelected: any) => void;
-  itemData: IDropdownOption[]
+  itemData: IDropdownOption[];
+  id?: string;
+  name?: string;
+  onBlur?: () => void;
+  hasError?: boolean;
 }) => {
   const { ref, isOpen, setIsOpen } = useDetectOutsideClick<HTMLDivElement>(false);
 
@@ -26,10 +35,22 @@ export const Dropdown = ({
 
   return (
     <div className={`dropdown-control-wrap dropdown ${isOpen ? 'drp-show' : ''}`} ref={ref}>
+      {/* Hidden input so that <label>'s htmlFor correctly points to this field */}
+      {(id || name) && (
+        <input
+          type="hidden"
+          id={id}
+          name={name}
+          value={dataSelected ?? ''}
+          readOnly
+        />
+      )}
       <div
-        className={`form-control cursor-pointer dropdown-toggle arrow-none me-0 ${getItemDataByValue?.className || ''}`}
+        className={`form-control cursor-pointer dropdown-toggle arrow-none me-0 ${getItemDataByValue?.className ?? ''} ${hasError ? 'error' : ''}`}
         data-pc-toggle="dropdown" role="button"
         onClick={toggleDropdown}
+        onBlur={onBlur}
+        tabIndex={0}
       >
         <div className="flex justify-between items-center">
           <span className="dropdown-selected-text-content">
@@ -61,6 +82,14 @@ export const Dropdown = ({
           </div>
         </div>
       )}
+      {getItemDataByValue &&
+        <div className="can-status-preview text-right">
+          <span className={`can-status-badge can-status-badge--${(getItemDataByValue.value as ICourseStatus).toLowerCase()}`}>
+            {getItemDataByValue.value === STATE.DRAFT && 'Draft'}
+            {getItemDataByValue.value === STATE.PUBLISHED && 'Published'}
+            {getItemDataByValue.value === STATE.ARCHIVED && 'Archived'}
+          </span>
+        </div>}
     </div>
   );
 };

@@ -43,6 +43,7 @@ export const uploadImage = async (file: File) => {
 };
 
 export const createCourse = async (payload: ICourseCreateRequest) => {
+  console.log('payload', payload);
   const { setProcessing } = modalStore.getState();
   setProcessing(true);
   try {
