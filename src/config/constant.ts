@@ -71,6 +71,7 @@ export const API_URL = {
   GET_COURSE_DETAIL: '/courses',
   CREATE_COURSE: '/courses',
   UPDATE_COURSE: '/courses',
+  DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',

@@ -42,8 +42,45 @@ export const uploadImage = async (file: File) => {
   return response.data.fileUrl || '';
 };
 
+export const deleteCourse = async (courseId: number) => {
+  const { setProcessing } = modalStore.getState();
+
+  const setEnableCancelButton = modalStore.getState().setEnableCancelButton;
+  const setEnableOkButton = modalStore.getState().setEnableOkButton;
+  const setCallback = modalStore.getState().setCallback;
+  const setMessage = modalStore.getState().setMessage;
+  const setTitle = modalStore.getState().setTitle;
+  const setOpen = modalStore.getState().setOpen;
+
+  setProcessing(true);
+  try {
+    coursesApi.delete(courseId)
+      .then(async () => {
+        await queryClient.invalidateQueries({ queryKey: queryKeys.courses.all });
+        setMessage(response.message);
+        setEnableCancelButton(false);
+        setEnableOkButton(true);
+        setTitle('Delete Success');
+        setCallback(null);
+        setOpen(true);
+      })
+      .catch(async error => {
+        if (error.data && error.data.data) {
+          const response = error.data.data;
+          setMessage(response.message);
+          setEnableCancelButton(false);
+          setEnableOkButton(true);
+          setTitle(response.error);
+          setCallback(null);
+          setOpen(true);
+        }
+      });
+  } finally {
+    setProcessing(false);
+  }
+};
+
 export const createCourse = async (payload: ICourseCreateRequest) => {
-  console.log('payload', payload);
   const { setProcessing } = modalStore.getState();
   setProcessing(true);
   try {

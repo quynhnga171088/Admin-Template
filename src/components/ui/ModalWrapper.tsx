@@ -1,6 +1,6 @@
 import React from 'react';
-import Modal from '@/components/ui/Modal.tsx';
-import { modalStore } from '@/stores/modal.store.ts';
+import Modal from '@/components/ui/Modal';
+import { modalStore } from '@/stores/modal.store';
 
 const ModalWrapper = () => {
   const open = modalStore(state => state.open);

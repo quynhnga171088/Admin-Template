@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
-import { getCourses } from './courses.services';
+import {
+  getCourses,
+  deleteCourse
+} from './courses.services';
 import type {
   ICoursesState,
   ICourseItem,
@@ -16,15 +19,22 @@ import {
 } from '@/util/util';
 import { coursesStore } from '@/stores/courses.store';
 import '@/pages/courses/CoursesList.scss';
-import { DATE_TIME_FORMAT, SCREENS_PATH, AVATAR_DEFAULT } from '@/config/constant';
+import {
+  DATE_TIME_FORMAT,
+  AVATAR_DEFAULT,
+  SCREENS_PATH
+} from '@/config/constant';
 import Pagination from '@/components/ui/Pagination';
 import { userStore } from '@/stores/user.store';
+import { modalStore } from '@/stores/modal.store';
 
 const CoursesList = () => {
 
   const location = useLocation();
 
   const navigate = useNavigate();
+
+  const [courseId, setCourseId] = useState<number | null>(null);
 
   const search = userStore((state: IUserState) => state.search);
 
@@ -36,13 +46,47 @@ const CoursesList = () => {
 
   const pagination = coursesStore((state: ICoursesState) => state.pagination);
 
+  const setEnableCancelButton = modalStore(state => state.setEnableCancelButton);
+  const setEnableOkButton = modalStore(state => state.setEnableOkButton);
+  const setCallback = modalStore(state => state.setCallback);
+  const setMessage = modalStore(state => state.setMessage);
+  const setTitle = modalStore(state => state.setTitle);
+  const setOpen = modalStore(state => state.setOpen);
+
+  const confirmDeleteAction = (course: ICourseItem) => {
+    setCourseId(course.id);
+    setMessage(`Do you want to delete the course: ${course.title}?`);
+    setEnableCancelButton(true);
+    setEnableOkButton(true);
+    setTitle('Confirm');
+    setCallback(deleteCourseData);
+    setOpen(true);
+  };
+
+  const deleteCourseData = () => {
+    if (courseId) {
+      deleteCourse(courseId)
+        .then(() => {
+          setCourseId(null);
+        })
+        .catch(() => {
+          setMessage('Failed to delete course. Please try again later.');
+          setTitle('Confirm');
+          setEnableCancelButton(false);
+          setEnableOkButton(true);
+          setCallback(null);
+          setOpen(true);
+        });
+    }
+  };
+
   useEffect(() => {
     const params: URLSearchParams = new URLSearchParams(location.search);
 
     const pagination: IPagination = getPagination(params);
 
     getCourses(pagination).then(() => setAction(false));
-  }, [location.search]);
+  }, [location.search, setAction]);
 
   useEffect(() => {
     if (action) {
@@ -94,11 +138,7 @@ const CoursesList = () => {
               </div>
               : ''}
             {courses.map((course: ICourseItem) => (
-              <div
-                key={course.id}
-                className="grid grid-cols-24 gap-4 courses-item cursor-pointer"
-                onClick={() => navigate(SCREENS_PATH.COURSE_PREVIEW(course.id))}
-              >
+              <div key={course.id} className="grid grid-cols-24 gap-4 courses-item cursor-pointer" onClick={() => navigate(SCREENS_PATH.COURSE_PREVIEW(course.id))}>
                 <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 courses-item-full-name flex items-center cursor-pointer">
                   <img
                     className="img-fluid logo logo-lg h-12.5"
@@ -142,7 +182,7 @@ const CoursesList = () => {
                   <Link className="btn btn-light-warning btn-icon btn-sm ml-0.5! no-underline" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>
                     <i className="fa-regular fa-pen text-sm" aria-hidden="true" />
                   </Link>
-                  <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" type="button" title="Delete">
+                  <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" title="Delete" onClick={() => confirmDeleteAction(course)}>
                     <i className="fa-regular fa-trash text-sm" aria-hidden="true" />
                   </button>
                 </div>
