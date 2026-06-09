@@ -45,13 +45,12 @@ const CoursesList = () => {
   const setTitle = modalStore(state => state.setTitle);
   const setOpen = modalStore(state => state.setOpen);
 
-  /* Read pagination params direct from url */
   const pagination: IPagination = getPagination(new URLSearchParams(location.search));
 
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.courses.list(pagination),
     queryFn: () => coursesFetcher(pagination),
-    staleTime: QUERY_CONFIG.STALE_TIME * 60 * 1000 // 30s
+    staleTime: QUERY_CONFIG.STALE_TIME * 60 * 1000 // 5 minutes
   });
 
   const courses = data?.content ?? [];
