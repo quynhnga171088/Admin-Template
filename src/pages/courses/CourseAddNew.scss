@@ -75,7 +75,7 @@
     padding: 1.25rem !important;
   }
 
-  /* ── Form fields ── */
+  /* Form fields */
   .can-field {
     display: flex;
     flex-direction: column;
@@ -114,21 +114,21 @@
     margin-top: 0;
   }
 
-  /* ── Input group prefix ── */
+  /* Input group prefix */
   .can-input-prefix {
-    background: var(--primary-500, #1890ff);
+    background: var(--color-info-600, #18a8d8);
     color: white;
-    border-color: var(--primary-500, #1890ff);
+    border-color: var(--color-info-600, #18a8d8);
     font-size: 0.9rem;
     padding: 0 0.85rem;
     border-radius: 6px 0 0 6px;
   }
 
-  /* ── Price display ── */
+  /* Price display */
   .can-price-display {
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--primary-500, #1890ff);
+    color: var(--color-info-600, #18a8d8);
     margin-top: 0.1rem;
   }
 
@@ -139,7 +139,7 @@
     margin-top: 0.1rem;
   }
 
-  /* ── Status badge ── */
+  /* Status badge */
   .can-status-preview {
     margin-top: 0.4rem;
   }
@@ -149,7 +149,8 @@
     align-items: center;
     justify-content: center;
     padding: 0.15rem 0.65rem;
-    border-radius: 20px;
+    border-radius: 5px;
+    width: 70px;
     font-size: 0.72rem;
     font-weight: 600;
     color: #fff;
@@ -158,18 +159,18 @@
   }
 
   .can-status-badge--draft {
-    background: linear-gradient(135deg, var(--color-warning-600, #d48806), var(--color-warning-400, #ffc53d));
+    background: $draft-bg;
   }
 
   .can-status-badge--published {
-    background: linear-gradient(-135deg, #1de9b6, #1dc4e9);
+    background: $published-bg;
   }
 
   .can-status-badge--archived {
-    background: linear-gradient(135deg, var(--primary-500, #1890ff), var(--primary-700, #096dd9));
+    background: $archived-bg;
   }
 
-  /* ── Thumbnail ── */
+  /* Thumbnail */
   .can-dropzone {
     display: flex;
     align-items: center;
@@ -182,7 +183,7 @@
     background: transparent;
 
     &:hover {
-      border-color: var(--primary-500, #1890ff);
+      border-color: var(--color-info-600, #18a8d8);
       background: rgba(24, 144, 255, 0.03);
     }
   }
@@ -205,7 +206,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: var(--primary-500, #1890ff);
+    color: var(--color-info-600, #18a8d8);
     transition: transform 0.2s;
 
     .can-dropzone:hover & { transform: scale(1.08); }
@@ -220,7 +221,7 @@
   .can-dropzone-primary {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--primary-500, #1890ff);
+    color: var(--color-info-600, #18a8d8);
   }
 
   .can-dropzone-secondary {
@@ -277,8 +278,8 @@
     transition: border-color 0.2s, color 0.2s;
 
     &:hover {
-      border-color: var(--primary-500, #1890ff);
-      color: var(--primary-500, #1890ff);
+      border-color: var(--color-info-600, #18a8d8);
+      color: var(--color-info-600, #18a8d8);
     }
   }
 
@@ -394,5 +395,4 @@
       }
     }
   }
-
 }

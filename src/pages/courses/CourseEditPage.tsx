@@ -2,12 +2,14 @@ import { useRef, useState, useEffect, type ChangeEvent, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from '@tanstack/react-form';
 
-import { getCourseDetail, updateCourse, uploadImage } from './courses.services.ts';
-import { courseSchema, type CourseFormData } from '@/pages/courses/course.schema.ts';
-import type { ICourseStatus } from '@/types/types.ts';
-import { SCREENS_PATH, STATE } from '@/config/constant';
-import { type IModalState, modalStore } from '@/stores/modal.store.ts';
+import { getCourseDetail, updateCourse, uploadImage } from './courses.services';
+import { courseSchema, type CourseFormData } from '@/pages/courses/course.schema';
+import type { ICourseStatus } from '@/types/types';
+import { SCREENS_PATH, STATE, STATUS_DATA_FOR_DROPDOWN } from '@/config/constant';
+import { type IModalState, modalStore } from '@/stores/modal.store';
+import { getFormatVNCurrency } from '@/util/util';
 import '@/pages/courses/CourseAddNew.scss';
+import { Dropdown } from '@/components/ui/dropdown/Dropdown.tsx';
 
 const CourseEditPage = () => {
   const navigate = useNavigate();
@@ -287,26 +289,15 @@ const CourseEditPage = () => {
                       <label htmlFor={field.name} className="form-label can-label">
                         Status <span className="can-required">*</span>
                       </label>
-                      <select
+                      <Dropdown
                         id={field.name}
                         name={field.name}
-                        className={`form-select ${field.state.meta.errors.length ? 'error' : ''}`}
-                        value={field.state.value}
-                        onChange={e => field.handleChange(e.target.value as ICourseStatus)}
+                        dataSelected={field.state.value}
+                        itemData={STATUS_DATA_FOR_DROPDOWN}
+                        setDataSelected={val => field.handleChange(val as ICourseStatus)}
                         onBlur={field.handleBlur}
-                      >
-                        <option value={STATE.DRAFT}>📝 Draft</option>
-                        <option value={STATE.PUBLISHED}>✅ Published</option>
-                        <option value={STATE.ARCHIVED}>📦 Archived</option>
-                      </select>
-                      {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
-                      <div className="can-status-preview">
-                        <span className={`can-status-badge can-status-badge--${(field.state.value as ICourseStatus).toLowerCase()}`}>
-                          {field.state.value === STATE.DRAFT && 'Draft'}
-                          {field.state.value === STATE.PUBLISHED && 'Published'}
-                          {field.state.value === STATE.ARCHIVED && 'Archived'}
-                        </span>
-                      </div>
+                        hasError={field.state.meta.errors.length > 0}
+                      />
                     </div>
                   )}
                 />
@@ -386,12 +377,7 @@ const CourseEditPage = () => {
                       <li className="can-summary-item">
                         <span className="can-summary-label">Price</span>
                         <span className="can-summary-value">
-                          {price > 0
-                            ? new Intl.NumberFormat('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND'
-                            }).format(price)
-                            : 'Free'}
+                          {price > 0 ? getFormatVNCurrency(price) : 'Free'}
                         </span>
                       </li>
                       <li className="can-summary-item">

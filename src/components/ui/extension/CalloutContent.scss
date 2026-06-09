@@ -1,0 +1,75 @@
+.rte-content {
+  /* Callout block */
+  .rte-callout {
+    --callout-border: var(--color-primary, #4680ff);
+    --callout-bg:     rgba(70, 128, 255, 0.07);
+    --callout-text:   #0369a1;
+
+    background: var(--callout-bg);
+    border-radius: 1rem;
+    padding: 0.65rem 1rem;
+    margin: 0.75rem 0;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+
+    &--info {
+      --callout-border: var(--color-primary, #bae6fd);
+      --callout-bg:     #f0f9ff;
+      --callout-text:   #0369a1!important;
+      color:   #0369a1!important;
+    }
+
+    &--warning {
+      --callout-border: var(--color-warning, #f4c22b);
+      --callout-bg:     rgba(244, 194, 43, 0.09);
+      --callout-text:   #92650a!important;
+      color: #92650a!important;
+    }
+
+    &--danger {
+      --callout-border: var(--color-danger, #f44236);
+      --callout-bg:     rgba(244, 66, 54, 0.07);
+      --callout-text:   #b91c1c!important;
+    }
+
+    &--success {
+      --callout-border: var(--color-success, #1de9b6);
+      --callout-bg:     rgba(29, 233, 182, 0.08);
+      --callout-text:   #0d7a5f!important;
+    }
+
+    /* Content area inside callout */
+    .rte-callout-content {
+      color: var(--callout-text);
+
+      p:last-child { margin-bottom: 0; }
+
+      /* Links inherit accent feel */
+      a { color: var(--callout-text); opacity: 0.85; }
+    }
+  }
+}
+
+/* Callout variant-dot buttons in toolbar */
+.rte-callout-variant-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--dot-color, #4680ff);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+
+  &:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  }
+
+  &--active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px var(--dot-color, #4680ff);
+    transform: scale(1.15);
+  }
+}

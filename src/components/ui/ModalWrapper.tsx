@@ -1,6 +1,6 @@
 import React from 'react';
-import Modal from '@/components/ui/Modal.tsx';
-import { modalStore } from '@/stores/modal.store.ts';
+import Modal from '@/components/ui/Modal';
+import { modalStore } from '@/stores/modal.store';
 
 const ModalWrapper = () => {
   const open = modalStore(state => state.open);
@@ -21,9 +21,7 @@ const ModalWrapper = () => {
       size="md"
       footer={
         <React.Fragment>
-          {enableCancelButton && <button className="btn btn-light" onClick={() => setOpen(false)}>
-            Cancel
-          </button>}
+          {enableCancelButton && <button className="btn btn-light" onClick={() => setOpen(false)}>Cancel</button>}
           {enableOkButton && <button
             className="btn btn-primary"
             onClick={() => {

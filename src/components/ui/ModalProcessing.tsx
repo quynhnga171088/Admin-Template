@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { modalStore } from '@/stores/modal.store.ts';
+import { modalStore } from '@/stores/modal.store';
 
 const ModalProcessing = () => {
   const isProcessing = modalStore(state => state.isProcessing);

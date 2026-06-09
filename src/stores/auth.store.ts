@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { type IAdminUser, type IAuthState } from '@/types/types';
+import type { IAdminUser, IAuthState } from '@/types/types';
 
 export const authStore = create<IAuthState>()(
   persist(
     set => ({
-      user: null,
-      accessToken: null,
-      refreshToken: null,
-      errorMessage: null,
-      isAuthenticated: false,
+      user: null as IAdminUser | null,
+      accessToken: null as string | null,
+      refreshToken: null as string | null,
+      errorMessage: null as string | null,
+      isAuthenticated: false as boolean,
       logout: () => set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false }),
       setUser: (user: IAdminUser | null) => set({ user }),
       setAuth: (user: IAdminUser, accessToken: string, refreshToken) => set({ user, accessToken, refreshToken, isAuthenticated: true, errorMessage: null }),

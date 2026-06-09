@@ -3,43 +3,43 @@ import { coursesApi } from '@/lib/api/courses.api';
 import { resourceApi } from '@/lib/api/resource.api';
 import { queryKeys } from '@/lib/queryKeys';
 import { modalStore } from '@/stores/modal.store';
-import { coursesStore } from '@/stores/courses.store';
-import type { ICourseCreateRequest, ICourseUpdateRequest, IPagination } from '@/types/types.ts';
+import type { ICourseCreateRequest, ICourseItem, ICourseUpdateRequest, IPageResponse, IPagination } from '@/types/types';
+import { VIDEO_HOST } from '@/config/constant';
 
-export const getCourses = async (pagination: IPagination) => {
-  const { setProcessing } = modalStore.getState();
-  const { setCourses, setPagination } = coursesStore.getState();
-
-  const queryKey = queryKeys.courses.list(pagination);
-  const cachedState = queryClient.getQueryState(queryKey);
-  const isStale = !cachedState?.data || (cachedState.dataUpdatedAt + (queryClient.getDefaultOptions().queries?.staleTime as number ?? 0)) < Date.now();
-
-  if (isStale) setProcessing(true);
-
-  try {
-    const data = await queryClient.fetchQuery({
-      queryKey,
-      queryFn: () =>
-        coursesApi
-          .getCourses(pagination)
-          .then(response => response.data)
-    });
-
-    setCourses(data.content);
-    setPagination({
-      ...pagination,
-      last: data.last,
-      totalElements: data.totalElements,
-      totalPages: data.totalPages
-    });
-  } finally {
-    if (isStale) setProcessing(false);
-  }
-};
+/** Pure queryFn — use queryFn for useQuery in component */
+export const coursesFetcher: (pagination: IPagination) => Promise<IPageResponse<ICourseItem>> =
+  (pagination: IPagination) => coursesApi.getCourses(pagination).then(res => res.data);
 
 export const uploadImage = async (file: File) => {
   const response = await resourceApi.uploadImg(file);
   return response.data.fileUrl || '';
+};
+
+export const deleteCourse = async (courseId: number) => {
+  const { setProcessing, setEnableCancelButton, setEnableOkButton, setCallback, setMessage, setTitle, setOpen } = modalStore.getState();
+
+  setProcessing(true);
+  try {
+    await coursesApi.delete(courseId);
+    await queryClient.invalidateQueries({ queryKey: queryKeys.courses.all });
+    setMessage('Course deleted successfully.');
+    setEnableCancelButton(false);
+    setEnableOkButton(true);
+    setTitle('Success');
+    setCallback(null);
+    setOpen(true);
+  } catch (error: any) {
+    const errorData = error.response?.data;
+    setMessage(errorData?.message ?? 'An unexpected error occurred. Please try again.');
+    setEnableCancelButton(false);
+    setEnableOkButton(true);
+    setTitle(errorData?.error ?? 'Error');
+    setCallback(null);
+    setOpen(true);
+    throw error;
+  } finally {
+    setProcessing(false);
+  }
 };
 
 export const createCourse = async (payload: ICourseCreateRequest) => {
@@ -73,4 +73,25 @@ export const updateCourse = async (id: number, payload: ICourseUpdateRequest) =>
   } finally {
     setProcessing(false);
   }
+};
+
+export const buildEmbedUrl = (url: string): string => {
+  try {
+    const u = new URL(url);
+    /* YouTube watch URL → embed */
+    if (u.hostname.includes(VIDEO_HOST.YOUBUTE) && u.pathname === '/watch') {
+      const v = u.searchParams.get('v');
+      if (v) return `https://www.youtube.com/embed/${v}`;
+    }
+    /* youtu.be short URL → embed */
+    if (u.hostname === VIDEO_HOST.YOUBUTE_SHORT) {
+      return `https://www.youtube.com/embed${u.pathname}`;
+    }
+    /* Vimeo */
+    if (u.hostname.includes(VIDEO_HOST.VIMEO)) {
+      const id = u.pathname.replace('/', '');
+      return `https://player.vimeo.com/video/${id}`;
+    }
+  } catch { /* ignore */ }
+  return url;
 };

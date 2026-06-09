@@ -2,19 +2,23 @@ import axiosInstance from 'src/config/axios.config.ts';
 import { API_URL } from '@/config/constant.ts';
 import type {
   IChapter,
-  ILessonDetail,
   ILesson,
+  ISection,
   ICreateChapterRequest,
   IUpdateChapterRequest,
   IReorderChaptersRequest,
   ICreateLessonRequest,
   IUpdateLessonRequest,
   IReorderLessonsRequest,
-  IAttachment
+  ICreateSectionRequest,
+  IUpdateSectionRequest,
+  IReorderSectionsRequest,
 } from '@/types/types.ts';
 
+// ─── Chapter API ──────────────────────────────────────────────────────────────
+
 export const chaptersApi = {
-  /** GET /courses/{cId}/chapters — returns chapters with nested lessons */
+  /** GET /courses/{cId}/chapters — returns chapters with nested lessons & sections */
   list: (courseId: number | string) =>
     axiosInstance.get<IChapter[]>(API_URL.CHAPTERS(courseId)),
 
@@ -38,13 +42,9 @@ export const chaptersApi = {
 // ─── Lesson API ───────────────────────────────────────────────────────────────
 
 export const lessonsApi = {
-  /** GET /courses/{cId}/chapters/{chId}/lessons/{lid} */
-  detail: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    axiosInstance.get<ILessonDetail>(API_URL.LESSON(courseId, chapterId, lessonId)),
-
   /** POST /courses/{cId}/chapters/{chId}/lessons */
   create: (courseId: number | string, chapterId: number | string, data: ICreateLessonRequest) =>
-    axiosInstance.post<ILessonDetail>(API_URL.LESSONS(courseId, chapterId), data),
+    axiosInstance.post<ILesson>(API_URL.LESSONS(courseId, chapterId), data),
 
   /** PATCH /courses/{cId}/chapters/{chId}/lessons/{lid} */
   update: (
@@ -66,32 +66,39 @@ export const lessonsApi = {
   ) => axiosInstance.patch<ILesson[]>(API_URL.REORDER_LESSONS(courseId, chapterId), data)
 };
 
-export const attachmentsApi = {
-  /** GET /courses/{cid}/chapters/{chId}/lessons/{lid}/attachments */
-  list: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    axiosInstance.get<IAttachment[]>(API_URL.ATTACHMENTS(courseId, chapterId, lessonId)),
+// ─── Section API ──────────────────────────────────────────────────────────────
 
-  /** POST /courses/{cid}/chapters/{chId}/lessons/{lid}/attachments (multipart) */
-  upload: (
+export const sectionsApi = {
+  /** POST /courses/{cId}/chapters/{chId}/lessons/{lId}/sections */
+  create: (
     courseId: number | string,
     chapterId: number | string,
     lessonId: number | string,
-    file: File
-  ) => {
-    const form = new FormData();
-    form.append('file', file);
-    return axiosInstance.post<IAttachment>(
-      API_URL.ATTACHMENTS(courseId, chapterId, lessonId),
-      form,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-  },
+    data: ICreateSectionRequest
+  ) => axiosInstance.post<ISection>(API_URL.SECTIONS(courseId, chapterId, lessonId), data),
 
-  /** DELETE /courses/{cid}/chapters/{chId}/lessons/{lid}/attachments/{aid} */
+  /** PATCH /courses/{cId}/chapters/{chId}/lessons/{lId}/sections/{sId} */
+  update: (
+    courseId: number | string,
+    chapterId: number | string,
+    lessonId: number | string,
+    sectionId: number | string,
+    data: IUpdateSectionRequest
+  ) => axiosInstance.patch<ISection>(API_URL.SECTION(courseId, chapterId, lessonId, sectionId), data),
+
+  /** DELETE /courses/{cId}/chapters/{chId}/lessons/{lId}/sections/{sId} */
   delete: (
     courseId: number | string,
     chapterId: number | string,
     lessonId: number | string,
-    attachmentId: number | string
-  ) => axiosInstance.delete(API_URL.ATTACHMENT(courseId, chapterId, lessonId, attachmentId))
+    sectionId: number | string
+  ) => axiosInstance.delete(API_URL.SECTION(courseId, chapterId, lessonId, sectionId)),
+
+  /** PATCH /courses/{cId}/chapters/{chId}/lessons/{lId}/sections/reorder */
+  reorder: (
+    courseId: number | string,
+    chapterId: number | string,
+    lessonId: number | string,
+    data: IReorderSectionsRequest
+  ) => axiosInstance.patch<ISection[]>(API_URL.REORDER_SECTIONS(courseId, chapterId, lessonId), data),
 };

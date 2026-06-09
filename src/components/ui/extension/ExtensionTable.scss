@@ -1,0 +1,126 @@
+/* Table Dropdown Menu */
+.rte-table-menu-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rte-table-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: var(--color-bg-card, #fff);
+  border: 1px solid var(--color-border, #dee2e6);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rte-table-group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted, #adb5bd);
+  padding: 6px 8px 2px;
+}
+
+.rte-table-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--color-theme-bodycolor, #333);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+
+  i { width: 14px; text-align: center; opacity: 0.7; }
+
+  &:hover { background: var(--color-bg-hover, rgba(0, 0, 0, 0.05)); }
+
+  &--danger {
+    color: var(--color-danger, #f44236);
+    i { opacity: 1; }
+    &:hover { background: rgba(244, 66, 54, 0.07); }
+  }
+}
+
+.rte-table-sep {
+  height: 1px;
+  background: var(--color-border, #dee2e6);
+  margin: 4px 0;
+}
+
+/* Table Styles inside Editor */
+.rte-content .tiptap {
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0.75rem 0;
+    overflow: unset; /* must NOT be hidden — blocks resize handle clicks */
+    border-radius: 8px;
+
+    td,
+    th {
+      position: relative;
+      border: 1px solid var(--color-border, #dee2e6);
+      padding: 6px 10px;
+      vertical-align: top;
+      min-width: 60px;
+      box-sizing: border-box;
+
+      > * { margin: 0; }
+    }
+
+    th {
+      background: var(--color-bg-secondary, #f8f9fa);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-align: left;
+      color: var(--color-theme-bodycolor, #333);
+    }
+
+    tr:nth-child(even) td { background: rgba(0, 0, 0, 0.018); }
+
+    /* Selected cell highlight */
+    .selectedCell::after {
+      z-index: 2;
+      position: absolute;
+      content: '';
+      inset: 0;
+      background: rgba(70, 128, 255, 0.12);
+      pointer-events: none;
+    }
+
+    /* Column resize handle — ProseMirror injects this element and attaches
+       mousedown listeners directly, so pointer-events MUST NOT be none */
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      cursor: col-resize;
+      border-radius: 2px;
+      transition: background 0.15s;
+
+      &:hover,
+      &:active {
+        background: var(--color-primary, #4680ff);
+      }
+    }
+  }
+}
