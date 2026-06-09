@@ -1,33 +1,23 @@
 import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { Navigate } from 'react-router-dom';
 
-import { reportApi } from '@/lib/api/report.api.ts';
+import { useOverviewQuery } from '@/lib/queries/overview.queries';
 import { modalStore } from '@/stores/modal.store.ts';
 import { SCREENS_PATH } from '@/config/constant.ts';
 import HomeHeaderContent from '@/pages/home/homeDetail/HomeHeaderContent.tsx';
-import { queryKeys } from '@/lib/queryKeys.ts';
 import { authStore } from '@/stores/auth.store.ts';
 
 const HomePage = () => {
   const setProcessing = modalStore(state => state.setProcessing);
-
   const accessToken: string | null = authStore(state => state.accessToken);
 
-  const { data, isLoading } = useQuery({
-    queryKey: queryKeys.overview.all,
-    queryFn: () =>
-      reportApi
-        .getOverview()
-        .then((response: any) => response.data)
-        .catch((error: any) => error.response)
-  });
+  const { data, isLoading } = useOverviewQuery();
 
   useEffect(() => {
     setProcessing(isLoading);
   }, [isLoading, setProcessing]);
 
-  if (data && data.status && (data.status === 403 || data.status === 404)) {
+  if (data && (data as any).status && ((data as any).status === 403 || (data as any).status === 404)) {
     if (accessToken) {
       return <Navigate to={SCREENS_PATH.COURSE_LIST} />;
     } else {
