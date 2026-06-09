@@ -49,8 +49,8 @@ const CoursePreviewPage = () => {
   const { id } = useParams<{ id: string }>();
   const courseId = Number(id);
 
-  /* UI state */
-  // Track collapsed IDs thay vì expanded — mặc định tất cả đều expanded (set rỗng)
+  /** UI state
+  Track collapsed IDs instead of expanded — by default all are expanded (empty set) */
   const [activeSection, setActiveSection] = useState<ISection | null>(null);
   const [collapsedChapters, setCollapsedChapters] = useState<Set<number>>(new Set());
   const [collapsedLessons, setCollapsedLessons] = useState<Set<number>>(new Set());
@@ -70,7 +70,7 @@ const CoursePreviewPage = () => {
 
   const isLoading = loadingDetail || loadingChapters;
 
-  /* Tính section đầu tiên từ chapters — dùng khi user chưa chọn gì */
+  /* Show first section when user doesn't select yet */
   const defaultSection = useMemo<ISection | null>(() => {
     for (const chapter of chapters) {
       for (const lesson of chapter.lessons) {
@@ -80,7 +80,7 @@ const CoursePreviewPage = () => {
     return null;
   }, [chapters]);
 
-  /* Section đang active: ưu tiên user chọn, fallback về section đầu tiên */
+  /* Currently active section: prioritize user selection, fallback to first section */
   const currentSection = activeSection ?? defaultSection;
 
   /* Toggle helpers */
@@ -99,7 +99,6 @@ const CoursePreviewPage = () => {
       return next;
     });
   }, []);
-
 
   /* Status badge */
   const statusClass = (status?: string) => {
