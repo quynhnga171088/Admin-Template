@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -34,7 +34,6 @@ const CoursesList = () => {
 
   const navigate = useNavigate();
 
-  const [courseId, setCourseId] = useState<number | null>(null);
 
   const search = userStore((state: IUserState) => state.search);
 
@@ -53,46 +52,43 @@ const CoursesList = () => {
   const setTitle = modalStore(state => state.setTitle);
   const setOpen = modalStore(state => state.setOpen);
 
+  const getCoursesData = useCallback(() => {
+    const params = new URLSearchParams(location.search);
+    const pagination: IPagination = getPagination(params);
+    getCourses(pagination)
+      .then(() => setAction(false))
+      .catch(() => setAction(false)); // đảm bảo action reset dù lỗi
+  }, [location.search, setAction]);
+
   const confirmDeleteAction = (course: ICourseItem) => {
-    setCourseId(course.id);
     setMessage(`Do you want to delete the course: ${course.title}?`);
     setEnableCancelButton(true);
     setEnableOkButton(true);
     setTitle('Confirm');
-    setCallback(deleteCourseData);
+    setCallback(() =>
+      deleteCourse(course.id)
+        .then(() => {
+          // Navigate về page 0 sau khi delete, giữ nguyên các filter khác
+          const params = new URLSearchParams(location.search);
+          params.set('page', '0');
+          navigate(`${location.pathname}?${params.toString()}`);
+        })
+        .catch(() => {
+          // Error đã được xử lý trong service (hiển thị modal lỗi)
+        })
+    );
     setOpen(true);
   };
 
-  const deleteCourseData = () => {
-    if (courseId) {
-      deleteCourse(courseId)
-        .then(() => {
-          setCourseId(null);
-        })
-        .catch(() => {
-          setMessage('Failed to delete course. Please try again later.');
-          setTitle('Confirm');
-          setEnableCancelButton(false);
-          setEnableOkButton(true);
-          setCallback(null);
-          setOpen(true);
-        });
-    }
-  };
-
   useEffect(() => {
-    const params: URLSearchParams = new URLSearchParams(location.search);
-
-    const pagination: IPagination = getPagination(params);
-
-    getCourses(pagination).then(() => setAction(false));
-  }, [location.search, setAction]);
+    getCoursesData();
+  }, [getCoursesData]);
 
   useEffect(() => {
     if (action) {
       navigate(`${location.pathname}?search=${search}`);
     }
-  }, [action]);
+  }, [action, navigate, location.pathname, search]);
 
   return (
     <div className="grid grid-cols-12 gap-4 courses-list">
