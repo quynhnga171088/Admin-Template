@@ -6,7 +6,12 @@ import { chaptersApi } from '@/lib/api/chapters.api';
 import { coursesApi } from '@/lib/api/courses.api';
 import { buildEmbedUrl } from '@/pages/courses/courses.services';
 import { queryKeys } from '@/lib/queryKeys';
-import { SCREENS_PATH, VIDEO_HOST } from '@/config/constant';
+import {
+  SCREENS_PATH,
+  CONTENT_TYPE,
+  VIDEO_HOST,
+  STATE
+} from '@/config/constant';
 import type { IChapter, ISection, ICourseDetail } from '@/types/types';
 import '@/pages/courses/CoursePreviewPage.scss';
 
@@ -103,9 +108,9 @@ const CoursePreviewPage = () => {
   /* Status badge */
   const statusClass = (status?: string) => {
     switch (status?.toUpperCase()) {
-      case 'PUBLISHED': return 'cpv-status-badge--published';
-      case 'DRAFT': return 'cpv-status-badge--draft';
-      case 'ARCHIVED': return 'cpv-status-badge--archived';
+      case STATE.PUBLISHED: return 'cpv-status-badge--published';
+      case STATE.DRAFT: return 'cpv-status-badge--draft';
+      case STATE.ARCHIVED: return 'cpv-status-badge--archived';
       default: return 'cpv-status-badge--draft';
     }
   };
@@ -123,7 +128,6 @@ const CoursePreviewPage = () => {
   /* Render */
   return (
     <div className="cpv-page">
-
       {/* Header */}
       <div className="card mb-0!">
         <div className="card-body">
@@ -210,7 +214,7 @@ const CoursePreviewPage = () => {
 
                               {lesson.sections.map(section => {
                                 const isActive = currentSection?.id === section.id;
-                                const isVideo = section.type === 'VIDEO';
+                                const isVideo = section.type === CONTENT_TYPE.VIDEO;
                                 return (
                                   <div
                                     key={section.id}
@@ -226,7 +230,7 @@ const CoursePreviewPage = () => {
                                         'fa-regular fa-book-open cpv-section-type-icon--text'} cpv-section-type-icon`
                                     } />
                                     <span className="cpv-section-name">{section.title}</span>
-                                    {section.status === 'DRAFT' && (
+                                    {section.status === STATE.DRAFT && (
                                       <span className="cpv-section-draft-badge">Draft</span>
                                     )}
                                   </div>
@@ -254,7 +258,7 @@ const CoursePreviewPage = () => {
           ) : (
             <>
               {/* Video or Text */}
-              {currentSection.type === 'VIDEO' && currentSection.videoUrl && (
+              {currentSection.type === CONTENT_TYPE.VIDEO && currentSection.videoUrl && (
                 <VideoContent url={currentSection.videoUrl} />
               )}
 
@@ -265,7 +269,7 @@ const CoursePreviewPage = () => {
                 </div>
               )}
 
-              {currentSection.type === 'TEXT' && (
+              {currentSection.type === CONTENT_TYPE.TEXT && (
                 <div
                   className="cpv-text-content"
                   dangerouslySetInnerHTML={{ __html: currentSection.textContent ?? '' }}
@@ -275,7 +279,7 @@ const CoursePreviewPage = () => {
               {/* Section meta info */}
               <div className="cpv-section-info">
                 <div className="cpv-section-info-type">
-                  <i className={currentSection.type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
+                  <i className={currentSection.type === CONTENT_TYPE.VIDEO ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
                   {currentSection.type === 'VIDEO' ? 'Video' : 'Reading'}
                 </div>
                 <div className="cpv-section-info-title">{currentSection.title}</div>
