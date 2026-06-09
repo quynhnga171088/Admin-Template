@@ -17,6 +17,7 @@ export interface IModalState {
   setOpen: (value: boolean) => void;
   setTitle: (title: string) => void;
   setMessage: (message: string) => void;
+  setMessageAndTitle: (message: string, title: string) => void;
   setEnableCancelButton: (enableCancelButton: boolean) => void;
   setEnableOkButton: (enableOkButton: boolean) => void;
   setCallback: (callback: ModalCallback | null) => void;
@@ -37,6 +38,7 @@ export const modalStore = create<IModalState>(set => ({
   setOpen: (open: boolean) => set({ open }),
   setTitle: (title: string) => set({ title }),
   setMessage: (message: string) => set({ message }),
+  setMessageAndTitle: (message: string, title: string) => set({ message, title }),
   setEnableCancelButton: (enableCancelButton: boolean) => set({ enableCancelButton }),
   setEnableOkButton: (enableOkButton: boolean) => set({ enableOkButton }),
   setCallback: (callback: ModalCallback | null) => set({ callback }),

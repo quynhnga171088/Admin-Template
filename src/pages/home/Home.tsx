@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Navigate } from 'react-router-dom';
 
@@ -9,7 +10,7 @@ import { queryKeys } from '@/lib/queryKeys.ts';
 import { authStore } from '@/stores/auth.store.ts';
 
 const HomePage = () => {
-  const setProcessing = modalStore.getState().setProcessing;
+  const setProcessing = modalStore(state => state.setProcessing);
 
   const accessToken: string | null = authStore(state => state.accessToken);
 
@@ -22,7 +23,9 @@ const HomePage = () => {
         .catch((error: any) => error.response)
   });
 
-  setProcessing(isLoading);
+  useEffect(() => {
+    setProcessing(isLoading);
+  }, [isLoading, setProcessing]);
 
   if (data && data.status && (data.status === 403 || data.status === 404)) {
     if (accessToken) {

@@ -1,4 +1,7 @@
 import { type CalloutVariant } from '@/components/ui/course/CalloutExtension';
+import logoWhite from '@/assets/logo/logo-white.svg';
+import favicon from '@/assets/logo/favicon.svg';
+import type { IDropdownOption } from '@/types/types';
 
 export const SCREENS_PATH = {
   HOME: '/',
@@ -55,10 +58,6 @@ export const DEFAULT_AVATAR = 'https://codedthemes.com/demos/admin-templates/dat
 export const COMMON_MESSAGES = {
   PLEASE_WAIT: 'Please wait...'
 };
-
-import logoWhite from '@/assets/logo/logo-white.svg';
-import favicon from '@/assets/logo/favicon.svg';
-import type { IDropdownOption } from '@/types/types.ts';
 
 export const LOGO_WHITE = logoWhite;
 export const FAVICON = favicon;

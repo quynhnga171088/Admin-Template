@@ -194,14 +194,9 @@ export interface IReorderChaptersRequest {
 }
 
 export interface ICoursesState {
-  courses: ICourseItem[];
   courseDraft: ICourseItem | null;
-  pagination: IPagination;
   clearAll: () => void;
-  setCourses: (courses: ICourseItem[]) => void;
   setCourseDraft: (setCourseDraft: ICourseItem) => void;
-  setPagination: (pagination: IPagination) => void;
-  setPaginationByFieldName: (fieldName: keyof IPagination, fieldValue: any) => void;
   setCourseDraftByFieldName: (fieldName: keyof ICourseItem, fieldValue: any) => void;
 }
 

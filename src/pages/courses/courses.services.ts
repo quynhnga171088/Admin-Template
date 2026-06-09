@@ -3,39 +3,11 @@ import { coursesApi } from '@/lib/api/courses.api';
 import { resourceApi } from '@/lib/api/resource.api';
 import { queryKeys } from '@/lib/queryKeys';
 import { modalStore } from '@/stores/modal.store';
-import { coursesStore } from '@/stores/courses.store';
-import type { ICourseCreateRequest, ICourseUpdateRequest, IPagination } from '@/types/types.ts';
+import type { ICourseCreateRequest, ICourseItem, ICourseUpdateRequest, IPageResponse, IPagination } from '@/types/types.ts';
 
-export const getCourses = async (pagination: IPagination) => {
-  const { setProcessing } = modalStore.getState();
-  const { setCourses, setPagination } = coursesStore.getState();
-
-  const queryKey = queryKeys.courses.list(pagination);
-  const cachedState = queryClient.getQueryState(queryKey);
-  const isStale = !cachedState?.data || (cachedState.dataUpdatedAt + (queryClient.getDefaultOptions().queries?.staleTime as number ?? 0)) < Date.now();
-
-  if (isStale) setProcessing(true);
-
-  try {
-    const data = await queryClient.fetchQuery({
-      queryKey,
-      queryFn: () =>
-        coursesApi
-          .getCourses(pagination)
-          .then(response => response.data)
-    });
-
-    setCourses(data.content);
-    setPagination({
-      ...pagination,
-      last: data.last,
-      totalElements: data.totalElements,
-      totalPages: data.totalPages
-    });
-  } finally {
-    if (isStale) setProcessing(false);
-  }
-};
+/** Pure queryFn — use queryFn for useQuery in component */
+export const coursesFetcher: (pagination: IPagination) => Promise<IPageResponse<ICourseItem>> =
+  (pagination: IPagination) => coursesApi.getCourses(pagination).then(res => res.data);
 
 export const uploadImage = async (file: File) => {
   const response = await resourceApi.uploadImg(file);
