@@ -1,11 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { chaptersApi } from '@/lib/api/chapters.api';
 import { getCourseDetail } from '@/pages/courses/courses.services';
 import { queryClient } from '@/lib/queryClient';
 import { queryKeys } from '@/lib/queryKeys';
-import { SCREENS_PATH, VIDEO_HOST } from '@/config/constant';
+import {
+  SCREENS_PATH,
+  CONTENT_TYPE,
+  VIDEO_HOST,
+  STATE
+} from '@/config/constant';
 import type { IChapter, ISection, ICourseItem } from '@/types/types';
 import '@/pages/courses/CoursePreviewPage.scss';
 
@@ -134,9 +139,9 @@ const CoursePreviewPage = () => {
   /* Status badge */
   const statusClass = (status?: string) => {
     switch (status?.toUpperCase()) {
-      case 'PUBLISHED': return 'cpv-status-badge--published';
-      case 'DRAFT': return 'cpv-status-badge--draft';
-      case 'ARCHIVED': return 'cpv-status-badge--archived';
+      case STATE.PUBLISHED: return 'cpv-status-badge--published';
+      case STATE.DRAFT: return 'cpv-status-badge--draft';
+      case STATE.ARCHIVED: return 'cpv-status-badge--archived';
       default: return 'cpv-status-badge--draft';
     }
   };
@@ -147,8 +152,7 @@ const CoursePreviewPage = () => {
       <div className="cpv-loading">
         <i className="fa-regular fa-spinner-third fa-spin fa-2x" />
         <p>Loading preview...</p>
-      </div>
-    );
+      </div>);
   }
 
   /* Render */
@@ -191,11 +195,10 @@ const CoursePreviewPage = () => {
             <i className="fa-regular fa-list-ul" /> Course Content
           </div>
 
-          {chapters.length === 0 && (
+          {chapters.length === 0 &&
             <div className="cpv-no-lessons" style={{ padding: '1rem' }}>
               No content yet.
-            </div>
-          )}
+            </div>}
 
           {chapters.map((chapter, chIdx) => {
             const isChOpen = expandedChapters.has(chapter.id);
@@ -241,7 +244,7 @@ const CoursePreviewPage = () => {
 
                               {lesson.sections.map(section => {
                                 const isActive = activeSection?.id === section.id;
-                                const isVideo = section.type === 'VIDEO';
+                                const isVideo = section.type === CONTENT_TYPE.VIDEO;
                                 return (
                                   <div
                                     key={section.id}
@@ -257,9 +260,7 @@ const CoursePreviewPage = () => {
                                         'fa-regular fa-book-open cpv-section-type-icon--text'} cpv-section-type-icon`
                                     } />
                                     <span className="cpv-section-name">{section.title}</span>
-                                    {section.status === 'DRAFT' && (
-                                      <span className="cpv-section-draft-badge">Draft</span>
-                                    )}
+                                    {section.status === STATE.DRAFT && <span className="cpv-section-draft-badge">Draft</span>}
                                   </div>
                                 );
                               })}
@@ -277,26 +278,24 @@ const CoursePreviewPage = () => {
 
         {/* Content area */}
         <div className="cpv-content">
-          {!activeSection ? (
+          {!activeSection ?
             <div className="cpv-empty-state">
               <i className="fa-regular fa-play-circle cpv-empty-icon" />
               <p className="cpv-empty-text">Select a section from the list on the left to view its content</p>
             </div>
-          ) : (
-            <>
+            :
+            <Fragment>
               {/* Video or Text */}
-              {activeSection.type === 'VIDEO' && activeSection.videoUrl && (
-                <VideoContent url={activeSection.videoUrl} />
-              )}
+              {activeSection.type === CONTENT_TYPE.VIDEO && activeSection.videoUrl &&
+                <VideoContent url={activeSection.videoUrl} />}
 
-              {activeSection.type === 'VIDEO' && !activeSection.videoUrl && (
+              {activeSection.type === CONTENT_TYPE.VIDEO && !activeSection.videoUrl &&
                 <div className="cpv-empty-state">
                   <i className="fa-regular fa-video-slash cpv-empty-icon" />
                   <p className="cpv-empty-text">This section has no video yet.</p>
-                </div>
-              )}
+                </div>}
 
-              {activeSection.type === 'TEXT' && (
+              {activeSection.type === CONTENT_TYPE.TEXT && (
                 <div
                   className="cpv-text-content"
                   dangerouslySetInnerHTML={{ __html: activeSection.textContent ?? '' }}
@@ -306,22 +305,25 @@ const CoursePreviewPage = () => {
               {/* Section meta info */}
               <div className="cpv-section-info">
                 <div className="cpv-section-info-type">
-                  <i className={activeSection.type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
-                  {activeSection.type === 'VIDEO' ? 'Video' : 'Reading'}
+                  <i className={activeSection.type === CONTENT_TYPE.VIDEO ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
+                  {activeSection.type === CONTENT_TYPE.VIDEO ? 'Video' : 'Reading'}
                 </div>
                 <div className="cpv-section-info-title">{activeSection.title}</div>
                 {activeSection.description && (
                   <div className="cpv-section-info-desc">{activeSection.description}</div>
                 )}
                 <div className={`cpv-section-info-status cpv-section-info-status--${activeSection.status.toLowerCase()}`}>
-                  {activeSection.status === 'PUBLISHED'
-                    ? <><i className="fa-regular fa-circle-check" /> Published</>
-                    : <><i className="fa-regular fa-pencil" /> Draft</>
-                  }
+                  {activeSection.status === STATE.PUBLISHED ?
+                    <Fragment>
+                      <i className="fa-regular fa-circle-check" /> Published
+                    </Fragment>
+                    :
+                    <Fragment>
+                      <i className="fa-regular fa-pencil" /> Draft
+                    </Fragment>}
                 </div>
               </div>
-            </>
-          )}
+            </Fragment>}
         </div>
       </div>
     </div>

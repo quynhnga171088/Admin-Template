@@ -47,10 +47,15 @@ export const TIMEOUT_REQUEST = 30000;
 
 export const ROLES: string[] = ['ADMIN', 'TEACHER'];
 
-export const STATE: Record<string, string> = {
+export const STATE = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
   ARCHIVED: 'ARCHIVED'
+};
+
+export const CONTENT_TYPE = {
+  VIDEO: 'VIDEO',
+  TEXT: 'TEXT'
 };
 
 export const DEFAULT_AVATAR = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
@@ -97,11 +102,6 @@ export const API_URL = {
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}`,
   REORDER_SECTIONS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/reorder`,
-
-  /* Attachments */
-  ATTACHMENTS: (courseId: number | string, chapterId: number | string, lessonId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments`,
-  ATTACHMENT: (courseId: number | string, chapterId: number | string, lessonId: number | string, attachmentId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/attachments/${attachmentId}`
 };
 
 export const AVATAR_DEFAULT = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
