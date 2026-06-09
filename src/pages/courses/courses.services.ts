@@ -3,7 +3,8 @@ import { coursesApi } from '@/lib/api/courses.api';
 import { resourceApi } from '@/lib/api/resource.api';
 import { queryKeys } from '@/lib/queryKeys';
 import { modalStore } from '@/stores/modal.store';
-import type { ICourseCreateRequest, ICourseItem, ICourseUpdateRequest, IPageResponse, IPagination } from '@/types/types.ts';
+import type { ICourseCreateRequest, ICourseItem, ICourseUpdateRequest, IPageResponse, IPagination } from '@/types/types';
+import { VIDEO_HOST } from '@/config/constant';
 
 /** Pure queryFn — use queryFn for useQuery in component */
 export const coursesFetcher: (pagination: IPagination) => Promise<IPageResponse<ICourseItem>> =
@@ -72,4 +73,25 @@ export const updateCourse = async (id: number, payload: ICourseUpdateRequest) =>
   } finally {
     setProcessing(false);
   }
+};
+
+export const buildEmbedUrl = (url: string): string => {
+  try {
+    const u = new URL(url);
+    /* YouTube watch URL → embed */
+    if (u.hostname.includes(VIDEO_HOST.YOUBUTE) && u.pathname === '/watch') {
+      const v = u.searchParams.get('v');
+      if (v) return `https://www.youtube.com/embed/${v}`;
+    }
+    /* youtu.be short URL → embed */
+    if (u.hostname === VIDEO_HOST.YOUBUTE_SHORT) {
+      return `https://www.youtube.com/embed${u.pathname}`;
+    }
+    /* Vimeo */
+    if (u.hostname.includes(VIDEO_HOST.VIMEO)) {
+      const id = u.pathname.replace('/', '');
+      return `https://player.vimeo.com/video/${id}`;
+    }
+  } catch { /* ignore */ }
+  return url;
 };

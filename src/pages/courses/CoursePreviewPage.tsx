@@ -1,17 +1,13 @@
-import { useState, useEffect, useCallback, Fragment } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 import { chaptersApi } from '@/lib/api/chapters.api';
-import { getCourseDetail } from '@/pages/courses/courses.services';
-import { queryClient } from '@/lib/queryClient';
+import { coursesApi } from '@/lib/api/courses.api';
+import { buildEmbedUrl } from '@/pages/courses/courses.services';
 import { queryKeys } from '@/lib/queryKeys';
-import {
-  SCREENS_PATH,
-  CONTENT_TYPE,
-  VIDEO_HOST,
-  STATE
-} from '@/config/constant';
-import type { IChapter, ISection, ICourseItem } from '@/types/types';
+import { SCREENS_PATH, VIDEO_HOST } from '@/config/constant';
+import type { IChapter, ISection, ICourseDetail } from '@/types/types';
 import '@/pages/courses/CoursePreviewPage.scss';
 
 /* Helpers */
@@ -26,33 +22,11 @@ const isExternalVideo = (url: string): boolean => {
   }
 };
 
-const buildEmbedUrl = (url: string): string => {
-  try {
-    const u = new URL(url);
-    /* YouTube watch URL → embed */
-    if (u.hostname.includes(VIDEO_HOST.YOUBUTE) && u.pathname === '/watch') {
-      const v = u.searchParams.get('v');
-      if (v) return `https://www.youtube.com/embed/${v}`;
-    }
-    /* youtu.be short URL → embed */
-    if (u.hostname === VIDEO_HOST.YOUBUTE_SHORT) {
-      return `https://www.youtube.com/embed${u.pathname}`;
-    }
-    /* Vimeo */
-    if (u.hostname.includes(VIDEO_HOST.VIMEO)) {
-      const id = u.pathname.replace('/', '');
-      return `https://player.vimeo.com/video/${id}`;
-    }
-  } catch { /* ignore */ }
-  return url;
-};
-
 /* Sub-components */
 interface VideoContentProps { url: string }
 
 const VideoContent = ({ url }: VideoContentProps) => {
   if (!url) return null;
-
   return (
     <div className="cpv-video-wrapper">
       {isExternalVideo(url) ? (
@@ -75,53 +49,43 @@ const CoursePreviewPage = () => {
   const { id } = useParams<{ id: string }>();
   const courseId = Number(id);
 
-  const [loading, setLoading] = useState(true);
-  const [courseDetail, setCourseDetail] = useState<ICourseItem | null>(null);
-  const [chapters, setChapters] = useState<IChapter[]>([]);
+  /* UI state */
+  // Track collapsed IDs thay vì expanded — mặc định tất cả đều expanded (set rỗng)
   const [activeSection, setActiveSection] = useState<ISection | null>(null);
-  const [expandedChapters, setExpandedChapters] = useState<Set<number>>(new Set());
-  const [expandedLessons, setExpandedLessons] = useState<Set<number>>(new Set());
+  const [collapsedChapters, setCollapsedChapters] = useState<Set<number>>(new Set());
+  const [collapsedLessons, setCollapsedLessons] = useState<Set<number>>(new Set());
 
-  /* Load data */
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [detail, chaptersData] = await Promise.all([
-          getCourseDetail(courseId),
-          queryClient.fetchQuery({
-            queryKey: queryKeys.chapters.byCourse(courseId),
-            queryFn: () => chaptersApi.list(courseId).then(r => r.data)
-          })
-        ]);
+  /* Server data — use useQuery */
+  const { data: courseDetail, isLoading: loadingDetail } = useQuery<ICourseDetail>({
+    queryKey: queryKeys.courses.detail(courseId),
+    queryFn: () => coursesApi.detail(courseId).then(r => r.data),
+    enabled: !!courseId
+  });
 
-        setCourseDetail(detail);
-        setChapters(chaptersData);
+  const { data: chapters = [], isLoading: loadingChapters } = useQuery<IChapter[]>({
+    queryKey: queryKeys.chapters.byCourse(courseId),
+    queryFn: () => chaptersApi.list(courseId).then(r => r.data),
+    enabled: !!courseId
+  });
 
-        /* Expand all chapters and their lessons by default */
-        setExpandedChapters(new Set(chaptersData.map((c: IChapter) => c.id)));
-        const lessonIds = chaptersData.flatMap((c: IChapter) => c.lessons.map(l => l.id));
-        setExpandedLessons(new Set(lessonIds));
+  const isLoading = loadingDetail || loadingChapters;
 
-        /* Auto-select first section */
-        for (const chapter of chaptersData) {
-          for (const lesson of chapter.lessons) {
-            if (lesson.sections.length > 0) {
-              setActiveSection(lesson.sections[0]);
-              return;
-            }
-          }
-        }
-      } finally {
-        setLoading(false);
+  /* Tính section đầu tiên từ chapters — dùng khi user chưa chọn gì */
+  const defaultSection = useMemo<ISection | null>(() => {
+    for (const chapter of chapters) {
+      for (const lesson of chapter.lessons) {
+        if (lesson.sections.length > 0) return lesson.sections[0];
       }
-    };
-    void fetchData();
-  }, [courseId]);
+    }
+    return null;
+  }, [chapters]);
+
+  /* Section đang active: ưu tiên user chọn, fallback về section đầu tiên */
+  const currentSection = activeSection ?? defaultSection;
 
   /* Toggle helpers */
   const toggleChapter = useCallback((chapterId: number) => {
-    setExpandedChapters(prev => {
+    setCollapsedChapters(prev => {
       const next = new Set(prev);
       if (next.has(chapterId)) { next.delete(chapterId); } else { next.add(chapterId); }
       return next;
@@ -129,30 +93,32 @@ const CoursePreviewPage = () => {
   }, []);
 
   const toggleLesson = useCallback((lessonId: number) => {
-    setExpandedLessons(prev => {
+    setCollapsedLessons(prev => {
       const next = new Set(prev);
       if (next.has(lessonId)) { next.delete(lessonId); } else { next.add(lessonId); }
       return next;
     });
   }, []);
 
+
   /* Status badge */
   const statusClass = (status?: string) => {
     switch (status?.toUpperCase()) {
-      case STATE.PUBLISHED: return 'cpv-status-badge--published';
-      case STATE.DRAFT: return 'cpv-status-badge--draft';
-      case STATE.ARCHIVED: return 'cpv-status-badge--archived';
+      case 'PUBLISHED': return 'cpv-status-badge--published';
+      case 'DRAFT': return 'cpv-status-badge--draft';
+      case 'ARCHIVED': return 'cpv-status-badge--archived';
       default: return 'cpv-status-badge--draft';
     }
   };
 
   /* Loading state */
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="cpv-loading">
         <i className="fa-regular fa-spinner-third fa-spin fa-2x" />
         <p>Loading preview...</p>
-      </div>);
+      </div>
+    );
   }
 
   /* Render */
@@ -195,13 +161,14 @@ const CoursePreviewPage = () => {
             <i className="fa-regular fa-list-ul" /> Course Content
           </div>
 
-          {chapters.length === 0 &&
+          {chapters.length === 0 && (
             <div className="cpv-no-lessons" style={{ padding: '1rem' }}>
               No content yet.
-            </div>}
+            </div>
+          )}
 
           {chapters.map((chapter, chIdx) => {
-            const isChOpen = expandedChapters.has(chapter.id);
+            const isChOpen = !collapsedChapters.has(chapter.id);
             return (
               <div key={chapter.id} className="cpv-chapter">
                 {/* Chapter header */}
@@ -222,7 +189,7 @@ const CoursePreviewPage = () => {
                     )}
 
                     {chapter.lessons.map((lesson, lIdx) => {
-                      const isLessonOpen = expandedLessons.has(lesson.id);
+                      const isLessonOpen = !collapsedLessons.has(lesson.id);
                       return (
                         <div key={lesson.id} className="cpv-lesson">
                           {/* Lesson header */}
@@ -243,8 +210,8 @@ const CoursePreviewPage = () => {
                               )}
 
                               {lesson.sections.map(section => {
-                                const isActive = activeSection?.id === section.id;
-                                const isVideo = section.type === CONTENT_TYPE.VIDEO;
+                                const isActive = currentSection?.id === section.id;
+                                const isVideo = section.type === 'VIDEO';
                                 return (
                                   <div
                                     key={section.id}
@@ -260,7 +227,9 @@ const CoursePreviewPage = () => {
                                         'fa-regular fa-book-open cpv-section-type-icon--text'} cpv-section-type-icon`
                                     } />
                                     <span className="cpv-section-name">{section.title}</span>
-                                    {section.status === STATE.DRAFT && <span className="cpv-section-draft-badge">Draft</span>}
+                                    {section.status === 'DRAFT' && (
+                                      <span className="cpv-section-draft-badge">Draft</span>
+                                    )}
                                   </div>
                                 );
                               })}
@@ -278,52 +247,51 @@ const CoursePreviewPage = () => {
 
         {/* Content area */}
         <div className="cpv-content">
-          {!activeSection ?
+          {!currentSection ? (
             <div className="cpv-empty-state">
               <i className="fa-regular fa-play-circle cpv-empty-icon" />
               <p className="cpv-empty-text">Select a section from the list on the left to view its content</p>
             </div>
-            :
-            <Fragment>
+          ) : (
+            <>
               {/* Video or Text */}
-              {activeSection.type === CONTENT_TYPE.VIDEO && activeSection.videoUrl &&
-                <VideoContent url={activeSection.videoUrl} />}
+              {currentSection.type === 'VIDEO' && currentSection.videoUrl && (
+                <VideoContent url={currentSection.videoUrl} />
+              )}
 
-              {activeSection.type === CONTENT_TYPE.VIDEO && !activeSection.videoUrl &&
+              {currentSection.type === 'VIDEO' && !currentSection.videoUrl && (
                 <div className="cpv-empty-state">
                   <i className="fa-regular fa-video-slash cpv-empty-icon" />
                   <p className="cpv-empty-text">This section has no video yet.</p>
-                </div>}
+                </div>
+              )}
 
-              {activeSection.type === CONTENT_TYPE.TEXT && (
+              {currentSection.type === 'TEXT' && (
                 <div
                   className="cpv-text-content"
-                  dangerouslySetInnerHTML={{ __html: activeSection.textContent ?? '' }}
+                  dangerouslySetInnerHTML={{ __html: currentSection.textContent ?? '' }}
                 />
               )}
 
               {/* Section meta info */}
               <div className="cpv-section-info">
                 <div className="cpv-section-info-type">
-                  <i className={activeSection.type === CONTENT_TYPE.VIDEO ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
-                  {activeSection.type === CONTENT_TYPE.VIDEO ? 'Video' : 'Reading'}
+                  <i className={currentSection.type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open'} />
+                  {currentSection.type === 'VIDEO' ? 'Video' : 'Reading'}
                 </div>
-                <div className="cpv-section-info-title">{activeSection.title}</div>
-                {activeSection.description && (
-                  <div className="cpv-section-info-desc">{activeSection.description}</div>
+                <div className="cpv-section-info-title">{currentSection.title}</div>
+                {currentSection.description && (
+                  <div className="cpv-section-info-desc">{currentSection.description}</div>
                 )}
-                <div className={`cpv-section-info-status cpv-section-info-status--${activeSection.status.toLowerCase()}`}>
-                  {activeSection.status === STATE.PUBLISHED ?
-                    <Fragment>
-                      <i className="fa-regular fa-circle-check" /> Published
-                    </Fragment>
-                    :
-                    <Fragment>
-                      <i className="fa-regular fa-pencil" /> Draft
-                    </Fragment>}
+                <div className={`cpv-section-info-status cpv-section-info-status--${currentSection.status.toLowerCase()}`}>
+                  {currentSection.status === 'PUBLISHED'
+                    ? <><i className="fa-regular fa-circle-check" /> Published</>
+                    : <><i className="fa-regular fa-pencil" /> Draft</>
+                  }
                 </div>
               </div>
-            </Fragment>}
+            </>
+          )}
         </div>
       </div>
     </div>
