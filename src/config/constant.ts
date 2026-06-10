@@ -61,9 +61,6 @@ export const CONTENT_TYPE = {
   TEXT: 'TEXT'
 };
 
-/** @deprecated Use AVATAR_DEFAULT instead */
-export const DEFAULT_AVATAR = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
-
 export const COMMON_MESSAGES = {
   PLEASE_WAIT: 'Please wait...'
 };
@@ -87,12 +84,9 @@ export const API_URL = {
   UPLOAD_VIDEO: '/upload/video',
 
   /* chapters */
-  CHAPTERS: (courseId: number | string) =>
-    `/courses/${courseId}/chapters`,
-  CHAPTER: (courseId: number | string, chapterId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}`,
-  REORDER_CHAPTERS: (courseId: number | string) =>
-    `/courses/${courseId}/chapters/reorder`,
+  CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters`,
+  CHAPTER: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}`,
+  REORDER_CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters/reorder`,
 
   /* Lessons */
   LESSONS: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons`,
@@ -105,7 +99,7 @@ export const API_URL = {
   SECTION: (courseId: number | string, chapterId: number | string, lessonId: number | string, sectionId: number | string) =>
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}`,
   REORDER_SECTIONS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/reorder`,
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/reorder`
 };
 
 export const AVATAR_DEFAULT = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';

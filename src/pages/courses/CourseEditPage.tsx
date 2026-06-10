@@ -6,13 +6,17 @@ import { useQuery } from '@tanstack/react-query';
 import { updateCourse, uploadImage } from './courses.services';
 import { coursesApi } from '@/lib/api/courses.api';
 import { queryKeys } from '@/lib/queryKeys';
-import { courseSchema, type CourseFormData } from '@/pages/courses/course.schema';
+import {
+  courseSchema,
+  type CourseFormData,
+  initialCourseFormValues
+} from '@/pages/courses/course.schema';
 import type { ICourseStatus } from '@/types/types';
 import { SCREENS_PATH, STATE, STATUS_DATA_FOR_DROPDOWN } from '@/config/constant';
 import { type IModalState, modalStore } from '@/stores/modal.store';
 import { getFormatVNCurrency } from '@/util/util';
 import '@/pages/courses/CourseAddNew.scss';
-import { Dropdown } from '@/components/ui/dropdown/Dropdown.tsx';
+import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
 const CourseEditPage = () => {
   const navigate = useNavigate();
@@ -44,14 +48,7 @@ const CourseEditPage = () => {
 
   /* TanStack Form + Zod */
   const form = useForm({
-    defaultValues: {
-      title: '',
-      shortDescription: '',
-      description: '',
-      thumbnailUrl: '',
-      price: 0,
-      status: 'DRAFT'
-    } as CourseFormData,
+    defaultValues: initialCourseFormValues as CourseFormData,
     onSubmit: async ({ value }) => {
       const file = fileInputRef.current?.files?.[0];
       let thumbnailUrl = value.thumbnailUrl;
@@ -75,7 +72,7 @@ const CourseEditPage = () => {
       description: courseDetail.description ?? '',
       thumbnailUrl: courseDetail.thumbnailUrl ?? '',
       price: courseDetail.price ?? 0,
-      status: (courseDetail.status ?? 'DRAFT') as CourseFormData['status']
+      status: (courseDetail.status ?? STATE.DRAFT) as CourseFormData['status']
     });
   }, [courseDetail, form]);
 

@@ -8,7 +8,7 @@ export const initialCourseFormValues: ICourseCreateRequest = {
   description: '',
   thumbnailUrl: '',
   price: 0,
-  status: 'DRAFT'
+  status: STATE.DRAFT as ICourseStatus
 };
 
 export const courseSchema = z.object({

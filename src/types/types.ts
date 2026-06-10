@@ -66,17 +66,18 @@ export interface IPagination {
 }
 
 export interface ICourseItem {
-  id: number
-  title: string
-  slug: string
-  shortDescription?: string
-  thumbnailUrl?: string
-  price: number
-  status: ICourseStatus
-  teacher: ITeacherCourse
-  lessonCount: number
-  createdAt: string
-  enrollmentCount?: number
+  id: number;
+  title: string;
+  slug: string;
+  shortDescription?: string;
+  thumbnailUrl?: string;
+  price: number;
+  status: ICourseStatus;
+  teacher: ITeacherCourse;
+  createdAt: string;
+  publishedAt?: string;
+  enrollmentCount?: number;
+  lessons: ILesson[];
 }
 
 export interface ICourseDetail extends ICourseItem {

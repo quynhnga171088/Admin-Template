@@ -12,11 +12,12 @@ import {
   type ILesson,
   type IChapter,
   type ISection,
+  type ICourseDetail,
   type ILessonModalState,
   type IChapterModalState,
   lessonFormInit
 } from '@/types/types';
-import { SCREENS_PATH } from '@/config/constant';
+import { CONTENT_TYPE, SCREENS_PATH } from '@/config/constant';
 import '@/pages/courses/chapter/ChaptersPage.scss';
 import ChapterModal from '@/components/ui/course/ChapterModal';
 import LessonModal from '@/components/ui/course/LessonModal';
@@ -56,7 +57,7 @@ const ChaptersPage = () => {
   );
 
   /* Fix 5: Server data via useQuery — replaces useState + useEffect + loadData */
-  const { data: courseDetailData, isLoading: loadingDetail } = useQuery({
+  const { data: courseDetailData, isLoading: loadingDetail } = useQuery<ICourseDetail>({
     queryKey: queryKeys.courses.detail(courseId),
     queryFn: () => coursesApi.detail(courseId).then(r => r.data),
     enabled: !!courseId
@@ -88,7 +89,6 @@ const ChaptersPage = () => {
   };
 
   /* Chapter actions */
-
   const openCreateChapter = () => {
     setChapterTitle('');
     setChapterDescription('');
@@ -273,7 +273,7 @@ const ChaptersPage = () => {
   }, []);
 
   const sectionTypeIcon = (type: ISection['type']) =>
-    type === 'VIDEO' ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open';
+    type === CONTENT_TYPE.VIDEO ? 'fa-regular fa-circle-play' : 'fa-regular fa-book-open';
 
   /* Render */
 
@@ -293,7 +293,7 @@ const ChaptersPage = () => {
         <div className="card-header">
           <div className="card-header-title">
             <i className="fa-regular fa-layer-group" />
-            <span className="ml-2!">Chapters &amp; Lessons</span>
+            <span className="ml-2!">Chapters Lessons</span>
           </div>
         </div>
         <div className="card-body">
@@ -466,8 +466,7 @@ const ChaptersPage = () => {
 
                   {/* Add Lesson Button */}
                   <div className="ccp-add-lesson-row text-right">
-                    <button className="btn btn-sm btn-light-primary ccp-add-lesson-btn"
-                      onClick={() => openCreateLesson(chapter.id)}>
+                    <button className="btn btn-sm btn-light-primary ccp-add-lesson-btn" onClick={() => openCreateLesson(chapter.id)}>
                       <i className="fa-regular fa-plus" /> Add Lesson
                     </button>
                   </div>
