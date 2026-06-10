@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '@/layouts/main/MainLayout';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import { SCREENS_PATH } from 'src/config/constant';
+import { SCREENS_PATH } from '@/config/constant';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         lazy: () => import('@/pages/courses/CoursePreviewPage')
       }, {
         path: 'courses/:id/chapters',
-        lazy: () => import('@/pages/courses/chapter/ChaptersPage.tsx')
+        lazy: () => import('@/pages/courses/chapter/ChaptersPage')
       }, {
         path: 'courses/:id/chapters/:chapterId/lessons/:lessonId/sections/add',
         lazy: () => import('@/pages/courses/chapter/lesson/SectionAddPage')
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
     ]
   }, {
     path: '*',
-    lazy: () => import('src/pages/NotFound')
+    lazy: () => import('@/pages/NotFound')
   }
 ]);
 

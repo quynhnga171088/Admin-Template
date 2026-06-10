@@ -30,7 +30,6 @@ export const modalStore = create<IModalState>(set => ({
   message: '',
   callback: null,
   enableCancelButton: false,
-  disableOkButton: false,
   enableOkButton: true,
   /* Processing modal */
   isProcessing: false,

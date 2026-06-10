@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import './MainLayout.scss';
@@ -14,19 +15,17 @@ import {
 } from '@/config/constant.ts';
 
 const MainLayout = () => {
-
   const isAuthenticated = authStore(state => state.isAuthenticated);
-
   const logout = authStore(state => state.logout);
-
   const user = authStore(state => state.user);
 
-  if (!isAuthenticated || !user) {
-    return <Navigate to={SCREENS_PATH.LOGIN} replace />;
-  }
+  /* Fix: logout() must not be called in render phase */
+  const hasInvalidRole = !!user && !ROLES.includes(user.role);
+  useEffect(() => {
+    if (hasInvalidRole) logout();
+  }, [hasInvalidRole, logout]);
 
-  if (!ROLES.includes(user.role)) {
-    logout();
+  if (!isAuthenticated || !user || hasInvalidRole) {
     return <Navigate to={SCREENS_PATH.LOGIN} replace />;
   }
 

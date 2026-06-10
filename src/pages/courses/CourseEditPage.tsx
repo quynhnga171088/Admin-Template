@@ -34,13 +34,6 @@ const CourseEditPage = () => {
   const [isLoading, setIsLoading] = useState(!isIdInvalid);
   const [loadError, setLoadError] = useState<string | null>(isIdInvalid ? 'Invalid course ID.' : null);
 
-  const [lastId, setLastId] = useState(courseId);
-  if (courseId !== lastId) {
-    setLastId(courseId);
-    setIsLoading(!isIdInvalid);
-    setLoadError(isIdInvalid ? 'Invalid course ID.' : null);
-  }
-
   /* TanStack Form + Zod */
   const form = useForm({
     defaultValues: {
@@ -65,22 +58,28 @@ const CourseEditPage = () => {
     }
   });
 
-  /* Load course detail on mount */
+  /* Load course detail on mount / when courseId changes */
   useEffect(() => {
     if (isIdInvalid) return;
-
+    setIsLoading(true);
+    setLoadError(null);
     getCourseDetail(courseId)
       .then(detail => {
-        form.setFieldValue('title', detail.title ?? '');
-        form.setFieldValue('shortDescription', detail.shortDescription ?? '');
-        form.setFieldValue('description', detail.description ?? '');
-        form.setFieldValue('thumbnailUrl', detail.thumbnailUrl ?? '');
-        form.setFieldValue('price', detail.price ?? 0);
-        form.setFieldValue('status', detail.status ?? 'DRAFT');
+        form.reset({
+          values: {
+            title: detail.title ?? '',
+            shortDescription: detail.shortDescription ?? '',
+            description: detail.description ?? '',
+            thumbnailUrl: detail.thumbnailUrl ?? '',
+            price: detail.price ?? 0,
+            status: (detail.status ?? 'DRAFT') as CourseFormData['status'],
+          }
+        });
       })
       .catch(() => setLoadError('Failed to load course data. Please try again.'))
       .finally(() => setIsLoading(false));
-  }, [courseId, isIdInvalid, form]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId, isIdInvalid]); // 'form' omitted: TanStack Form instance is stable
 
   useEffect(() => {
     setProcessing(isLoading);
@@ -110,14 +109,16 @@ const CourseEditPage = () => {
 
   const handleCancel = () => navigate(SCREENS_PATH.COURSE_LIST);
 
-  /* Error state */
-  if (loadError) {
+  /* Fix: setState must not be called in render phase — move to useEffect */
+  useEffect(() => {
+    if (!loadError) return;
     setMessage('Loading data fail, please comeback to List');
     setTitle('Loading error');
     setCallback(handleCancel);
     setOpen(true);
-    return null;
-  }
+  }, [loadError, setMessage, setTitle, setCallback, setOpen]);
+
+  if (loadError) return null;
 
   return (
     <div className="course-add-new">

@@ -18,11 +18,14 @@ export const SCREENS_PATH = {
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}/edit`,
   COURSE_REGISTRATION: '/course-registration',
   TYPOGRAPHY: '/typography',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   FORGOT_PASSWORD: '/forgot-password',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   RESET_PASSWORD: '/reset-password',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   VERIFY_EMAIL: '/verify-email',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   VERIFY_OTP: '/verify-otp'
-
 };
 
 export const SCREENS_PATH_FOR_SIDEBAR = {
@@ -58,6 +61,7 @@ export const CONTENT_TYPE = {
   TEXT: 'TEXT'
 };
 
+/** @deprecated Use AVATAR_DEFAULT instead */
 export const DEFAULT_AVATAR = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
 
 export const COMMON_MESSAGES = {
@@ -108,9 +112,13 @@ export const AVATAR_DEFAULT = 'https://codedthemes.com/demos/admin-templates/dat
 
 export const VIDEO_HOST = {
   VIMEO: 'vimeo.com',
+  YOUTUBE: 'youtube.com',
+  YOUTUBE_SHORT: 'youtu.be',
+  DAILY_MOTION: 'dailymotion.com',
+  /** @deprecated Typo alias — use YOUTUBE */
   YOUBUTE: 'youtube.com',
-  YOUBUTE_SHORT: 'youtu.be',
-  DAILY_MOTION: 'dailymotion.com'
+  /** @deprecated Typo alias — use YOUTUBE_SHORT */
+  YOUBUTE_SHORT: 'youtu.be'
 };
 
 /* All Params for RichTextEditor Start */

@@ -28,6 +28,7 @@ import {
 import Pagination from '@/components/ui/Pagination';
 import { userStore } from '@/stores/user.store';
 import { modalStore } from '@/stores/modal.store';
+import { useShallow } from 'zustand/react/shallow';
 
 const CoursesList = () => {
 
@@ -38,12 +39,17 @@ const CoursesList = () => {
   const setAction = userStore((state: IUserState) => state.setAction);
   const action = userStore((state: IUserState) => state.action);
 
-  const setEnableCancelButton = modalStore(state => state.setEnableCancelButton);
-  const setEnableOkButton = modalStore(state => state.setEnableOkButton);
-  const setCallback = modalStore(state => state.setCallback);
-  const setMessage = modalStore(state => state.setMessage);
-  const setTitle = modalStore(state => state.setTitle);
-  const setOpen = modalStore(state => state.setOpen);
+  const { setEnableCancelButton, setEnableOkButton, setCallback,
+          setMessage, setTitle, setOpen } = modalStore(
+    useShallow(state => ({
+      setEnableCancelButton: state.setEnableCancelButton,
+      setEnableOkButton: state.setEnableOkButton,
+      setCallback: state.setCallback,
+      setMessage: state.setMessage,
+      setTitle: state.setTitle,
+      setOpen: state.setOpen,
+    }))
+  );
 
   const pagination: IPagination = getPagination(new URLSearchParams(location.search));
 
