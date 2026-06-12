@@ -38,6 +38,9 @@ const router = createBrowserRouter([
       }, {
         path: 'courses/:id/chapters/:chapterId/lessons/:lessonId/sections/:sectionId/edit',
         lazy: () => import('@/pages/courses/chapter/lesson/SectionEditPage')
+      }, {
+        path: 'enrollments',
+        lazy: () => import('@/pages/enrollment/Enrollments.tsx')
       }
     ]
   }, {

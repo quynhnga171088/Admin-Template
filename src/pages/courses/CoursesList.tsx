@@ -39,15 +39,14 @@ const CoursesList = () => {
   const setAction = userStore((state: IUserState) => state.setAction);
   const action = userStore((state: IUserState) => state.action);
 
-  const { setEnableCancelButton, setEnableOkButton, setCallback,
-          setMessage, setTitle, setOpen } = modalStore(
+  const { setEnableCancelButton, setEnableOkButton, setCallback, setMessage, setTitle, setOpen } = modalStore(
     useShallow(state => ({
       setEnableCancelButton: state.setEnableCancelButton,
       setEnableOkButton: state.setEnableOkButton,
       setCallback: state.setCallback,
       setMessage: state.setMessage,
       setTitle: state.setTitle,
-      setOpen: state.setOpen,
+      setOpen: state.setOpen
     }))
   );
 
@@ -114,42 +113,27 @@ const CoursesList = () => {
           </div>
           <div className="card-body">
             <div className="grid grid-cols-24 gap-4 courses-item sources-item-label">
-              <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">
-                Avatar
-              </div>
-              <div className="col-span-7 md:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-2 flex items-center card-header-title">
-                Thumbnail
-              </div>
-              <div className="col-span-4 md:col-span-6 lg:col-span-9 xl:col-span-8 2xl:col-span-9 flex items-center card-header-title">
-                Title & short description
-              </div>
-              <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-2 2xl:col-span-2 flex items-center card-header-title">
-                Status
-              </div>
-              <div className="hidden xl:flex 2xl:flex xl:col-span-3 2xl:col-span-3 items-center card-header-title">
-                Create Date
-              </div>
-              <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">
-                Price
-              </div>
-              <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-3 items-center card-header-title">
-                Action
-              </div>
+              <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">Avatar</div>
+              <div className="col-span-7 md:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-2 flex items-center card-header-title">Thumbnail</div>
+              <div className="col-span-4 md:col-span-6 lg:col-span-9 xl:col-span-8 2xl:col-span-9 flex items-center card-header-title">Title & short description</div>
+              <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-2 2xl:col-span-2 flex items-center card-header-title">Status</div>
+              <div className="hidden xl:flex 2xl:flex xl:col-span-3 2xl:col-span-3 items-center card-header-title">Create Date</div>
+              <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-2 items-center card-header-title">Price</div>
+              <div className="hidden xl:flex 2xl:flex xl:col-span-2 2xl:col-span-3 items-center card-header-title">Action</div>
             </div>
             {courses.length === 0 && !isLoading &&
               <div className="col-span-24 flex items-center justify-center text-center text-gray-500 py-4 mt-2! mb-2!">
                 No courses found.
-              </div>
-            }
+              </div>}
             {courses.map((course: ICourseItem) => (
               <div key={course.id} className="grid grid-cols-24 gap-4 courses-item cursor-pointer" onClick={() => navigate(SCREENS_PATH.COURSE_PREVIEW(course.id))}>
                 <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 courses-item-full-name flex items-center cursor-pointer">
-                  <img
-                    className="img-fluid logo logo-lg h-12.5"
-                    src={course.teacher.avatarUrl || AVATAR_DEFAULT}
-                    alt={course.teacher.fullName}
+                  <div
+                    className="courses-item-avatar"
+                    style={{ backgroundImage: `url(${course.teacher.avatarUrl || AVATAR_DEFAULT})` }}
+                    title={course.teacher.fullName}
                   />
-                  {course.teacher.fullName}
+                  <span className="ml-2!">{course.teacher.fullName}</span>
                 </div>
                 <div className="col-span-7 md:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer">
                   <div

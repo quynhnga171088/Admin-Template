@@ -24,6 +24,11 @@ export const queryKeys = {
     list: (pagination: IPagination) => [ ...queryKeys.courses.all, 'list', pagination] as const,
     detail: (id: number | string) => [ ...queryKeys.courses.all, 'detail', id] as const
   },
+  enrollments: {
+    all: ['enrollments'] as const,
+    list: (pagination: IPagination) => [ ...queryKeys.enrollments.all, 'list', pagination] as const,
+    detail: (id: number | string) => [ ...queryKeys.enrollments.all, 'detail', id] as const
+  },
   chapters: {
     all: ['chapters'] as const,
     /** All chapters of a course (with nested lessons) */

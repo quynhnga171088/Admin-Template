@@ -161,26 +161,38 @@ html {
   margin-inline-end: auto;
 }
 
+.img-fluid {
+  border-radius: 50%;
+  border: 2px solid var(--color-info-700);
+}
+
 .course-item-status.info,
 .chapter-item-status.info,
 .lesson-item-status.info {
-  background: var(--primary-500);
+  background: linear-gradient(135deg, var(--color-info-700) 0%, var(--color-info-400) 100%);
 }
 
 .course-item-status.warning,
+.enrollment-item-status.pending,
 .chapter-item-status.warning,
 .lesson-item-status.warning,
 .lesson-item-status.draft {
-  background: linear-gradient(135deg, var(--color-warning-600) 0%, var(--color-warning-200) 100%);
+  background: linear-gradient(135deg, var(--color-warning-700) 0%, var(--color-warning-400) 100%);
 }
 
+.enrollment-item-status.approved,
 .course-item-status.success,
 .chapter-item-status.success,
 .lesson-item-status.published,
 .lesson-item-status.success {
-  background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%)
+  background: linear-gradient(135deg, var(--color-success-700) 0%, var(--color-success-400) 100%)
 }
 
+.enrollment-item-status.rejected {
+  background: linear-gradient(135deg, var(--color-danger-700) 0%, var(--color-danger-400) 100%)
+}
+
+.enrollment-item-status,
 .course-item-status,
 .chapter-item-status,
 .lesson-item-status {

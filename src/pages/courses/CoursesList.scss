@@ -20,6 +20,15 @@
     border-radius: 4px;
   }
 
+  .courses-item-avatar {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
   .courses-item {
     font-weight: 600;
     border-bottom: 1px solid #d3d3d3;

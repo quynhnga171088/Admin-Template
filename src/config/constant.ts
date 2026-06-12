@@ -32,6 +32,7 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
   HOME: '/',
   TYPOGRAPHY: '/typography',
   COURSE_LIST: '/courses',
+  ENROLLMENTS: '/enrollments',
   COURSE_ADD_NEW: '/courses/add',
   COURSE_CHAPTERS: '/chapters',
   COURSE_REGISTRATION: '/course-registration',
@@ -56,6 +57,12 @@ export const STATE = {
   ARCHIVED: 'ARCHIVED'
 };
 
+export const ENROLLMENT_STATE = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 export const CONTENT_TYPE = {
   VIDEO: 'VIDEO',
   TEXT: 'TEXT'
@@ -74,6 +81,7 @@ export const API_URL = {
   STUDENT_REGISTER: '/auth/register',
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
+  GET_ENROLLMENTS: '/enrollments',
   CREATE_COURSE: '/courses',
   UPDATE_COURSE: '/courses',
   DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
@@ -103,6 +111,8 @@ export const API_URL = {
 };
 
 export const AVATAR_DEFAULT = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
+
+export const COURSE_DEFAULT_IMAGE = '/public/images/image-default-course-item.jpg';
 
 export const VIDEO_HOST = {
   VIMEO: 'vimeo.com',
