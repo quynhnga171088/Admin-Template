@@ -68,12 +68,12 @@
 }
 
 .btn-success {
-  background-color: var(--color-success-500, #1de9b6);
-  border-color:     var(--color-success-500, #1de9b6);
+  background-color: var(--color-success-600, #12bc91);
+  border-color:     var(--color-success-600, #12bc91);
   color: #fff;
-  &:hover  { background-color: var(--color-success-600, #12bc91); border-color: var(--color-success-600, #12bc91); }
-  &:active { background-color: var(--color-success-700, #0d896a); border-color: var(--color-success-700, #0d896a); }
-  &:focus  { background-color: var(--color-success-600, #12bc91); border-color: var(--color-success-600, #12bc91); outline: none; }
+  &:hover  { background-color: var(--color-success-700, #0d896a); border-color: var(--color-success-700, #0d896a); }
+  &:active { background-color: var(--color-success-800, #085542); border-color: var(--color-success-800, #085542); }
+  &:focus  { background-color: var(--color-success-700, #0d896a); border-color: var(--color-success-700, #0d896a); outline: none; }
 }
 
 .btn-danger {

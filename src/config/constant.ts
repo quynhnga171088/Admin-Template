@@ -40,6 +40,7 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
 };
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const DATE_FORMAT = 'YYYY-MM-DD';
 
 export const QUERY_CONFIG = {
   STALE_TIME: 5,
@@ -82,6 +83,8 @@ export const API_URL = {
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
   GET_ENROLLMENTS: '/enrollments',
+  GET_ENROLLMENT_DETAIL: (enrollmentId: number) => `/enrollments/${enrollmentId}`,
+  APPROVE_ENROLLMENT: (enrollmentId: number) => `/enrollments/${enrollmentId}/approve`,
   CREATE_COURSE: '/courses',
   UPDATE_COURSE: '/courses',
   DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
