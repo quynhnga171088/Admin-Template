@@ -21,11 +21,14 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryKeys';
 import { queryClient } from '@/lib/queryClient';
-import { usersFetcher, createTeacher } from '@/pages/users/users.services';
+import {
+  usersFetcher,
+  deleteTeacher,
+  createTeacher
+} from '@/pages/users/users.services';
 import '@/pages/users/UsersList.scss';
 import dayjs from 'dayjs';
 import Pagination from '@/components/ui/Pagination.tsx';
-import { deleteCourse } from '@/pages/courses/courses.services.ts';
 import AddTeacherModal from '@/components/ui/user/AddTeacherModal';
 
 const UsersList = () => {
@@ -47,14 +50,15 @@ const UsersList = () => {
     }))
   );
 
-  const confirmBlockUser = (user: IUser) => {
-    setMessage(`Do you want to block this user: ${user.fullName}?`);
+  const confirmDeleteUser = (user: IUser) => {
+    setMessage(`Do you want to delete this user: ${user.fullName}?`);
     setEnableCancelButton(true);
     setEnableOkButton(true);
     setTitle('Confirm');
     setCallback(() =>
-      deleteCourse(user.id)
-        .then(() => {
+      deleteTeacher(user.id)
+        .then(async () => {
+          await queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
           const params = new URLSearchParams(location.search);
           params.set('page', '0');
           navigate(`${location.pathname}?${params.toString()}`);
@@ -159,10 +163,10 @@ const UsersList = () => {
                   </button>
                   <button
                     className="btn btn-light-danger btn-icon btn-sm"
-                    title="Block this user"
-                    onClick={() => confirmBlockUser(user)}
+                    title="Delete this user"
+                    onClick={() => confirmDeleteUser(user)}
                   >
-                    <i className="fa-thin fa-ban" />
+                    <i className="fa-thin fa-xmark-octagon" />
                   </button>
                 </div>
               </div>

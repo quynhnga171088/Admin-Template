@@ -13,5 +13,9 @@ export const usersApi = {
 
   getById: (userId: number) => axiosInstance.get<IUserDetail>(API_URL.ADMIN_GET_USER_DETAIL(userId)),
 
-  createNewTeacher: (data: INewTeacher) => axiosInstance.post<IUser>(API_URL.ADMIN_CREATE_USERS, data)
+  createNewTeacher: (data: INewTeacher) => axiosInstance.post<IUser>(API_URL.ADMIN_CREATE_USERS, data),
+
+  updateTeacher: (userId: number, data: IUser) => axiosInstance.patch<IUser>(API_URL.ADMIN_UPDATE_USER(userId), data),
+
+  deleteTeacher: (userId: number) => axiosInstance.delete(API_URL.ADMIN_DELETE_USER(userId))
 };
