@@ -44,7 +44,7 @@ a {
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
+    text-decoration: none;
   }
 }
 
@@ -118,9 +118,16 @@ html {
     max-width: 96rem;
   }
 }
-.m-0 {
-  margin: calc(var(--spacing) * 0);
-}
+.m-0 { margin: calc(var(--spacing) * 0); }
+.m-0-l { margin-left: calc(var(--spacing) * 0); }
+.m-0-r { margin-right: calc(var(--spacing) * 0); }
+.m-0-b { margin-bottom: calc(var(--spacing) * 0); }
+.m-0-t { margin-top: calc(var(--spacing) * 0); }
+.m-1 { margin: calc(var(--spacing) * 1); }
+.m-1-b { margin-bottom: calc(var(--spacing) * 1); }
+.m-1-r { margin-right: calc(var(--spacing) * 1); }
+.m-1-t { margin-top: calc(var(--spacing) * 1); }
+.m-1-l { margin-left: calc(var(--spacing) * 1); }
 .mx-2 {
   margin-inline: calc(var(--spacing) * 2);
 }
@@ -161,26 +168,46 @@ html {
   margin-inline-end: auto;
 }
 
+.img-fluid {
+  border-radius: 50%;
+  border: 2px solid var(--color-info-700);
+}
+
+.user-teacher-status,
 .course-item-status.info,
 .chapter-item-status.info,
 .lesson-item-status.info {
-  background: var(--primary-500);
+  background: linear-gradient(135deg, var(--color-info-700) 0%, var(--color-info-400) 100%);
 }
 
 .course-item-status.warning,
+.enrollment-item-status.pending,
 .chapter-item-status.warning,
 .lesson-item-status.warning,
 .lesson-item-status.draft {
-  background: linear-gradient(135deg, var(--color-warning-600) 0%, var(--color-warning-200) 100%);
+  background: linear-gradient(135deg, var(--color-warning-700) 0%, var(--color-warning-400) 100%);
 }
 
+.user-active-status,
+.user-student-status,
+.enrollment-item-status.approved,
 .course-item-status.success,
 .chapter-item-status.success,
 .lesson-item-status.published,
 .lesson-item-status.success {
-  background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%)
+  background: linear-gradient(135deg, var(--color-success-700) 0%, var(--color-success-400) 100%)
 }
 
+.user-admin-status,
+.enrollment-item-status.rejected {
+  background: linear-gradient(135deg, var(--color-danger-700) 0%, var(--color-danger-400) 100%)
+}
+
+.user-blocked-status {
+  background: linear-gradient(135deg, var(--color-secondary-700) 0%, var(--color-secondary-400) 100%)
+}
+
+.enrollment-item-status,
 .course-item-status,
 .chapter-item-status,
 .lesson-item-status {

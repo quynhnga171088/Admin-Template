@@ -1,50 +1,44 @@
-import axiosInstance from 'src/config/axios.config.ts';
-import { API_URL } from '@/config/constant.ts';
+import axiosInstance from 'src/config/axios.config';
+import { API_URL } from '@/config/constant';
 import type {
   IChapter,
   ILesson,
   ISection,
-  ICreateChapterRequest,
-  IUpdateChapterRequest,
   IReorderChaptersRequest,
   ICreateLessonRequest,
   IUpdateLessonRequest,
+  ICreateChapterRequest,
+  IUpdateChapterRequest,
   IReorderLessonsRequest,
   ICreateSectionRequest,
   IUpdateSectionRequest,
-  IReorderSectionsRequest,
-} from '@/types/types.ts';
+  IReorderSectionsRequest
+} from '@/types/types';
 
-// ─── Chapter API ──────────────────────────────────────────────────────────────
+/* Chapter API */
 
 export const chaptersApi = {
   /** GET /courses/{cId}/chapters — returns chapters with nested lessons & sections */
-  list: (courseId: number | string) =>
-    axiosInstance.get<IChapter[]>(API_URL.CHAPTERS(courseId)),
+  list: (courseId: number | string) => axiosInstance.get<IChapter[]>(API_URL.CHAPTERS(courseId)),
 
   /** POST /courses/{cId}/chapters */
-  create: (courseId: number | string, data: ICreateChapterRequest) =>
-    axiosInstance.post<IChapter>(API_URL.CHAPTERS(courseId), data),
+  create: (courseId: number | string, data: ICreateChapterRequest) => axiosInstance.post<IChapter>(API_URL.CHAPTERS(courseId), data),
 
   /** PATCH /courses/{cId}/chapters/{chId} */
-  update: (courseId: number | string, chapterId: number | string, data: IUpdateChapterRequest) =>
-    axiosInstance.patch<IChapter>(API_URL.CHAPTER(courseId, chapterId), data),
+  update: (courseId: number | string, chapterId: number | string, data: IUpdateChapterRequest) => axiosInstance.patch<IChapter>(API_URL.CHAPTER(courseId, chapterId), data),
 
   /** DELETE /courses/{cId}/chapters/{chId} */
-  delete: (courseId: number | string, chapterId: number | string) =>
-    axiosInstance.delete(API_URL.CHAPTER(courseId, chapterId)),
+  delete: (courseId: number | string, chapterId: number | string) => axiosInstance.delete(API_URL.CHAPTER(courseId, chapterId)),
 
   /** PATCH /courses/{cId}/chapters/reorder */
-  reorder: (courseId: number | string, data: IReorderChaptersRequest) =>
-    axiosInstance.patch<IChapter[]>(API_URL.REORDER_CHAPTERS(courseId), data)
+  reorder: (courseId: number | string, data: IReorderChaptersRequest) => axiosInstance.patch<IChapter[]>(API_URL.REORDER_CHAPTERS(courseId), data)
 };
 
-// ─── Lesson API ───────────────────────────────────────────────────────────────
+/* Lesson API */
 
 export const lessonsApi = {
   /** POST /courses/{cId}/chapters/{chId}/lessons */
-  create: (courseId: number | string, chapterId: number | string, data: ICreateLessonRequest) =>
-    axiosInstance.post<ILesson>(API_URL.LESSONS(courseId, chapterId), data),
+  create: (courseId: number | string, chapterId: number | string, data: ICreateLessonRequest) => axiosInstance.post<ILesson>(API_URL.LESSONS(courseId, chapterId), data),
 
   /** PATCH /courses/{cId}/chapters/{chId}/lessons/{lid} */
   update: (
@@ -55,8 +49,7 @@ export const lessonsApi = {
   ) => axiosInstance.patch<ILesson>(API_URL.LESSON(courseId, chapterId, lessonId), data),
 
   /** DELETE /courses/{cId}/chapters/{chId}/lessons/{lid} */
-  delete: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    axiosInstance.delete(API_URL.LESSON(courseId, chapterId, lessonId)),
+  delete: (courseId: number | string, chapterId: number | string, lessonId: number | string) => axiosInstance.delete(API_URL.LESSON(courseId, chapterId, lessonId)),
 
   /** PATCH /courses/{cId}/chapters/{chId}/lessons/reorder */
   reorder: (
@@ -66,7 +59,7 @@ export const lessonsApi = {
   ) => axiosInstance.patch<ILesson[]>(API_URL.REORDER_LESSONS(courseId, chapterId), data)
 };
 
-// ─── Section API ──────────────────────────────────────────────────────────────
+/* Section API */
 
 export const sectionsApi = {
   /** POST /courses/{cId}/chapters/{chId}/lessons/{lId}/sections */
@@ -100,5 +93,5 @@ export const sectionsApi = {
     chapterId: number | string,
     lessonId: number | string,
     data: IReorderSectionsRequest
-  ) => axiosInstance.patch<ISection[]>(API_URL.REORDER_SECTIONS(courseId, chapterId, lessonId), data),
+  ) => axiosInstance.patch<ISection[]>(API_URL.REORDER_SECTIONS(courseId, chapterId, lessonId), data)
 };

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import './MainLayout.scss';
@@ -9,24 +10,22 @@ import ModalWrapper from '@/components/ui/ModalWrapper.tsx';
 import ModalProcessing from '@/components/ui/ModalProcessing.tsx';
 import { authStore } from '@/stores/auth.store.ts';
 import {
-  ROLES,
+  ROLES_FOR_ADMIN,
   SCREENS_PATH
 } from '@/config/constant.ts';
 
 const MainLayout = () => {
-
   const isAuthenticated = authStore(state => state.isAuthenticated);
-
   const logout = authStore(state => state.logout);
-
   const user = authStore(state => state.user);
 
-  if (!isAuthenticated || !user) {
-    return <Navigate to={SCREENS_PATH.LOGIN} replace />;
-  }
+  /* Fix: logout() must not be called in render phase */
+  const hasInvalidRole = !!user && !Object.keys(ROLES_FOR_ADMIN).includes(user.role);
+  useEffect(() => {
+    if (hasInvalidRole) logout();
+  }, [hasInvalidRole, logout]);
 
-  if (!ROLES.includes(user.role)) {
-    logout();
+  if (!isAuthenticated || !user || hasInvalidRole) {
     return <Navigate to={SCREENS_PATH.LOGIN} replace />;
   }
 

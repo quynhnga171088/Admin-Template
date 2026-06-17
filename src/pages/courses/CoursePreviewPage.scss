@@ -89,7 +89,7 @@
 
 .cpv-sidebar {
   position: sticky;
-  top: 1rem;
+  //top: 1rem;
   max-height: calc(100vh - 5rem);
   overflow-y: auto;
   border-radius: 12px;
@@ -160,7 +160,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--color-primary, #4680ff);
+  background: linear-gradient(5deg, var(--color-info-800), var(--color-info-400) 100%);
   color: #fff;
   flex-shrink: 0;
 }
@@ -213,7 +213,7 @@
   border-radius: 50%;
   font-weight: 500;
   color: white;
-  background-color: var(--primary-300, #4ec5fc);
+  background: linear-gradient(5deg, var(--color-info-700), var(--color-info-300) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -255,10 +255,10 @@
 
   &--active {
     background: rgba(70, 128, 255, 0.08);
-    border-left-color: var(--color-primary, #4680ff);
+    border-left-color: var(--color-info-700);
 
     .cpv-section-name {
-      color: var(--color-primary, #4680ff);
+      color: var(--color-info-700);
       font-weight: 600;
     }
   }
@@ -270,8 +270,8 @@
   width: 16px;
   text-align: center;
 
-  &--video { color: var(--primary-300); }
-  &--text  { color: var(--primary-400); }
+  &--video { color: var(--color-info-800); }
+  &--text  { color: var(--color-info-700); }
 }
 
 .cpv-section-name {

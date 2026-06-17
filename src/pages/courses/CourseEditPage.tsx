@@ -1,15 +1,22 @@
-import { useRef, useState, useEffect, type ChangeEvent, Fragment } from 'react';
+import { useRef, useEffect, useCallback, type ChangeEvent, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from '@tanstack/react-form';
+import { useQuery } from '@tanstack/react-query';
 
-import { getCourseDetail, updateCourse, uploadImage } from './courses.services';
-import { courseSchema, type CourseFormData } from '@/pages/courses/course.schema';
+import { updateCourse, uploadImage } from './courses.services';
+import { coursesApi } from '@/lib/api/courses.api';
+import { queryKeys } from '@/lib/queryKeys';
+import {
+  courseSchema,
+  type CourseFormData,
+  initialCourseFormValues
+} from '@/pages/courses/course.schema';
 import type { ICourseStatus } from '@/types/types';
 import { SCREENS_PATH, STATE, STATUS_DATA_FOR_DROPDOWN } from '@/config/constant';
 import { type IModalState, modalStore } from '@/stores/modal.store';
-import { getFormatVNCurrency } from '@/util/util';
+import { getFormatVNCurrency } from '@/util/util.tsx';
 import '@/pages/courses/CourseAddNew.scss';
-import { Dropdown } from '@/components/ui/dropdown/Dropdown.tsx';
+import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
 const CourseEditPage = () => {
   const navigate = useNavigate();
@@ -31,26 +38,17 @@ const CourseEditPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isIdInvalid = !courseId || isNaN(courseId);
-  const [isLoading, setIsLoading] = useState(!isIdInvalid);
-  const [loadError, setLoadError] = useState<string | null>(isIdInvalid ? 'Invalid course ID.' : null);
 
-  const [lastId, setLastId] = useState(courseId);
-  if (courseId !== lastId) {
-    setLastId(courseId);
-    setIsLoading(!isIdInvalid);
-    setLoadError(isIdInvalid ? 'Invalid course ID.' : null);
-  }
+  /* Fix: useQuery manages loading/error state — no manual useState needed */
+  const { data: courseDetail, isLoading, isError } = useQuery({
+    queryKey: queryKeys.courses.detail(courseId),
+    queryFn: () => coursesApi.detail(courseId).then(r => r.data),
+    enabled: !isIdInvalid
+  });
 
   /* TanStack Form + Zod */
   const form = useForm({
-    defaultValues: {
-      title: '',
-      shortDescription: '',
-      description: '',
-      thumbnailUrl: '',
-      price: 0,
-      status: 'DRAFT'
-    } as CourseFormData,
+    defaultValues: initialCourseFormValues as CourseFormData,
     onSubmit: async ({ value }) => {
       const file = fileInputRef.current?.files?.[0];
       let thumbnailUrl = value.thumbnailUrl;
@@ -65,22 +63,18 @@ const CourseEditPage = () => {
     }
   });
 
-  /* Load course detail on mount */
+  /* Sync form when course data arrives — form.reset() is not a React setState, rule does not apply */
   useEffect(() => {
-    if (isIdInvalid) return;
-
-    getCourseDetail(courseId)
-      .then(detail => {
-        form.setFieldValue('title', detail.title ?? '');
-        form.setFieldValue('shortDescription', detail.shortDescription ?? '');
-        form.setFieldValue('description', detail.description ?? '');
-        form.setFieldValue('thumbnailUrl', detail.thumbnailUrl ?? '');
-        form.setFieldValue('price', detail.price ?? 0);
-        form.setFieldValue('status', detail.status ?? 'DRAFT');
-      })
-      .catch(() => setLoadError('Failed to load course data. Please try again.'))
-      .finally(() => setIsLoading(false));
-  }, [courseId, isIdInvalid, form]);
+    if (!courseDetail) return;
+    form.reset({
+      title: courseDetail.title ?? '',
+      shortDescription: courseDetail.shortDescription ?? '',
+      description: courseDetail.description ?? '',
+      thumbnailUrl: courseDetail.thumbnailUrl ?? '',
+      price: courseDetail.price ?? 0,
+      status: (courseDetail.status ?? STATE.DRAFT) as CourseFormData['status']
+    });
+  }, [courseDetail, form]);
 
   useEffect(() => {
     setProcessing(isLoading);
@@ -108,16 +102,18 @@ const CourseEditPage = () => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleCancel = () => navigate(SCREENS_PATH.COURSE_LIST);
+  const handleCancel = useCallback(() => navigate(SCREENS_PATH.COURSE_LIST), [navigate]);
 
-  /* Error state */
-  if (loadError) {
+  /* Show error modal when ID is invalid or fetch fails */
+  useEffect(() => {
+    if (!isIdInvalid && !isError) return;
     setMessage('Loading data fail, please comeback to List');
     setTitle('Loading error');
     setCallback(handleCancel);
     setOpen(true);
-    return null;
-  }
+  }, [isIdInvalid, isError, handleCancel, setMessage, setTitle, setCallback, setOpen]);
+
+  if (isIdInvalid || isError) return null;
 
   return (
     <div className="course-add-new">

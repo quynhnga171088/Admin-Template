@@ -18,17 +18,21 @@ export const SCREENS_PATH = {
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}/edit`,
   COURSE_REGISTRATION: '/course-registration',
   TYPOGRAPHY: '/typography',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   FORGOT_PASSWORD: '/forgot-password',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   RESET_PASSWORD: '/reset-password',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   VERIFY_EMAIL: '/verify-email',
+  /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   VERIFY_OTP: '/verify-otp'
-
 };
 
 export const SCREENS_PATH_FOR_SIDEBAR = {
   HOME: '/',
   TYPOGRAPHY: '/typography',
   COURSE_LIST: '/courses',
+  ENROLLMENTS: '/enrollments',
   COURSE_ADD_NEW: '/courses/add',
   COURSE_CHAPTERS: '/chapters',
   COURSE_REGISTRATION: '/course-registration',
@@ -36,6 +40,7 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
 };
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const DATE_FORMAT = 'YYYY-MM-DD';
 
 export const QUERY_CONFIG = {
   STALE_TIME: 5,
@@ -45,7 +50,21 @@ export const QUERY_CONFIG = {
 
 export const TIMEOUT_REQUEST = 30000;
 
-export const ROLES: string[] = ['ADMIN', 'TEACHER'];
+export const USER_STATUS = {
+  BLOCKED: 'BLOCKED',
+  ACTIVE: 'ACTIVE'
+};
+
+export const ROLES_FOR_ADMIN = {
+  ADMIN: 'ADMIN',
+  TEACHER: 'TEACHER'
+};
+
+export const ROLES = {
+  ADMIN: 'ADMIN',
+  TEACHER: 'TEACHER',
+  STUDENT: 'STUDENT'
+};
 
 export const STATE = {
   DRAFT: 'DRAFT',
@@ -53,12 +72,16 @@ export const STATE = {
   ARCHIVED: 'ARCHIVED'
 };
 
+export const ENROLLMENT_STATE = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const;
+
 export const CONTENT_TYPE = {
   VIDEO: 'VIDEO',
   TEXT: 'TEXT'
 };
-
-export const DEFAULT_AVATAR = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
 
 export const COMMON_MESSAGES = {
   PLEASE_WAIT: 'Please wait...'
@@ -73,9 +96,21 @@ export const API_URL = {
   STUDENT_REGISTER: '/auth/register',
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
+
+  GET_ENROLLMENTS: '/enrollments',
+  GET_ENROLLMENT_DETAIL: (enrollmentId: number) => `/enrollments/${enrollmentId}`,
+  APPROVE_ENROLLMENT: (enrollmentId: number) => `/enrollments/${enrollmentId}/approve`,
+
   CREATE_COURSE: '/courses',
   UPDATE_COURSE: '/courses',
   DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
+
+  ADMIN_GET_USERS: '/admin/users',
+  ADMIN_CREATE_USERS: '/admin/users',
+  ADMIN_UPDATE_USER: (userId: number) => `/admin/users/${userId}`,
+  ADMIN_DELETE_USER: (userId: number) => `/admin/users/${userId}`,
+  ADMIN_GET_USER_DETAIL: (userId: number) => `/admin/users/${userId}`,
+
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
@@ -83,12 +118,9 @@ export const API_URL = {
   UPLOAD_VIDEO: '/upload/video',
 
   /* chapters */
-  CHAPTERS: (courseId: number | string) =>
-    `/courses/${courseId}/chapters`,
-  CHAPTER: (courseId: number | string, chapterId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}`,
-  REORDER_CHAPTERS: (courseId: number | string) =>
-    `/courses/${courseId}/chapters/reorder`,
+  CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters`,
+  CHAPTER: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}`,
+  REORDER_CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters/reorder`,
 
   /* Lessons */
   LESSONS: (courseId: number | string, chapterId: number | string) => `/courses/${courseId}/chapters/${chapterId}/lessons`,
@@ -101,16 +133,22 @@ export const API_URL = {
   SECTION: (courseId: number | string, chapterId: number | string, lessonId: number | string, sectionId: number | string) =>
     `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/${sectionId}`,
   REORDER_SECTIONS: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/reorder`,
+    `/courses/${courseId}/chapters/${chapterId}/lessons/${lessonId}/sections/reorder`
 };
 
 export const AVATAR_DEFAULT = 'https://codedthemes.com/demos/admin-templates/datta-able/react/default/assets/avatar-1-aH-LGLvV.png';
 
+export const COURSE_DEFAULT_IMAGE = '/public/images/image-default-course-item.jpg';
+
 export const VIDEO_HOST = {
   VIMEO: 'vimeo.com',
+  YOUTUBE: 'youtube.com',
+  YOUTUBE_SHORT: 'youtu.be',
+  DAILY_MOTION: 'dailymotion.com',
+  /** @deprecated Typo alias — use YOUTUBE */
   YOUBUTE: 'youtube.com',
-  YOUBUTE_SHORT: 'youtu.be',
-  DAILY_MOTION: 'dailymotion.com'
+  /** @deprecated Typo alias — use YOUTUBE_SHORT */
+  YOUBUTE_SHORT: 'youtu.be'
 };
 
 /* All Params for RichTextEditor Start */

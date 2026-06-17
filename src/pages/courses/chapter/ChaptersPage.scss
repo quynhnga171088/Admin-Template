@@ -98,7 +98,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: white;
-  background: linear-gradient(-135deg, #4680ff 0%, #9fb8ef 100%);;
+  background: linear-gradient(5deg, var(--color-info-900), var(--color-info-600) 100%);
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -243,7 +243,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: white;
-  background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%);
+  background: linear-gradient(5deg, var(--color-info-800), var(--color-info-500) 100%);;
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -356,7 +356,7 @@
   flex-shrink: 0;
   min-width: 18px;
   border-radius: 50%;
-  background: linear-gradient(-135deg, rgb(102, 115, 117) 0%, #c8d7da 100%);
+  background: linear-gradient(5deg, var(--color-info-700), var(--color-info-400) 100%);
 }
 
 .ccp-section-info {

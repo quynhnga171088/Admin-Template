@@ -10,9 +10,12 @@ export type ISectionType = 'VIDEO' | 'TEXT';
 export type ISectionStatus = 'DRAFT' | 'PUBLISHED';
 /* Chapter End */
 
-export type IRole = 'TEACHER' | 'ADMIN';
+export type IRole = 'TEACHER' | 'ADMIN' | 'STUDENT';
+export type IUserStatus = 'ACTIVE' | 'BLOCKED';
 
 export type ICourseStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+
+export type IRegistrationStatus = 'APPROVED' | 'REJECTED' | 'PENDING';
 
 export interface IUploadResponse {
   fileKey: string
@@ -66,17 +69,18 @@ export interface IPagination {
 }
 
 export interface ICourseItem {
-  id: number
-  title: string
-  slug: string
-  shortDescription?: string
-  thumbnailUrl?: string
-  price: number
-  status: ICourseStatus
-  teacher: ITeacherCourse
-  lessonCount: number
-  createdAt: string
-  enrollmentCount?: number
+  id: number;
+  title: string;
+  slug: string;
+  shortDescription?: string;
+  thumbnailUrl?: string;
+  price: number;
+  status: ICourseStatus;
+  teacher: ITeacherCourse;
+  createdAt: string;
+  publishedAt?: string;
+  enrollmentCount?: number;
+  lessons: ILesson[];
 }
 
 export interface ICourseDetail extends ICourseItem {
@@ -218,8 +222,18 @@ export interface IAdminUser {
   email: string;
   fullName: string;
   role: IRole;
+  status: IUserStatus;
   phone: string;
+  createdAt: string;
   avatarUrl?: string;
+}
+
+export type IUser = IAdminUser;
+
+export type INewTeacher = {
+  email: string;
+  fullName: string;
+  password: string;
 }
 
 export interface IAuthResponse {
@@ -328,4 +342,48 @@ export interface IDropdownOption {
   label: string;
   value: string | number;
   className?: string | null | undefined
+}
+
+/* For Registration Management */
+export interface IPaymentProofResponse {
+  id: number;
+  imageUrl: string;
+  note: string;
+  createdAt: string;
+}
+
+export interface IRegistrationContent {
+  id: 2,
+  courseId: 18,
+  courseTitle: string;
+  courseShortDescription: string;
+  courseThumbnailUrl: string;
+  coursePrice: number;
+  studentId: number;
+  studentName: string;
+  studentPhone: string;
+  studentEmail: string;
+  studentAvatar: string;
+  status: IRegistrationStatus;
+  note: string | null;
+  reviewedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  progressPercent: number | null;
+  completedLessons: number | null;
+  totalLessons: number | null;
+  paymentProof: IPaymentProofResponse | null;
+}
+
+export interface IRecentEnrollment {
+  id: number;
+  courseId: number;
+  courseTitle: string;
+  status: IRegistrationStatus;
+  createdAt: string;
+}
+
+export interface IUserDetail {
+  user: IUser,
+  recentEnrollments: IRecentEnrollment[]
 }

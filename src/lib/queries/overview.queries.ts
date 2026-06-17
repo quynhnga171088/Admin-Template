@@ -12,10 +12,10 @@ const overviewQueryOptions = {
 };
 
 /* Call in component */
-export const useOverviewQuery = () => useQuery<IOverviewReport>(overviewQueryOptions);
+export const useOverviewQuery = (enabled = true) => useQuery<IOverviewReport>({ ...overviewQueryOptions, enabled });
 
 /* Call after login success or call before navigate to page use this data */
 export const prefetchOverview = () => queryClient.prefetchQuery(overviewQueryOptions);
 
-/* Call after update data to refetch data */
+/* Call after update data to re-fetch data */
 export const invalidateOverview = () => queryClient.invalidateQueries({ queryKey: queryKeys.overview.all });

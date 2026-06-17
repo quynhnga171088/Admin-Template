@@ -10,7 +10,7 @@ import {
   SCREENS_PATH,
   STATUS_DATA_FOR_DROPDOWN
 } from '@/config/constant';
-import { getFormatVNCurrency } from '@/util/util';
+import { getFormatVNCurrency } from '@/util/util.tsx';
 import '@/pages/courses/CourseAddNew.scss';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 

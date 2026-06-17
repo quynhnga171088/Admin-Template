@@ -71,8 +71,8 @@ const ChapterModal = ({
   const canSave = !!title.trim() && (mode === 'edit' || !!previewUrl) && !isLoading;
 
   return (
-    <div className="ccp-modal-overlay" onClick={() => setChapterModal({ open: false })}>
-      <div className="ccp-modal ccp-modal--wide" onClick={e => e.stopPropagation()}>
+    <div className="ccp-modal-overlay">
+      <div className="ccp-modal ccp-modal--wide">
         <div className="ccp-modal-header">
           <h3 className="ccp-modal-title">
             <i className="fa-regular fa-layer-group" />

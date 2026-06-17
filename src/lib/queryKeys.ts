@@ -12,8 +12,7 @@ export const queryKeys = {
   users: {
     all: ['users'] as const,
     list: (pagination?: IPagination) => [...queryKeys.users.all, 'list', pagination] as const,
-    detail: (id: string | number) =>
-      [...queryKeys.users.all, 'detail', id] as const
+    detail: (id: string | number) => [...queryKeys.users.all, 'detail', id] as const
   },
   overview: {
     all: ['overview'] as const,
@@ -24,22 +23,25 @@ export const queryKeys = {
     list: (pagination: IPagination) => [ ...queryKeys.courses.all, 'list', pagination] as const,
     detail: (id: number | string) => [ ...queryKeys.courses.all, 'detail', id] as const
   },
+  enrollments: {
+    all: ['enrollments'] as const,
+    list: (pagination: IPagination) => [ ...queryKeys.enrollments.all, 'list', pagination] as const,
+    detail: (id: number | string) => [ ...queryKeys.enrollments.all, 'detail', id] as const
+  },
   chapters: {
     all: ['chapters'] as const,
     /** All chapters of a course (with nested lessons) */
-    byCourse: (courseId: number | string) =>
-      [...queryKeys.chapters.all, 'course', courseId] as const,
-    detail: (courseId: number | string, chapterId: number | string) =>
-      [...queryKeys.chapters.all, 'course', courseId, 'chapter', chapterId] as const,
+    byCourse: (courseId: number | string) => [...queryKeys.chapters.all, 'course', courseId] as const,
+    detail: (courseId: number | string, chapterId: number | string) => [...queryKeys.chapters.all, 'course', courseId, 'chapter', chapterId] as const
   },
   lessons: {
     all: ['lessons'] as const,
     detail: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-      [...queryKeys.lessons.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const,
+      [...queryKeys.lessons.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const
   },
   sections: {
     all: ['sections'] as const,
     byLesson: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
-      [...queryKeys.sections.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const,
+      [...queryKeys.sections.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const
   }
 } as const;

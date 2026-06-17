@@ -6,7 +6,7 @@ import type { IAuthState } from '@/types/types.ts';
 import { Navigate } from 'react-router-dom';
 import {
   SCREENS_PATH,
-  DEFAULT_AVATAR
+  AVATAR_DEFAULT
 } from '@/config/constant.ts';
 
 const UserProfile = () => {
@@ -34,7 +34,7 @@ const UserProfile = () => {
           <div className="dropdown-header bg-linear-gradient-primary flex items-center justify-between px-[1.25rem]! py-[1rem]!">
             <div className="mb-1 flex items-center">
               <div className="shrink-0">
-                <img src={user.avatarUrl || DEFAULT_AVATAR} alt="user-image" className="rounded-full" width={40} height={40} />
+                <img src={user.avatarUrl || AVATAR_DEFAULT} alt="user-image" className="rounded-full" width={40} height={40} />
               </div>
               <div className="ms-3 grow">
                 <h6 className="mb-1 text-white">{user.fullName}</h6>

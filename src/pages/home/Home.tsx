@@ -9,20 +9,17 @@ import { authStore } from '@/stores/auth.store.ts';
 
 const HomePage = () => {
   const setProcessing = modalStore(state => state.setProcessing);
-  const accessToken: string | null = authStore(state => state.accessToken);
+  const user = authStore(state => state.user);
+  const isAdmin = user?.role === 'ADMIN';
 
-  const { data, isLoading } = useOverviewQuery();
+  const { data, isLoading } = useOverviewQuery(isAdmin);
 
   useEffect(() => {
     setProcessing(isLoading);
   }, [isLoading, setProcessing]);
 
-  if (data && (data as any).status && ((data as any).status === 403 || (data as any).status === 404)) {
-    if (accessToken) {
-      return <Navigate to={SCREENS_PATH.COURSE_LIST} />;
-    } else {
-      return <Navigate to={SCREENS_PATH.LOGIN} />;
-    }
+  if (!isAdmin) {
+    return <Navigate to={SCREENS_PATH.COURSE_LIST} />;
   }
 
   return (

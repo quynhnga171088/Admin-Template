@@ -1,5 +1,4 @@
 /* ------------------------ MENU ITEMS ------------------------ */
-
 import { SCREENS_PATH_FOR_SIDEBAR } from '@/config/constant.ts';
 
 const dashboard = {
@@ -32,7 +31,7 @@ const mainFunctions = {
           id: 'courses-list',
           title: 'List of Courses',
           type: 'item',
-          icon: 'fa-regular fa-clipboard-list',
+          icon: 'fa-regular fa-list-dropdown',
           url: SCREENS_PATH_FOR_SIDEBAR.COURSE_LIST
         }, {
           id: 'add-new-course',
@@ -57,47 +56,25 @@ const mainFunctions = {
         }
       ]
     }, {
-      id: 'course-registration',
-      title: 'Course Registration',
-      type: 'item',
-      icon: 'fa-regular fa-calendar-pen',
-      url: SCREENS_PATH_FOR_SIDEBAR.COURSE_REGISTRATION
-    }, {
-      id: 'typography',
-      title: 'Typography',
-      type: 'item',
-      icon: 'fa-regular fa-font',
-      url: SCREENS_PATH_FOR_SIDEBAR.TYPOGRAPHY
-    }, {
-      id: 'icons',
-      title: 'Icons',
-      type: 'item',
-      icon: 'fa-regular fa-feather',
-      url: '/icons'
-    }
-  ]
-};
-
-const pages = {
-  id: 'pages',
-  title: 'Pages',
-  type: 'group',
-  children: [
-    {
-      id: 'login',
-      title: 'Login',
-      type: 'item',
-      icon: 'fa-regular fa-right-to-bracket',
-      url: '/login',
-      target: true
-    },
-    {
-      id: 'register',
-      title: 'Register',
-      type: 'item',
+      id: 'enrollments-management',
+      title: 'Enrollments Management',
+      type: 'collapse',
       icon: 'fa-regular fa-registered',
-      url: '/register',
-      target: true
+      children: [
+        {
+          id: 'enrollments-management-list',
+          title: 'Enrollments List',
+          type: 'item',
+          icon: 'fa-regular fa-list-dropdown',
+          url: SCREENS_PATH_FOR_SIDEBAR.ENROLLMENTS
+        }
+      ]
+    }, {
+      id: 'Users Management',
+      title: 'Users Management',
+      type: 'item',
+      icon: 'fa-regular fa-users',
+      url: '/users'
     }
   ]
 };
@@ -197,6 +174,30 @@ const other = {
       type: 'item',
       icon: 'fa-regular fa-desktop',
       url: '/sample-page'
+    }
+  ]
+};
+
+const pages = {
+  id: 'pages',
+  title: 'Pages',
+  type: 'group',
+  children: [
+    {
+      id: 'login',
+      title: 'Login',
+      type: 'item',
+      icon: 'fa-regular fa-right-to-bracket',
+      url: '/login',
+      target: true
+    },
+    {
+      id: 'register',
+      title: 'Register',
+      type: 'item',
+      icon: 'fa-regular fa-registered',
+      url: '/register',
+      target: true
     }
   ]
 };
