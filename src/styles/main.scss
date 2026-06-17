@@ -173,6 +173,7 @@ html {
   border: 2px solid var(--color-info-700);
 }
 
+.user-teacher-status,
 .course-item-status.info,
 .chapter-item-status.info,
 .lesson-item-status.info {
@@ -187,6 +188,8 @@ html {
   background: linear-gradient(135deg, var(--color-warning-700) 0%, var(--color-warning-400) 100%);
 }
 
+.user-active-status,
+.user-student-status,
 .enrollment-item-status.approved,
 .course-item-status.success,
 .chapter-item-status.success,
@@ -195,8 +198,13 @@ html {
   background: linear-gradient(135deg, var(--color-success-700) 0%, var(--color-success-400) 100%)
 }
 
+.user-admin-status,
 .enrollment-item-status.rejected {
   background: linear-gradient(135deg, var(--color-danger-700) 0%, var(--color-danger-400) 100%)
+}
+
+.user-blocked-status {
+  background: linear-gradient(135deg, var(--color-secondary-700) 0%, var(--color-secondary-400) 100%)
 }
 
 .enrollment-item-status,

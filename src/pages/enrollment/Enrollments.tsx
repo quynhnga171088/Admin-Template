@@ -7,7 +7,7 @@ import type { IUserState, IPagination, IRegistrationContent, IPageResponse } fro
 import {
   getColorByStateEnrollment,
   getPagination
-} from '@/util/util';
+} from '@/util/util.tsx';
 import { queryKeys } from '@/lib/queryKeys';
 import { modalStore } from '@/stores/modal.store';
 import {
@@ -21,7 +21,7 @@ import {
   AVATAR_DEFAULT,
   QUERY_CONFIG,
   SCREENS_PATH,
-  DATE_FORMAT
+  DATE_FORMAT, DATE_TIME_FORMAT,
 } from '@/config/constant';
 import '@/pages/enrollment/Enrollments.scss';
 import dayjs from 'dayjs';
@@ -123,7 +123,7 @@ const Enrollments = () => {
             </button>
           </div>
           <div className="card-body">
-            <div className="grid grid-cols-24 gap-4 enrollment-item sources-item-label enrollment-item-label">
+            <div className="grid grid-cols-24 gap-4 enrollment-item enrollment-item-label">
               <div className="col-span-8  md:col-span-7       lg:col-span-6 xl:col-span-5 2xl:col-span-4 flex items-center card-header-title">Student</div>
               <div className="col-span-12 md:col-span-13      lg:col-span-8 xl:col-span-7 2xl:col-span-8 items-center card-header-title">Course</div>
               <div className="col-span-4  md:col-span-4       lg:col-span-3 xl:col-span-2 2xl:col-span-2 items-center card-header-title">Status</div>
@@ -173,7 +173,7 @@ const Enrollments = () => {
                       'N/A'
                     )}
                   </div>
-                  <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-4 2xl:col-span-4 items-center cursor-pointer">
+                  <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-7 xl:col-span-4 2xl:col-span-4 items-center cursor-pointer">
                     {enrollment.status && enrollment.status === ENROLLMENT_STATE.PENDING &&
                       <div className="flex w-full">
                         <button
@@ -188,7 +188,7 @@ const Enrollments = () => {
                         </button>
                         <button className="btn btn-danger btn-sm m-1-l"><i className="fa-regular fa-x" /> Reject</button>
                       </div>}
-                    {enrollment.status && enrollment.status === ENROLLMENT_STATE.APPROVED && enrollment.updatedAt && dayjs(enrollment.createdAt).format(DATE_FORMAT)}
+                    {enrollment.status && enrollment.status === ENROLLMENT_STATE.APPROVED && enrollment.updatedAt && dayjs(enrollment.createdAt).format(DATE_TIME_FORMAT)}
                   </div>
                 </div>
               );

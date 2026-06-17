@@ -14,7 +14,7 @@ import {
 import type { ICourseStatus } from '@/types/types';
 import { SCREENS_PATH, STATE, STATUS_DATA_FOR_DROPDOWN } from '@/config/constant';
 import { type IModalState, modalStore } from '@/stores/modal.store';
-import { getFormatVNCurrency } from '@/util/util';
+import { getFormatVNCurrency } from '@/util/util.tsx';
 import '@/pages/courses/CourseAddNew.scss';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 

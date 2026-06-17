@@ -10,7 +10,8 @@ export type ISectionType = 'VIDEO' | 'TEXT';
 export type ISectionStatus = 'DRAFT' | 'PUBLISHED';
 /* Chapter End */
 
-export type IRole = 'TEACHER' | 'ADMIN';
+export type IRole = 'TEACHER' | 'ADMIN' | 'STUDENT';
+export type IUserStatus = 'ACTIVE' | 'BLOCKED';
 
 export type ICourseStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -221,9 +222,13 @@ export interface IAdminUser {
   email: string;
   fullName: string;
   role: IRole;
+  status: IUserStatus;
   phone: string;
+  createdAt: string;
   avatarUrl?: string;
 }
+
+export type IUser = IAdminUser;
 
 export interface IAuthResponse {
   accessToken: string

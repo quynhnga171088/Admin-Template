@@ -50,7 +50,21 @@ export const QUERY_CONFIG = {
 
 export const TIMEOUT_REQUEST = 30000;
 
-export const ROLES: string[] = ['ADMIN', 'TEACHER'];
+export const USER_STATUS = {
+  BLOCKED: 'BLOCKED',
+  ACTIVE: 'ACTIVE'
+};
+
+export const ROLES_FOR_ADMIN = {
+  ADMIN: 'ADMIN',
+  TEACHER: 'TEACHER'
+};
+
+export const ROLES = {
+  ADMIN: 'ADMIN',
+  TEACHER: 'TEACHER',
+  STUDENT: 'STUDENT'
+};
 
 export const STATE = {
   DRAFT: 'DRAFT',
@@ -62,7 +76,7 @@ export const ENROLLMENT_STATE = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
-};
+} as const;
 
 export const CONTENT_TYPE = {
   VIDEO: 'VIDEO',
@@ -88,6 +102,7 @@ export const API_URL = {
   CREATE_COURSE: '/courses',
   UPDATE_COURSE: '/courses',
   DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
+  ADMIN_GET_USERS: '/admin/users',
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',

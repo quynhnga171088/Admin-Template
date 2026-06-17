@@ -76,18 +76,34 @@ const NavCollapse = (
 
   return (
     <li className={`pc-item pc-hasmenu ${open ? 'pc-trigger' : ''}`}>
-      <Link className="pc-link" to={menu.url || ''} onClick={() => handleClick(true)}>
-        {menu.icon && (
-          <span className="pc-micon">
-            <i className={menu.icon} />
+      {menu.url ?
+        <Link className="pc-link" to={menu.url || ''} onClick={() => handleClick(true)}>
+          {menu.icon && (
+            <span className="pc-micon">
+              <i className={menu.icon} />
+            </span>
+          )}
+          <span className="pc-mtext">{menu.title}</span>
+          <span className="pc-arrow">
+            <i className="fa-regular fa-chevron-right" />
           </span>
-        )}
-        <span className="pc-mtext">{menu.title}</span>
-        <span className="pc-arrow">
-          <i className="fa-regular fa-chevron-right" />
-        </span>
-        {menu.badge && <span className="pc-badge">{menu.badge}</span>}
-      </Link>
+          {menu.badge && <span className="pc-badge">{menu.badge}</span>}
+        </Link>
+        :
+        <div className="pc-link cursor-pointer" onClick={() => handleClick(true)}>
+          {menu.icon && (
+            <span className="pc-micon">
+              <i className={menu.icon} />
+            </span>
+          )}
+          <span className="pc-mtext">{menu.title}</span>
+          <span className="pc-arrow">
+            <i className="fa-regular fa-chevron-right" />
+          </span>
+          {menu.badge && <span className="pc-badge">{menu.badge}</span>}
+        </div>
+      }
+
       {open && <ul className="pc-submenu">{navCollapse}</ul>}
     </li>
   );

@@ -70,11 +70,11 @@ const mainFunctions = {
         }
       ]
     }, {
-      id: 'icons',
-      title: 'Icons',
+      id: 'Users Management',
+      title: 'Users Management',
       type: 'item',
-      icon: 'fa-regular fa-feather',
-      url: '/icons'
+      icon: 'fa-regular fa-users',
+      url: '/users'
     }
   ]
 };

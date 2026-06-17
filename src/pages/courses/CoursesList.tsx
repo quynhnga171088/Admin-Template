@@ -16,7 +16,7 @@ import {
   getPagination,
   getColorByState,
   getFormatVNCurrency
-} from '@/util/util';
+} from '@/util/util.tsx';
 import { queryKeys } from '@/lib/queryKeys';
 import '@/pages/courses/CoursesList.scss';
 import {
@@ -113,7 +113,7 @@ const CoursesList = () => {
           </div>
           <div className="card-body">
             <div className="grid grid-cols-24 gap-4 courses-item sources-item-label">
-              <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">Avatar</div>
+              <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">User</div>
               <div className="col-span-7 md:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-2 flex items-center card-header-title">Thumbnail</div>
               <div className="col-span-4 md:col-span-6 lg:col-span-9 xl:col-span-8 2xl:col-span-9 flex items-center card-header-title">Title & short description</div>
               <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-2 2xl:col-span-2 flex items-center card-header-title">Status</div>

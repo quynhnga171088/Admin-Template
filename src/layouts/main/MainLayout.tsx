@@ -10,7 +10,7 @@ import ModalWrapper from '@/components/ui/ModalWrapper.tsx';
 import ModalProcessing from '@/components/ui/ModalProcessing.tsx';
 import { authStore } from '@/stores/auth.store.ts';
 import {
-  ROLES,
+  ROLES_FOR_ADMIN,
   SCREENS_PATH
 } from '@/config/constant.ts';
 
@@ -20,7 +20,7 @@ const MainLayout = () => {
   const user = authStore(state => state.user);
 
   /* Fix: logout() must not be called in render phase */
-  const hasInvalidRole = !!user && !ROLES.includes(user.role);
+  const hasInvalidRole = !!user && !Object.keys(ROLES_FOR_ADMIN).includes(user.role);
   useEffect(() => {
     if (hasInvalidRole) logout();
   }, [hasInvalidRole, logout]);

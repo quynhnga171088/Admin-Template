@@ -41,6 +41,9 @@ const router = createBrowserRouter([
       }, {
         path: 'enrollments',
         lazy: () => import('@/pages/enrollment/Enrollments.tsx')
+      }, {
+        path: 'users',
+        lazy: () => import('@/pages/users/UsersList')
       }
     ]
   }, {
