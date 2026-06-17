@@ -230,6 +230,12 @@ export interface IAdminUser {
 
 export type IUser = IAdminUser;
 
+export type INewTeacher = {
+  email: string;
+  fullName: string;
+  password: string;
+}
+
 export interface IAuthResponse {
   accessToken: string
   refreshToken: string
@@ -367,4 +373,17 @@ export interface IRegistrationContent {
   completedLessons: number | null;
   totalLessons: number | null;
   paymentProof: IPaymentProofResponse | null;
+}
+
+export interface IRecentEnrollment {
+  id: number;
+  courseId: number;
+  courseTitle: string;
+  status: IRegistrationStatus;
+  createdAt: string;
+}
+
+export interface IUserDetail {
+  user: IUser,
+  recentEnrollments: IRecentEnrollment[]
 }

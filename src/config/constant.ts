@@ -106,8 +106,9 @@ export const API_URL = {
   DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
 
   ADMIN_GET_USERS: '/admin/users',
+  ADMIN_CREATE_USERS: '/admin/users',
   ADMIN_UPDATE_USER: (userId: number) => `/admin/users/${userId}`,
-  ADMIN_GET_DETAIL_USER: (userId: number) => `/admin/users/${userId}`,
+  ADMIN_GET_USER_DETAIL: (userId: number) => `/admin/users/${userId}`,
 
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
