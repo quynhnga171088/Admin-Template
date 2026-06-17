@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 import {
   AVATAR_DEFAULT,
@@ -18,18 +19,19 @@ import {
   getPagination,
   getStatusUser
 } from '@/util/util';
-import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryKeys';
 import { queryClient } from '@/lib/queryClient';
 import {
   usersFetcher,
   deleteTeacher,
-  createTeacher
+  createTeacher,
+  updateTeacher
 } from '@/pages/users/users.services';
 import '@/pages/users/UsersList.scss';
 import dayjs from 'dayjs';
 import Pagination from '@/components/ui/Pagination.tsx';
 import AddTeacherModal from '@/components/ui/user/AddTeacherModal';
+import UpdateUserModal from '@/components/ui/user/UpdateUserModal';
 
 const UsersList = () => {
 
@@ -37,6 +39,7 @@ const UsersList = () => {
   const navigate = useNavigate();
 
   const [addTeacherOpen, setAddTeacherOpen] = useState(false);
+  const [editUser, setEditUser] = useState<IUser | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const { setEnableCancelButton, setEnableOkButton, setCallback, setMessage, setTitle, setOpen } = modalStore(
@@ -83,6 +86,24 @@ const UsersList = () => {
     last: data?.last ?? true,
     totalElements: data?.totalElements ?? 0,
     totalPages: data?.totalPages ?? 1
+  };
+
+  const handleUpdateUser = async (data: { fullName: string; role: IUser['role']; status: IUser['status'] }) => {
+    if (!editUser) return;
+    setSubmitting(true);
+    try {
+      await updateTeacher(editUser.id, { ...editUser, ...data });
+      setEditUser(null);
+      await queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
+      setTitle('Success');
+      setMessage('User information has been updated successfully!');
+      setEnableCancelButton(false);
+      setEnableOkButton(true);
+      setCallback(() => () => {});
+      setOpen(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCreateTeacher = async (data: INewTeacher) => {
@@ -158,7 +179,7 @@ const UsersList = () => {
                   {user.createdAt && dayjs(user.createdAt).format(DATE_FORMAT)}
                 </div>
                 <div className="col-span-6 md:col-span-6        lg:col-span-5 xl:col-span-5 2xl:col-span-5 flex items-center cursor-pointer">
-                  <button className="btn btn-light-warning btn-icon btn-sm mr-2!" title="Update user info">
+                  <button className="btn btn-light-warning btn-icon btn-sm mr-2!" title="Update user info" onClick={() => setEditUser(user)}>
                     <i className="fa-thin fa-edit" />
                   </button>
                   <button
@@ -181,6 +202,15 @@ const UsersList = () => {
           submitting={submitting}
           onClose={() => setAddTeacherOpen(false)}
           onSave={handleCreateTeacher}
+        />
+      )}
+
+      {editUser && (
+        <UpdateUserModal
+          user={editUser}
+          submitting={submitting}
+          onClose={() => setEditUser(null)}
+          onSave={handleUpdateUser}
         />
       )}
     </div>
