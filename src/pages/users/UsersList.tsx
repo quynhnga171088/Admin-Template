@@ -1,15 +1,14 @@
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   AVATAR_DEFAULT,
   QUERY_CONFIG,
-  SCREENS_PATH,
   DATE_FORMAT
 } from '@/config/constant';
-import { userStore } from '@/stores/user.store';
 import type {
   IUser,
-  IUserState,
+  INewTeacher,
   IPagination
 } from '@/types/types';
 import { modalStore } from '@/stores/modal.store';
@@ -21,21 +20,21 @@ import {
 } from '@/util/util';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryKeys';
-import { usersFetcher } from '@/pages/users/users.services';
+import { queryClient } from '@/lib/queryClient';
+import { usersFetcher, createTeacher } from '@/pages/users/users.services';
 import '@/pages/users/UsersList.scss';
 import dayjs from 'dayjs';
 import Pagination from '@/components/ui/Pagination.tsx';
 import { deleteCourse } from '@/pages/courses/courses.services.ts';
+import AddTeacherModal from '@/components/ui/user/AddTeacherModal';
 
 const UsersList = () => {
 
   const location = useLocation();
-
   const navigate = useNavigate();
 
-  const search = userStore((state: IUserState) => state.search);
-  const setAction = userStore((state: IUserState) => state.setAction);
-  const action = userStore((state: IUserState) => state.action);
+  const [addTeacherOpen, setAddTeacherOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const { setEnableCancelButton, setEnableOkButton, setCallback, setMessage, setTitle, setOpen } = modalStore(
     useShallow(state => ({
@@ -56,7 +55,6 @@ const UsersList = () => {
     setCallback(() =>
       deleteCourse(user.id)
         .then(() => {
-          /* Return first page after change data content */
           const params = new URLSearchParams(location.search);
           params.set('page', '0');
           navigate(`${location.pathname}?${params.toString()}`);
@@ -83,6 +81,26 @@ const UsersList = () => {
     totalPages: data?.totalPages ?? 1
   };
 
+  const handleCreateTeacher = async (data: INewTeacher) => {
+    setSubmitting(true);
+    try {
+      await createTeacher(data);
+      setAddTeacherOpen(false);
+      await queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
+      const params = new URLSearchParams(location.search);
+      params.set('page', '0');
+      navigate(`${location.pathname}?${params.toString()}`);
+      setTitle('Success');
+      setMessage('New teacher has been added successfully!');
+      setEnableCancelButton(false);
+      setEnableOkButton(true);
+      setCallback(() => () => {});
+      setOpen(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="grid grid-cols-12 gap-4 users-list">
       <div className="col-span-12">
@@ -92,7 +110,7 @@ const UsersList = () => {
             <button
               type="button"
               className="btn btn-sm btn-primary ml-auto"
-              onClick={() => navigate(SCREENS_PATH.COURSE_ADD_NEW)}
+              onClick={() => setAddTeacherOpen(true)}
             >
               <i className="fa-regular fa-plus" /> Add New Teacher
             </button>
@@ -102,7 +120,7 @@ const UsersList = () => {
               <div className="col-span-9 md:col-span-9        lg:col-span-7 xl:col-span-7 2xl:col-span-7 flex items-center card-header-title">Avatar</div>
               <div className="col-span-5 md:col-span-5        lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">Role</div>
               <div className="col-span-4 md:col-span-4        lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">Status</div>
-              <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">Create Date</div>
+              <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-4 2xl:col-span-4 items-center card-header-title">Create Date</div>
               <div className="col-span-6 md:col-span-6        lg:col-span-5 xl:col-span-5 2xl:col-span-5 flex items-center card-header-title">Action</div>
             </div>
             {users.length === 0 && !isLoading &&
@@ -132,14 +150,18 @@ const UsersList = () => {
                 <div className="col-span-4 md:col-span-4        lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center cursor-pointer">
                   {getStatusUser(user.status)}
                 </div>
-                <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center cursor-pointer">
+                <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-4 2xl:col-span-4 items-center cursor-pointer">
                   {user.createdAt && dayjs(user.createdAt).format(DATE_FORMAT)}
                 </div>
                 <div className="col-span-6 md:col-span-6        lg:col-span-5 xl:col-span-5 2xl:col-span-5 flex items-center cursor-pointer">
                   <button className="btn btn-light-warning btn-icon btn-sm mr-2!" title="Update user info">
                     <i className="fa-thin fa-edit" />
                   </button>
-                  <button className="btn btn-light-danger btn-icon btn-sm" title="Block this user">
+                  <button
+                    className="btn btn-light-danger btn-icon btn-sm"
+                    title="Block this user"
+                    onClick={() => confirmBlockUser(user)}
+                  >
                     <i className="fa-thin fa-ban" />
                   </button>
                 </div>
@@ -149,7 +171,16 @@ const UsersList = () => {
           <Pagination pagination={paginationData} />
         </div>
       </div>
-    </div>);
+
+      {addTeacherOpen && (
+        <AddTeacherModal
+          submitting={submitting}
+          onClose={() => setAddTeacherOpen(false)}
+          onSave={handleCreateTeacher}
+        />
+      )}
+    </div>
+  );
 };
 
 export default UsersList;

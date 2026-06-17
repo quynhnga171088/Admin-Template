@@ -1,6 +1,7 @@
 import type {
   IUser,
   IUserDetail,
+  INewTeacher,
   IPagination,
   IPageResponse
 } from '@/types/types';
@@ -13,3 +14,6 @@ export const usersFetcher: (pagination: IPagination) => Promise<IPageResponse<IU
   = (pagination: IPagination) => usersApi.getUsers(pagination).then(res => res.data);
 
 export const getUserDetail: (userId: number) => Promise<IUserDetail> = (userId: number) => usersApi.getById(userId).then(res => res.data);
+
+export const createTeacher = (data: INewTeacher): Promise<IUser> =>
+  usersApi.createNewTeacher(data).then(res => res.data);

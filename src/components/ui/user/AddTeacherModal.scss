@@ -1,0 +1,26 @@
+.atm-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .form-control {
+    padding-right: 2.5rem;
+  }
+
+  .atm-password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted, #6c757d);
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: var(--bs-body-color, #212529);
+    }
+  }
+}
