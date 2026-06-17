@@ -49,12 +49,12 @@ const UsersList = () => {
   );
 
   const confirmBlockUser = (user: IUser) => {
-    setMessage(`Do you want to block this user: ${course.title}?`);
+    setMessage(`Do you want to block this user: ${user.fullName}?`);
     setEnableCancelButton(true);
     setEnableOkButton(true);
     setTitle('Confirm');
     setCallback(() =>
-      deleteCourse(course.id)
+      deleteCourse(user.id)
         .then(() => {
           /* Return first page after change data content */
           const params = new URLSearchParams(location.search);
