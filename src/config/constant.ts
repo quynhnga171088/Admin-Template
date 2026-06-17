@@ -96,13 +96,19 @@ export const API_URL = {
   STUDENT_REGISTER: '/auth/register',
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
+
   GET_ENROLLMENTS: '/enrollments',
   GET_ENROLLMENT_DETAIL: (enrollmentId: number) => `/enrollments/${enrollmentId}`,
   APPROVE_ENROLLMENT: (enrollmentId: number) => `/enrollments/${enrollmentId}/approve`,
+
   CREATE_COURSE: '/courses',
   UPDATE_COURSE: '/courses',
   DELETE_COURSE: (courseId: number) => `/courses/${courseId}`,
+
   ADMIN_GET_USERS: '/admin/users',
+  ADMIN_UPDATE_USER: (userId: number) => `/admin/users/${userId}`,
+  ADMIN_GET_DETAIL_USER: (userId: number) => `/admin/users/${userId}`,
+
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
