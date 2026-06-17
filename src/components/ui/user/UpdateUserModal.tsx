@@ -63,31 +63,6 @@ const UpdateUserModal = ({
 
         <div className="ccp-modal-body">
           <div className="can-field">
-            <label className="form-label can-label">Email</label>
-            <input type="text" className="form-control" value={user.email} disabled />
-          </div>
-
-          <div className="can-field">
-            <label className="form-label can-label">Phone</label>
-            <input type="text" className="form-control" value={user.phone || ''} disabled />
-          </div>
-
-          <div className="can-field">
-            <label className="form-label can-label">
-              Full Name <span className="can-required">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Input your fullname"
-              value={form.fullName}
-              onChange={e => setForm({ ...form, fullName: e.target.value })}
-              maxLength={255}
-              autoFocus
-            />
-          </div>
-
-          <div className="can-field">
             <label className="form-label can-label">Role</label>
             <Dropdown
               id={form.role}
@@ -111,6 +86,30 @@ const UpdateUserModal = ({
             />
           </div>
 
+          <div className="can-field">
+            <label className="form-label can-label">Email</label>
+            <input type="text" className="form-control" value={user.email} disabled />
+          </div>
+
+          <div className="can-field">
+            <label className="form-label can-label">Phone</label>
+            <input type="text" className="form-control" value={user.phone || ''} disabled />
+          </div>
+
+          <div className="can-field">
+            <label className="form-label can-label">
+              Full Name <span className="can-required">*</span>
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Input your fullname"
+              value={form.fullName}
+              onChange={e => setForm({ ...form, fullName: e.target.value })}
+              maxLength={255}
+              autoFocus
+            />
+          </div>
           {error && <div className="ccp-upload-error">{error}</div>}
         </div>
 
