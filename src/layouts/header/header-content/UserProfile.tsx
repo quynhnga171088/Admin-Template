@@ -1,13 +1,14 @@
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import { useDetectOutsideClick } from 'src/components/useDetectOutsideClick';
-import { authStore } from '@/stores/auth.store.ts';
+import { authStore } from '@/stores/auth.store';
 import { clearAllDataWhenLogout } from '@/layouts/header/header-content/userProfile.services';
-import type { IAuthState } from '@/types/types.ts';
+import type { IAuthState } from '@/types/types';
 import { Navigate, useNavigate } from 'react-router-dom';
 import {
   SCREENS_PATH,
-  AVATAR_DEFAULT
-} from '@/config/constant.ts';
+  AVATAR_DEFAULT,
+  ROLES_FOR_ADMIN
+} from '@/config/constant';
 
 const UserProfile = () => {
   const { ref, isOpen, setIsOpen } = useDetectOutsideClick(false);
@@ -35,7 +36,7 @@ const UserProfile = () => {
           <div className="dropdown-header bg-linear-gradient-primary flex items-center justify-between px-[1.25rem]! py-[1rem]!">
             <div className="mb-1 flex items-center">
               <div className="shrink-0">
-                <img src={user.avatarUrl || AVATAR_DEFAULT} alt="img-fluid" className="rounded-full" />
+                <img src={user.avatarUrl || AVATAR_DEFAULT} alt={user.fullName} className="img-fluid" />
               </div>
               <div className="ms-3 grow">
                 <h6 className="mb-1 text-white">{user.fullName}</h6>
@@ -45,7 +46,7 @@ const UserProfile = () => {
           </div>
           <div className="dropdown-body px-[1.25rem]! py-[1rem]!">
             <SimpleBarScroll className="profile-notification-scroll position-relative" style={{ maxHeight: 'calc(100vh - 225px)' }}>
-              {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+              {(user.role === ROLES_FOR_ADMIN.ADMIN || user.role === ROLES_FOR_ADMIN.TEACHER) && (
                 <div
                   className="dropdown-item cursor-pointer"
                   onClick={() => { setIsOpen(false); navigate(SCREENS_PATH.USER_PROFILE); }}

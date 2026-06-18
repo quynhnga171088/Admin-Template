@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
-import { authStore } from '@/stores/auth.store';
-import { resourceApi } from '@/lib/api/resource.api';
-import { updateUserInfo } from '@/pages/users/users.services';
-import { AVATAR_DEFAULT, SCREENS_PATH } from '@/config/constant';
-import type { IAuthState, IUpdateUserInfoRequest } from '@/types/types';
-import '@/pages/profile/ProfilePage.scss';
+import { authStore } from '@/stores/auth.store.ts';
+import { resourceApi } from '@/lib/api/resource.api.ts';
+import { updateUserInfo } from '@/pages/users/users.services.ts';
+import { AVATAR_DEFAULT, SCREENS_PATH } from '@/config/constant.ts';
+import type { IAuthState, IUpdateUserInfoRequest } from '@/types/types.ts';
+import '@/pages/users/profile/ProfilePage.scss';
 
 const getRoleBadgeClass = (role: string) => {
   if (role === 'ADMIN') return 'role-admin';

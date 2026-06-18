@@ -128,11 +128,8 @@ const CoursesList = () => {
             {courses.map((course: ICourseItem) => (
               <div key={course.id} className="grid grid-cols-24 gap-4 courses-item cursor-pointer" onClick={() => navigate(SCREENS_PATH.COURSE_PREVIEW(course.id))}>
                 <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 courses-item-full-name flex items-center cursor-pointer">
-                  <div
-                    className="courses-item-avatar"
-                    style={{ backgroundImage: `url(${course.teacher.avatarUrl || AVATAR_DEFAULT})` }}
-                    title={course.teacher.fullName}
-                  />
+                  <img className="img-fluid" src={course.teacher.avatarUrl || AVATAR_DEFAULT} alt={course.teacher.fullName} />
+
                   <span className="ml-2!">{course.teacher.fullName}</span>
                 </div>
                 <div className="col-span-7 md:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer">
