@@ -63,30 +63,6 @@ const UpdateUserModal = ({
 
         <div className="ccp-modal-body">
           <div className="can-field">
-            <label className="form-label can-label">Role</label>
-            <Dropdown
-              id={form.role}
-              name={form.role}
-              dataSelected={form.role}
-              itemData={ROLE_DATA_FOR_DROPDOWN}
-              setDataSelected={val => setForm({ ...form, role: val as IRole })}
-              hasError={false}
-            />
-          </div>
-
-          <div className="can-field">
-            <label className="form-label can-label">Status</label>
-            <Dropdown
-              id={form.status}
-              name={form.status}
-              dataSelected={form.status}
-              itemData={USER_STATUS_DATA_FOR_DROPDOWN}
-              setDataSelected={val => setForm({ ...form, status: val as IUserStatus })}
-              hasError={false}
-            />
-          </div>
-
-          <div className="can-field">
             <label className="form-label can-label">Email</label>
             <input type="text" className="form-control" value={user.email} disabled />
           </div>
@@ -108,6 +84,31 @@ const UpdateUserModal = ({
               onChange={e => setForm({ ...form, fullName: e.target.value })}
               maxLength={255}
               autoFocus
+            />
+          </div>
+          <div className="can-field">
+            <label className="form-label can-label">Role</label>
+            <Dropdown
+              id={form.role}
+              name={form.role}
+              dataSelected={form.role}
+              itemData={ROLE_DATA_FOR_DROPDOWN}
+              setDataSelected={val => setForm({ ...form, role: val as IRole })}
+              hasError={false}
+              portal
+            />
+          </div>
+
+          <div className="can-field">
+            <label className="form-label can-label">Status</label>
+            <Dropdown
+              id={form.status}
+              name={form.status}
+              dataSelected={form.status}
+              itemData={USER_STATUS_DATA_FOR_DROPDOWN}
+              setDataSelected={val => setForm({ ...form, status: val as IUserStatus })}
+              hasError={false}
+              portal
             />
           </div>
           {error && <div className="ccp-upload-error">{error}</div>}
