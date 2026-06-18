@@ -3,7 +3,7 @@ import { useDetectOutsideClick } from 'src/components/useDetectOutsideClick';
 import { authStore } from '@/stores/auth.store.ts';
 import { clearAllDataWhenLogout } from '@/layouts/header/header-content/userProfile.services';
 import type { IAuthState } from '@/types/types.ts';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {
   SCREENS_PATH,
   AVATAR_DEFAULT
@@ -11,6 +11,7 @@ import {
 
 const UserProfile = () => {
   const { ref, isOpen, setIsOpen } = useDetectOutsideClick(false);
+  const navigate = useNavigate();
 
   const user = authStore((state: IAuthState) => state.user);
 
@@ -34,7 +35,7 @@ const UserProfile = () => {
           <div className="dropdown-header bg-linear-gradient-primary flex items-center justify-between px-[1.25rem]! py-[1rem]!">
             <div className="mb-1 flex items-center">
               <div className="shrink-0">
-                <img src={user.avatarUrl || AVATAR_DEFAULT} alt="user-image" className="rounded-full" width={40} height={40} />
+                <img src={user.avatarUrl || AVATAR_DEFAULT} alt="img-fluid" className="rounded-full" />
               </div>
               <div className="ms-3 grow">
                 <h6 className="mb-1 text-white">{user.fullName}</h6>
@@ -44,6 +45,17 @@ const UserProfile = () => {
           </div>
           <div className="dropdown-body px-[1.25rem]! py-[1rem]!">
             <SimpleBarScroll className="profile-notification-scroll position-relative" style={{ maxHeight: 'calc(100vh - 225px)' }}>
+              {(user.role === 'ADMIN' || user.role === 'TEACHER') && (
+                <div
+                  className="dropdown-item cursor-pointer"
+                  onClick={() => { setIsOpen(false); navigate(SCREENS_PATH.USER_PROFILE); }}
+                >
+                  <span>
+                    <i className="fa-thin fa-user-pen me-2 align-middle" />
+                    <span>Edit Profile</span>
+                  </span>
+                </div>
+              )}
               <div className="dropdown-item cursor-pointer">
                 <span>
                   <i className="fa-thin fa-gear me-2 align-middle" />

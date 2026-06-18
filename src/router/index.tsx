@@ -44,6 +44,9 @@ const router = createBrowserRouter([
       }, {
         path: 'users',
         lazy: () => import('@/pages/users/UsersList')
+      }, {
+        path: 'profile',
+        lazy: () => import('@/pages/profile/ProfilePage')
       }
     ]
   }, {

@@ -387,3 +387,9 @@ export interface IUserDetail {
   user: IUser,
   recentEnrollments: IRecentEnrollment[]
 }
+
+export interface IUpdateUserInfoRequest {
+  fullName?: string;
+  phone?: string;
+  avatarUrl?: string;
+}

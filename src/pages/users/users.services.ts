@@ -3,7 +3,8 @@ import type {
   IUserDetail,
   INewTeacher,
   IPagination,
-  IPageResponse
+  IPageResponse,
+  IUpdateUserInfoRequest
 } from '@/types/types';
 import { usersApi } from '@/lib/api/users.api';
 
@@ -17,5 +18,8 @@ export const getUserDetail: (userId: number) => Promise<IUserDetail> = (userId: 
 export const createTeacher = (data: INewTeacher): Promise<IUser> => usersApi.createNewTeacher(data).then(res => res.data);
 
 export const updateTeacher = (userId: number, data: IUser): Promise<IUser> => usersApi.updateTeacher(userId, data).then(res => res.data);
+
+export const updateUserInfo = (userId: number, data: IUpdateUserInfoRequest): Promise<IUser> =>
+  usersApi.updateUserInfo(userId, data).then(res => res.data);
 
 export const deleteTeacher = (userId: number): Promise<any> => usersApi.deleteTeacher(userId);

@@ -4,6 +4,7 @@ import favicon from '@/assets/logo/favicon.svg';
 import type { IDropdownOption } from '@/types/types';
 
 export const SCREENS_PATH = {
+  USER_PROFILE: '/profile',
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
@@ -110,6 +111,7 @@ export const API_URL = {
   ADMIN_UPDATE_USER: (userId: number) => `/admin/users/${userId}`,
   ADMIN_DELETE_USER: (userId: number) => `/admin/users/${userId}`,
   ADMIN_GET_USER_DETAIL: (userId: number) => `/admin/users/${userId}`,
+  ADMIN_UPDATE_USER_INFO: (userId: number) => `/admin/users/info/${userId}`,
 
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
