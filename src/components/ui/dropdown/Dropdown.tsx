@@ -1,4 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  size,
+  useClick,
+  useDismiss,
+  useInteractions,
+  FloatingPortal
+} from '@floating-ui/react';
 import { useDetectOutsideClick } from '@/components/useDetectOutsideClick';
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import '@/components/ui/dropdown/Dropdown.scss';
@@ -12,7 +24,8 @@ export const Dropdown = ({
   id,
   name,
   onBlur,
-  hasError
+  hasError,
+  portal = false
 }: {
   dataSelected: string | null;
   setDataSelected: (dataSelected: any) => void;
@@ -21,11 +34,43 @@ export const Dropdown = ({
   name?: string;
   onBlur?: () => void;
   hasError?: boolean;
+  portal?: boolean;
 }) => {
-  const { ref, isOpen, setIsOpen } = useDetectOutsideClick<HTMLDivElement>(false);
+  /* Legacy path (non-portal): keeps the exact original behaviour */
+  const { ref, isOpen: legacyOpen, setIsOpen: setLegacyOpen } = useDetectOutsideClick<HTMLDivElement>(false);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+  /* Portal path: floating-ui handles position, resize, scroll, flip & shift */
+  const [floatingOpen, setFloatingOpen] = useState(false);
+  const {
+    refs: { setReference, setFloating },
+    floatingStyles,
+    context
+  } = useFloating({
+    open: floatingOpen,
+    onOpenChange: setFloatingOpen,
+    placement: 'bottom-start',
+    middleware: [
+      offset(4),
+      flip(),
+      shift({ padding: 8 }),
+      size({
+        apply({ rects, elements }) {
+          // Match the menu width to the trigger so it lines up like the inline version
+          elements.floating.style.width = `${rects.reference.width}px`;
+        }
+      })
+    ],
+    whileElementsMounted: autoUpdate
+  });
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
+
+  const isOpen = portal ? floatingOpen : legacyOpen;
+
+  const closeDropdown = () => {
+    if (portal) setFloatingOpen(false);
+    else setLegacyOpen(false);
   };
 
   const getItemDataByValue = useMemo<IDropdownOption | undefined>(
@@ -33,9 +78,32 @@ export const Dropdown = ({
     [itemData, dataSelected]
   );
 
+  const menu = (
+    <div
+      className="dropdown-menu dropdown-menu-end pc-h-dropdown overflow-hidden p-2"
+      style={portal ? { position: 'static', width: '100%', margin: 0 } : undefined}
+    >
+      <div className="dropdown-body">
+        <SimpleBarScroll className="profile-notification-scroll position-relative" style={{ maxHeight: 'calc(100vh - 225px)' }}>
+          {itemData.map((each: IDropdownOption) => (
+            <div
+              className={`dropdown-item cursor-pointer ${each.className ?? ''} ${dataSelected === each.value ? 'active' : ''}`}
+              onClick={() => {
+                setDataSelected(each.value);
+                closeDropdown();
+              }} key={each.value}
+            >
+              {each && each.icon ? <i className={`fa-regular ${each.icon} me-2 align-middle`} /> : null}
+              <span>{each.label}</span>
+            </div>
+          ))}
+        </SimpleBarScroll>
+      </div>
+    </div>
+  );
+
   return (
     <div className={`dropdown-control-wrap dropdown ${isOpen ? 'drp-show' : ''}`} ref={ref}>
-      {/* Hidden input so that <label>'s htmlFor correctly points to this field */}
       {(id || name) && (
         <input
           type="hidden"
@@ -46,11 +114,13 @@ export const Dropdown = ({
         />
       )}
       <div
+        ref={portal ? setReference : undefined}
         className={`form-control cursor-pointer dropdown-toggle arrow-none me-0 ${getItemDataByValue?.className ?? ''} ${hasError ? 'error' : ''}`}
         data-pc-toggle="dropdown" role="button"
-        onClick={toggleDropdown}
-        onBlur={onBlur}
         tabIndex={0}
+        {...(portal
+          ? getReferenceProps({ onBlur })
+          : { onClick: () => setLegacyOpen(!legacyOpen), onBlur })}
       >
         <div className="flex justify-between items-center">
           <span className="dropdown-selected-text-content">
@@ -62,26 +132,25 @@ export const Dropdown = ({
           </span>
         </div>
       </div>
+
       {isOpen && (
-        <div className="dropdown-menu dropdown-menu-end pc-h-dropdown overflow-hidden p-2">
-          <div className="dropdown-body">
-            <SimpleBarScroll className="profile-notification-scroll position-relative" style={{ maxHeight: 'calc(100vh - 225px)' }}>
-              {itemData.map((each: IDropdownOption) => (
-                <div
-                  className={`dropdown-item cursor-pointer ${each.className ?? ''} ${dataSelected === each.value ? 'active' : ''}`}
-                  onClick={() => {
-                    setDataSelected(each.value);
-                    toggleDropdown();
-                  }} key={each.value}
-                >
-                  {each && each.icon ? <i className={`fa-regular ${each.icon} me-2 align-middle`} /> : null}
-                  <span>{each.label}</span>
-                </div>
-              ))}
-            </SimpleBarScroll>
-          </div>
-        </div>
+        portal ? (
+          <FloatingPortal>
+            {/* Re-wrap in .dropdown-control-wrap so the nested SCSS (colors, layout) still applies */}
+            <div
+              className="dropdown-control-wrap dropdown drp-show"
+              ref={setFloating}
+              style={{ ...floatingStyles, zIndex: 1100 }}
+              {...getFloatingProps()}
+            >
+              {menu}
+            </div>
+          </FloatingPortal>
+        ) : (
+          menu
+        )
       )}
+
       {getItemDataByValue &&
         <div className="can-status-preview text-right">
           <span className={`can-status-badge can-status-badge--${(getItemDataByValue.value as ICourseStatus).toLowerCase()}`}>

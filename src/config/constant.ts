@@ -212,3 +212,36 @@ export const STATUS_DATA_FOR_DROPDOWN: IDropdownOption[] = [
     className: 'dropdown-item-status archived'
   }
 ];
+
+export const ROLE_DATA_FOR_DROPDOWN: IDropdownOption[] = [
+  {
+    icon: 'fa-regular fa-person-chalkboard',
+    label: ROLES.STUDENT,
+    value: ROLES.STUDENT,
+    className: 'dropdown-item-status student'
+  }, {
+    icon: 'fa-regular fa-person-chalkboard',
+    label: ROLES.TEACHER,
+    value: ROLES.TEACHER,
+    className: 'dropdown-item-status teacher'
+  }, {
+    icon: 'fa-regular fa-person-chalkboard',
+    label: ROLES.ADMIN,
+    value: ROLES.ADMIN,
+    className: 'dropdown-item-status admin'
+  }
+];
+
+export const USER_STATUS_DATA_FOR_DROPDOWN: IDropdownOption[] = [
+  {
+    icon: 'fa-regular fa-check',
+    label: USER_STATUS.ACTIVE,
+    value: USER_STATUS.ACTIVE,
+    className: 'dropdown-item-status active'
+  }, {
+    icon: 'fa-regular fa-ban',
+    label: USER_STATUS.BLOCKED,
+    value: USER_STATUS.BLOCKED,
+    className: 'dropdown-item-status blocked'
+  }
+];

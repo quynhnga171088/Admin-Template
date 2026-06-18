@@ -2,8 +2,56 @@
 
 .dropdown-control-wrap {
 
-  .dropdown-item-status.published {
+  .dropdown-item-status {
     border: none;
+  }
+
+  .dropdown-item-status.active {
+    background: $active-bg;
+    color: $active-color;
+  }
+
+  .dropdown-item-status.active:hover {
+    background: $active-bg-hover;
+  }
+
+  .dropdown-item-status.blocked {
+    background: $blocked-bg;
+    color: $blocked-color;
+  }
+
+  .dropdown-item-status.blocked:hover {
+    background: $blocked-bg-hover;
+  }
+
+  .dropdown-item-status.admin {
+    background: $admin-bg;
+    color: $admin-color;
+  }
+
+  .dropdown-item-status.admin:hover {
+    background: $admin-bg-hover;
+  }
+
+  .dropdown-item-status.teacher {
+    background: $teacher-bg;
+    color: $teacher-color;
+  }
+
+  .dropdown-item-status.teacher:hover {
+    background: $teacher-bg-hover;
+  }
+
+  .dropdown-item-status.student {
+    background: $student-bg;
+    color: $student-color;
+  }
+
+  .dropdown-item-status.student:hover {
+    background: $student-bg-hover;
+  }
+
+  .dropdown-item-status.published {
     background: $published-bg;
     color: $published-color;
   }
@@ -13,7 +61,6 @@
   }
 
   .dropdown-item-status.draft {
-    border: none;
     background: $draft-bg;
     color: $draft-colort;
   }
@@ -23,7 +70,6 @@
   }
 
   .dropdown-item-status.archived {
-    border: none;
     background: $archived-bg;
     color: $archived-color;
   }

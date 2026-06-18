@@ -16,6 +16,7 @@
     "node": ">=24.0.0"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.19",
     "@tanstack/query-sync-storage-persister": "^5.100.10",
     "@tanstack/react-form": "^1.32.0",
     "@tanstack/react-query": "5.100.10",
