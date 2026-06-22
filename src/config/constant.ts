@@ -95,6 +95,7 @@ export const LOGO_WHITE = logoWhite;
 export const FAVICON = favicon;
 
 export const API_URL = {
+  VIETQR_BANKS_URL: 'https://api.vietqr.io/v2/banks',
   LOGIN: '/auth/login',
   TEACH_REGISTER: '/auth/teach/register',
   STUDENT_REGISTER: '/auth/register',
@@ -124,7 +125,9 @@ export const API_URL = {
   UPLOAD_VIDEO: '/upload/video',
 
   GET_SETTINGS: '/admin/config',
-  UPDATE_SETTING: (key: string) => `/admin/settings/${key}`,
+  UPDATE_SETTINGS: (key: string) => `/admin/config/${key}`,
+  GET_BANK_INFO: '/admin/config/bank-info',
+  UPDATE_BANK_INFO: '/admin/config/bank-info',
 
   /* chapters */
   CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters`,

@@ -78,6 +78,16 @@
     background: $archived-bg-hover;
   }
 
+  .dropdown-item-status.default {
+    background: white;
+    color: $color-gray-600;
+    border: 1px solid $color-gray-300;
+  }
+
+  .dropdown-item-status.default:hover {
+    background: $color-gray-100;
+  }
+
   .dropdown-menu {
     left: 0;
   }

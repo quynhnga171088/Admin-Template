@@ -14,8 +14,8 @@ import {
 import { useDetectOutsideClick } from '@/components/useDetectOutsideClick';
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import '@/components/ui/dropdown/Dropdown.scss';
-import type { ICourseStatus, IDropdownOption } from '@/types/types.ts';
-import { STATE } from '@/config/constant.ts';
+import type { ICourseStatus, IDropdownOption } from '@/types/types';
+import { STATE } from '@/config/constant';
 
 export const Dropdown = ({
   dataSelected,
@@ -94,7 +94,8 @@ export const Dropdown = ({
               }} key={each.value}
             >
               {each && each.icon ? <i className={`fa-regular ${each.icon} me-2 align-middle`} /> : null}
-              <span>{each.label}</span>
+              {each && each.imgUrl ? <img src={each.imgUrl} alt={each.label} style={{ height: '25px' }}/> : null}
+              <span className="truncate">{each.label}</span>
             </div>
           ))}
         </SimpleBarScroll>
@@ -104,28 +105,20 @@ export const Dropdown = ({
 
   return (
     <div className={`dropdown-control-wrap dropdown ${isOpen ? 'drp-show' : ''}`} ref={ref}>
-      {(id || name) && (
-        <input
-          type="hidden"
-          id={id}
-          name={name}
-          value={dataSelected ?? ''}
-          readOnly
-        />
-      )}
+      {(id || name) && <input type="hidden" id={id} name={name} value={dataSelected ?? ''} readOnly />}
       <div
         ref={portal ? setReference : undefined}
         className={`form-control cursor-pointer dropdown-toggle arrow-none me-0 ${getItemDataByValue?.className ?? ''} ${hasError ? 'error' : ''}`}
-        data-pc-toggle="dropdown" role="button"
+        data-pc-toggle="dropdown"
+        role="button"
         tabIndex={0}
-        {...(portal
-          ? getReferenceProps({ onBlur })
-          : { onClick: () => setLegacyOpen(!legacyOpen), onBlur })}
+        {...(portal ? getReferenceProps({ onBlur }) : { onClick: () => setLegacyOpen(!legacyOpen), onBlur })}
       >
         <div className="flex justify-between items-center">
-          <span className="dropdown-selected-text-content">
+          <span className="dropdown-selected-text-content flex">
             {getItemDataByValue && getItemDataByValue.icon ? <i className={`fa-regular ${getItemDataByValue.icon} mr-2!`} /> : null}
-            {getItemDataByValue ? getItemDataByValue.label : 'Select Status'}
+            {getItemDataByValue && getItemDataByValue.imgUrl ? <img src={getItemDataByValue.imgUrl} alt={getItemDataByValue.label} style={{ height: '25px' }} /> : null}
+            {getItemDataByValue ? <div className="truncate">{getItemDataByValue.label}</div> : 'Select Status'}
           </span>
           <span>
             <i className={`fa-regular ${isOpen ? 'fa-angle-up' : 'fa-angle-down'}`} />
@@ -133,32 +126,27 @@ export const Dropdown = ({
         </div>
       </div>
 
-      {isOpen && (
-        portal ? (
+      {isOpen &&
+        (portal ? (
           <FloatingPortal>
             {/* Re-wrap in .dropdown-control-wrap so the nested SCSS (colors, layout) still applies */}
-            <div
-              className="dropdown-control-wrap dropdown drp-show"
-              ref={setFloating}
-              style={{ ...floatingStyles, zIndex: 1100 }}
-              {...getFloatingProps()}
-            >
+            <div className="dropdown-control-wrap dropdown drp-show" ref={setFloating} style={{ ...floatingStyles, zIndex: 1100 }} {...getFloatingProps()}>
               {menu}
             </div>
           </FloatingPortal>
         ) : (
           menu
-        )
-      )}
+        ))}
 
-      {getItemDataByValue &&
+      {getItemDataByValue && (
         <div className="can-status-preview text-right">
           <span className={`can-status-badge can-status-badge--${(getItemDataByValue.value as ICourseStatus).toLowerCase()}`}>
             {getItemDataByValue.value === STATE.DRAFT && 'Draft'}
             {getItemDataByValue.value === STATE.PUBLISHED && 'Published'}
             {getItemDataByValue.value === STATE.ARCHIVED && 'Archived'}
           </span>
-        </div>}
+        </div>
+      )}
     </div>
   );
 };

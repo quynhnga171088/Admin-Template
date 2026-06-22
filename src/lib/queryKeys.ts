@@ -47,5 +47,9 @@ export const queryKeys = {
   settings: {
     all: ['settings'] as const,
     list: () => [...queryKeys.settings.all, 'list'] as const
+  },
+  bankInfo: {
+    all: ['bankInfo'] as const,
+    detail: () => [...queryKeys.bankInfo.all, 'detail'] as const
   }
 } as const;

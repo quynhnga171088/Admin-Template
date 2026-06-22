@@ -339,6 +339,7 @@ export interface IStudentReport {
 /* For Dropdown controls */
 export interface IDropdownOption {
   icon?: string;
+  imgUrl?: string;
   label: string;
   value: string | number;
   className?: string | null | undefined
@@ -408,4 +409,35 @@ export interface ISetting {
 
 export interface ISettingUpdateRequest {
   value: string;
+}
+
+export interface IBankInfo {
+  id: number
+  bankName: string
+  accountNumber: string
+  accountName: string
+  branch?: string
+  transferTemplate?: string
+  qrImageUrl?: string
+  updatedAt: string
+}
+
+export interface IUpdateBankInfoRequest {
+  bankName: string
+  accountNumber: string
+  accountName: string
+  branch?: string
+  transferTemplate?: string
+  qrImageUrl?: string
+}
+
+export interface IVietQRBank {
+  id: number
+  name: string
+  code: string
+  bin: string
+  shortName: string
+  logo: string
+  transferSupported: number
+  lookupSupported: number
 }
