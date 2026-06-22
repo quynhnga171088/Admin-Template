@@ -70,11 +70,17 @@ const mainFunctions = {
         }
       ]
     }, {
-      id: 'Users Management',
+      id: 'users-management',
       title: 'Users Management',
       type: 'item',
       icon: 'fa-regular fa-users',
       url: '/users'
+    }, {
+      id: 'settings',
+      title: 'System Configuration',
+      type: 'item',
+      icon: 'fa-regular fa-gear',
+      url: SCREENS_PATH_FOR_SIDEBAR.SETTINGS
     }
   ]
 };

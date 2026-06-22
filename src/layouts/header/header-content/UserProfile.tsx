@@ -1,9 +1,10 @@
+import { Navigate, useNavigate, Link } from 'react-router-dom';
+
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import { useDetectOutsideClick } from 'src/components/useDetectOutsideClick';
 import { authStore } from '@/stores/auth.store';
 import { clearAllDataWhenLogout } from '@/layouts/header/header-content/userProfile.services';
 import type { IAuthState } from '@/types/types';
-import { Navigate, useNavigate } from 'react-router-dom';
 import {
   SCREENS_PATH,
   AVATAR_DEFAULT,
@@ -57,24 +58,21 @@ const UserProfile = () => {
                   </span>
                 </div>
               )}
-              <div className="dropdown-item cursor-pointer">
-                <span>
-                  <i className="fa-thin fa-gear me-2 align-middle" />
-                  <span>Settings</span>
-                </span>
-              </div>
-              <div className="dropdown-item cursor-pointer">
-                <span>
-                  <i className="fa-thin fa-share-all me-2 align-middle" />
-                  <span>Share</span>
-                </span>
-              </div>
-              <div className="dropdown-item cursor-pointer">
-                <span>
-                  <i className="fa-thin fa-lock me-2 align-middle" />
-                  <span>Change Password</span>
-                </span>
-              </div>
+              {(user.role === ROLES_FOR_ADMIN.ADMIN || user.role === ROLES_FOR_ADMIN.TEACHER) && (
+                <Link className="dropdown-item" onClick={() => setIsOpen(false)} to={SCREENS_PATH.CHANGE_PASSWORD}>
+                  <span>
+                    <i className="fa-thin fa-lock me-2 align-middle" />
+                    <span>Change Password</span>
+                  </span>
+                </Link>
+              )}
+              {user.role === ROLES_FOR_ADMIN.ADMIN &&
+                <Link className="dropdown-item" onClick={() => setIsOpen(false)} to={SCREENS_PATH.SETTINGS}>
+                  <span>
+                    <i className="fa-thin fa-gear me-2 align-middle" />
+                    <span>Settings</span>
+                  </span>
+                </Link>}
               <div className="my-3 grid">
                 <button className="btn btn-primary flex items-center justify-center" onClick={() => clearAllDataWhenLogout()}>
                   <i className="fa-thin fa-arrow-left-from-arc" /> Logout

@@ -393,3 +393,19 @@ export interface IUpdateUserInfoRequest {
   phone?: string;
   avatarUrl?: string;
 }
+
+export interface IChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ISetting {
+  key: string;
+  value: string;
+  description: string;
+}
+
+export interface ISettingUpdateRequest {
+  value: string;
+}

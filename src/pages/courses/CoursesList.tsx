@@ -8,9 +8,10 @@ import {
   deleteCourse
 } from './courses.services';
 import type {
+  IAuthState,
   ICourseItem,
   IPagination,
-  IUserState
+  IUserState,
 } from '@/types/types';
 import {
   getPagination,
@@ -20,13 +21,15 @@ import {
 import { queryKeys } from '@/lib/queryKeys';
 import '@/pages/courses/CoursesList.scss';
 import {
+  COURSE_DEFAULT_IMAGE,
   DATE_TIME_FORMAT,
   AVATAR_DEFAULT,
   SCREENS_PATH,
-  QUERY_CONFIG
+  QUERY_CONFIG, ROLES_FOR_ADMIN,
 } from '@/config/constant';
 import Pagination from '@/components/ui/Pagination';
 import { userStore } from '@/stores/user.store';
+import { authStore } from '@/stores/auth.store';
 import { modalStore } from '@/stores/modal.store';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -35,6 +38,7 @@ const CoursesList = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const user = authStore((state: IAuthState) => state.user);
   const search = userStore((state: IUserState) => state.search);
   const setAction = userStore((state: IUserState) => state.setAction);
   const action = userStore((state: IUserState) => state.action);
@@ -136,7 +140,7 @@ const CoursesList = () => {
                   <div
                     className="courses-item-bg-img"
                     style={{
-                      backgroundImage: `url(${course.thumbnailUrl || '/public/images/image-default-course-item.jpg'})`
+                      backgroundImage: `url(${course.thumbnailUrl || COURSE_DEFAULT_IMAGE})`
                     }}
                   />
                 </div>
@@ -167,9 +171,11 @@ const CoursesList = () => {
                   <Link className="btn btn-light-warning btn-icon btn-sm ml-0.5! no-underline" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>
                     <i className="fa-regular fa-pen text-sm" aria-hidden="true" />
                   </Link>
-                  <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" title="Delete" onClick={() => confirmDeleteAction(course)}>
-                    <i className="fa-regular fa-trash text-sm" aria-hidden="true" />
-                  </button>
+                  {user && user.role && user.role === ROLES_FOR_ADMIN.ADMIN ?
+                    <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" title="Delete" onClick={() => confirmDeleteAction(course)}>
+                      <i className="fa-regular fa-trash text-sm" aria-hidden="true" />
+                    </button>
+                    : ''}
                 </div>
               </div>
             ))}

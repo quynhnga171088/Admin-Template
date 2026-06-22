@@ -5,6 +5,8 @@ import type { IDropdownOption } from '@/types/types';
 
 export const SCREENS_PATH = {
   USER_PROFILE: '/profile',
+  CHANGE_PASSWORD: '/change-password',
+  SETTINGS: '/settings',
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
@@ -37,7 +39,8 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
   COURSE_ADD_NEW: '/courses/add',
   COURSE_CHAPTERS: '/chapters',
   COURSE_REGISTRATION: '/course-registration',
-  COURSE_PREVIEW: '/preview'
+  COURSE_PREVIEW: '/preview',
+  SETTINGS: '/settings'
 };
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -112,12 +115,16 @@ export const API_URL = {
   ADMIN_DELETE_USER: (userId: number) => `/admin/users/${userId}`,
   ADMIN_GET_USER_DETAIL: (userId: number) => `/admin/users/${userId}`,
   ADMIN_UPDATE_USER_INFO: (userId: number) => `/admin/users/info/${userId}`,
+  ADMIN_CHANGE_PASSWORD: '/admin/users/password',
 
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
   UPLOAD_IMAGE: '/upload/image',
   UPLOAD_VIDEO: '/upload/video',
+
+  GET_SETTINGS: '/admin/config',
+  UPDATE_SETTING: (key: string) => `/admin/settings/${key}`,
 
   /* chapters */
   CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters`,

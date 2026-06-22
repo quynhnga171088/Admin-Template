@@ -5,7 +5,8 @@ import type {
   IUserDetail,
   IPagination,
   IPageResponse,
-  IUpdateUserInfoRequest
+  IUpdateUserInfoRequest,
+  IChangePasswordRequest
 } from '@/types/types';
 import { API_URL } from '@/config/constant';
 
@@ -20,6 +21,9 @@ export const usersApi = {
 
   updateUserInfo: (userId: number, data: IUpdateUserInfoRequest) =>
     axiosInstance.patch<IUser>(API_URL.ADMIN_UPDATE_USER_INFO(userId), data),
+
+  changePassword: (data: IChangePasswordRequest) =>
+    axiosInstance.patch<void>(API_URL.ADMIN_CHANGE_PASSWORD, data),
 
   deleteTeacher: (userId: number) => axiosInstance.delete(API_URL.ADMIN_DELETE_USER(userId))
 };

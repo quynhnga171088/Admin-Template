@@ -47,6 +47,12 @@ const router = createBrowserRouter([
       }, {
         path: 'profile',
         lazy: () => import('@/pages/users/profile/ProfilePage')
+      }, {
+        path: 'change-password',
+        lazy: () => import('@/pages/users/profile/ChangePasswordPage')
+      }, {
+        path: 'settings',
+        lazy: () => import('@/pages/settings/SettingsPage')
       }
     ]
   }, {
