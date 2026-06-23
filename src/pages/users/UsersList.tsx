@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   AVATAR_DEFAULT,
   QUERY_CONFIG,
-  DATE_FORMAT, DATE_TIME_FORMAT,
+  DATE_TIME_FORMAT
 } from '@/config/constant';
 import type {
   IUser,
