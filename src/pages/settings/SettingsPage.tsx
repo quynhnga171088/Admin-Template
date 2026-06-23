@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+
 import { useSettingsQuery, useUpdateSettingMutation } from '@/lib/queries/settings.queries';
 import { useBankInfoQuery, useUpdateBankInfoMutation, useVietQRBanksQuery } from '@/lib/queries/bank.queries';
 import { buildVietQRUrl } from '@/lib/api/bank.api';
 import type { IBankInfo, IDropdownOption, ISetting, IUpdateBankInfoRequest, IVietQRBank } from '@/types/types';
 import '@/pages/settings/SettingsPage.scss';
-import { modalStore } from '@/stores/modal.store.ts';
-import { Dropdown } from '@/components/ui/dropdown/Dropdown.tsx';
+import { modalStore } from '@/stores/modal.store';
+import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
 /* Setting Item */
 interface SettingItemProps {
@@ -64,6 +66,25 @@ const BankInfoCard = () => {
   const { data: vietQRBanks = EMPTY_BANKS, isLoading: loadingBanks } = useVietQRBanksQuery();
   const { mutate: updateBankInfo, isPending } = useUpdateBankInfoMutation();
 
+  const { setMessage, setTitle, setOpen, setEnableCancelButton, setEnableOkButton } = modalStore(
+    useShallow(state => ({
+      setMessage: state.setMessage,
+      setTitle: state.setTitle,
+      setCallback: state.setCallback,
+      setOpen: state.setOpen,
+      setEnableCancelButton: state.setEnableCancelButton,
+      setEnableOkButton: state.setEnableOkButton
+    }))
+  );
+
+  const openInfoModal = useCallback((message: string, title: string) => {
+    setMessage(message);
+    setEnableCancelButton(true);
+    setEnableOkButton(true);
+    setTitle(title);
+    setOpen(true);
+  }, [setMessage, setEnableCancelButton, setEnableOkButton, setTitle, setOpen]);
+
   const [form, setForm] = useState<IUpdateBankInfoRequest>(EMPTY_FORM);
   const [selectedBank, setSelectedBank] = useState<IVietQRBank | null>(null);
   const [savedOk, setSavedOk] = useState(false);
@@ -73,12 +94,13 @@ const BankInfoCard = () => {
   /* Auto-clear savedOk banner */
   useEffect(() => {
     if (!savedOk) return;
+    openInfoModal('Save Info Bank Success', 'Confirm Success');
     const timer = setTimeout(() => setSavedOk(false), 3000);
     return () => clearTimeout(timer);
-  }, [savedOk]);
+  }, [openInfoModal, savedOk]);
 
   /* Populate form from fetched data — derived state during render */
-  if (bankInfo !== prevBankInfo) {
+  if (bankInfo !== prevBankInfo || (bankInfo && !form.bankName)) {
     setPrevBankInfo(bankInfo);
     if (bankInfo) {
       setForm({
@@ -93,7 +115,7 @@ const BankInfoCard = () => {
   }
 
   /* Auto-match saved bankName to VietQR bank list — derived state during render */
-  if (vietQRBanks !== prevVietQRBanks || bankInfo !== prevBankInfo) {
+  if (vietQRBanks !== prevVietQRBanks || bankInfo !== prevBankInfo || !selectedBank) {
     setPrevVietQRBanks(vietQRBanks);
     if (vietQRBanks.length && bankInfo?.bankName) {
       const matched = vietQRBanks.find(b => b.shortName.toLowerCase() === bankInfo.bankName.toLowerCase() || b.code.toLowerCase() === bankInfo.bankName.toLowerCase()) ?? null;
@@ -145,103 +167,33 @@ const BankInfoCard = () => {
   };
 
   return (
-    <div className="card bank-info-card">
+    <div className="card bank-info-card mb-0!">
       <div className="card-header">
         <div className="card-header-title">
           <i className="fa-regular fa-building-columns" /> Bank Transfer (VietQR)
         </div>
       </div>
-
       <div className="card-body">
-        {isLoading ? (
+        {isLoading ?
           <div className="bank-loading">
             <i className="fa-regular fa-spinner-third fa-spin" /> Loading...
           </div>
-        ) : (
-          <div className="">
-            <div className="grid grid-cols-12 gap-4 mb-4!">
-              <div className="col-span-12">
-                <label className="bank-label">
-                  Bank <span className="can-required">*</span>
-                </label>
-                <Dropdown dataSelected={selectedBank?.bin ?? ''} itemData={convertDataForDropdown()} setDataSelected={val => handleBankSelect(val)} hasError={false} portal />
-              </div>
-            </div>
-            <div className="grid grid-cols-12 gap-4 mb-4!">
-              <div className="col-span-12 xl:col-span-6">
-                <label className="bank-label">
-                  Account Number <span className="can-required">*</span>
-                </label>
-                <input className="form-control" placeholder="e.g. 1234567890" value={form.accountNumber} onChange={e => set('accountNumber', e.target.value)} />
-              </div>
-              <div className="col-span-12 xl:col-span-6">
-                <label className="bank-label">
-                  Account Name <span className="can-required">*</span>
-                </label>
-                <input className="form-control" placeholder="e.g. NGUYEN VAN A" value={form.accountName} onChange={e => set('accountName', e.target.value)} />
-              </div>
-            </div>
-            <div className="grid grid-cols-12 gap-4 mb-4!">
-              <div className="col-span-12">
-                <label className="bank-label">Branch</label>
-                <input className="form-control" placeholder="e.g. Ho Chi Minh City" value={form.branch} onChange={e => set('branch', e.target.value)} />
-              </div>
-            </div>
-            <div className="grid grid-cols-12 gap-4 mb-4!">
-              <div className="col-span-12">
-                <label className="bank-label">Transfer Description Template</label>
-                <input
-                  className="form-control"
-                  placeholder="e.g. LMS {courseName} - {studentName}"
-                  value={form.transferTemplate}
-                  onChange={e => set('transferTemplate', e.target.value)}
-                />
-                <p className="bank-hint text-right">
-                  Supports placeholders: <code>{'{courseName}'}</code>, <code>{'{studentName}'}</code>
-                </p>
-              </div>
-            </div>
-            {/* ── Left: form ── */}
-            <div className="bank-form">
-              <div className="bank-field" />
-
-              <div className="bank-actions">
-                {savedOk && (
-                  <span className="bank-saved-badge">
-                    <i className="fa-regular fa-circle-check" /> Saved successfully
-                  </span>
-                )}
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={handleSave}
-                  disabled={isPending || !isDirty || !form.bankName || !form.accountNumber || !form.accountName}
-                >
-                  {isPending ? (
-                    <>
-                      <i className="fa-regular fa-spinner-third fa-spin" /> Saving
-                    </>
-                  ) : (
-                    <>
-                      <i className="fa-regular fa-floppy-disk" /> Save Bank Info
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* ── Right: QR preview ── */}
-            <div className="bank-qr-panel">
+          :
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-12 text-center">
               <p className="bank-label">QR Preview</p>
+            </div>
+            {qrUrl &&
+              <div className="col-span-12 flex justify-center">
+                <img src={qrUrl} alt="VietQR" className="bank-qr-img" />
+              </div>}
+            <div className="col-span-12 flex justify-center">
               {qrUrl ? (
-                <>
-                  <img src={qrUrl} alt="VietQR" className="bank-qr-img" />
-                  <p className="bank-qr-note">
-                    <i className="fa-regular fa-circle-info" /> Dynamic QR powered by VietQR.
-                    <br />
-                    Amount &amp; description will be filled per payment.
-                  </p>
-                </>
+                <p className="bank-qr-note">
+                  <i className="fa-regular fa-circle-info" /> Dynamic QR powered by VietQR.
+                  <br />
+                  Amount &amp; description will be filled per payment.
+                </p>
               ) : (
                 <div className="bank-qr-placeholder">
                   <i className="fa-regular fa-qrcode" />
@@ -249,8 +201,46 @@ const BankInfoCard = () => {
                 </div>
               )}
             </div>
-          </div>
-        )}
+            <div className="col-span-12">
+              <label className="bank-label">
+                Bank <span className="can-required">*</span>
+              </label>
+              <Dropdown dataSelected={selectedBank?.bin ?? ''} itemData={convertDataForDropdown()} setDataSelected={val => handleBankSelect(val)} hasError={false} portal />
+            </div>
+            <div className="col-span-12 xl:col-span-6">
+              <label className="bank-label">
+                Account Number <span className="can-required">*</span>
+              </label>
+              <input className="form-control" placeholder="e.g. 1234567890" value={form.accountNumber} onChange={e => set('accountNumber', e.target.value)} />
+            </div>
+            <div className="col-span-12 xl:col-span-6">
+              <label className="bank-label">
+                Account Name <span className="can-required">*</span>
+              </label>
+              <input className="form-control" placeholder="e.g. NGUYEN VAN A" value={form.accountName} onChange={e => set('accountName', e.target.value)} />
+            </div>
+            <div className="col-span-12">
+              <label className="bank-label">Branch</label>
+              <input className="form-control" placeholder="e.g. Ho Chi Minh City" value={form.branch} onChange={e => set('branch', e.target.value)} />
+            </div>
+            <div className="col-span-12">
+              <label className="bank-label">Transfer Description Template</label>
+              <input
+                className="form-control"
+                placeholder="e.g. LMS {courseName} - {studentName}"
+                value={form.transferTemplate}
+                onChange={e => set('transferTemplate', e.target.value)}
+              />
+              <p className="bank-hint text-right">
+                Supports placeholders: <span className="settings-key-badge">{'{courseName}'}</span>, <span className="settings-key-badge">{'{studentName}'}</span>
+              </p>
+            </div>
+            <div className="col-span-12 text-right">
+              <button className="btn btn-primary" onClick={handleSave} disabled={isPending || !isDirty || !form.bankName || !form.accountNumber || !form.accountName}>
+                <i className={`fa-regular ${isPending ? 'fa-spinner-third fa-spin' : 'fa-floppy-disk'}`} /> {`${isPending ? 'Saving' : 'Save Bank Info'}`}
+              </button>
+            </div>
+          </div>}
       </div>
     </div>
   );
@@ -275,6 +265,9 @@ const SettingsPage = () => {
     <div className="settings-page">
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 xl:col-span-6">
+          <BankInfoCard />
+        </div>
+        <div className="col-span-12 xl:col-span-6">
           <div className="card">
             <div className="card-header">
               <div className="card-header-title">
@@ -288,10 +281,6 @@ const SettingsPage = () => {
               ))}
             </div>
           </div>
-        </div>
-
-        <div className="col-span-12 xl:col-span-6">
-          <BankInfoCard />
         </div>
       </div>
     </div>

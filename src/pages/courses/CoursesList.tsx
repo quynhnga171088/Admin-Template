@@ -107,11 +107,7 @@ const CoursesList = () => {
         <div className="card">
           <div className="card-header flex justify-between items-center">
             <div className="card-header-title">Courses</div>
-            <button
-              type="button"
-              className="btn btn-sm btn-primary ml-auto"
-              onClick={() => navigate(SCREENS_PATH.COURSE_ADD_NEW)}
-            >
+            <button type="button" className="btn btn-sm btn-primary ml-auto" onClick={() => navigate(SCREENS_PATH.COURSE_ADD_NEW)}>
               <i className="fa-regular fa-plus" /> Add Course
             </button>
           </div>
