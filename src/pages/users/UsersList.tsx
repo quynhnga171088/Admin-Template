@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   AVATAR_DEFAULT,
   QUERY_CONFIG,
-  DATE_FORMAT
+  DATE_FORMAT, DATE_TIME_FORMAT,
 } from '@/config/constant';
 import type {
   IUser,
@@ -46,6 +46,7 @@ const UsersList = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const search = userStore((state: IUserState) => state.search);
+  const setSearch = userStore((state: IUserState) => state.setSearch);
 
   const { setEnableCancelButton, setEnableOkButton, setCallback, setMessage, setTitle, setOpen } = modalStore(
     useShallow(state => ({
@@ -127,9 +128,7 @@ const UsersList = () => {
       await createTeacher(data);
       setAddTeacherOpen(false);
       await queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
-      const params = new URLSearchParams(location.search);
-      params.set('page', '0');
-      navigate(`${location.pathname}?${params.toString()}`);
+      setSearch(''); // reset search để user mới tạo hiển thị
       setTitle('Success');
       setMessage('New teacher has been added successfully!');
       setEnableCancelButton(false);
@@ -176,8 +175,8 @@ const UsersList = () => {
                 </div>
                 <div className="col-span-5 md:col-span-5        lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center card-header-title">{getNameByRole(user.role)}</div>
                 <div className="col-span-4 md:col-span-4        lg:col-span-4 xl:col-span-4 2xl:col-span-4 flex items-center cursor-pointer">{getStatusUser(user.status)}</div>
-                <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-3 2xl:col-span-3 items-center cursor-pointer">
-                  {user.createdAt && dayjs(user.createdAt).format(DATE_FORMAT)}
+                <div className="hidden lg:flex xl:flex 2xl:flex lg:col-span-4 xl:col-span-3 2xl:col-span-3 items-center cursor-pointer truncate">
+                  {user.createdAt && dayjs(user.createdAt).format(DATE_TIME_FORMAT)}
                 </div>
                 <div className="hidden         xl:flex 2xl:flex               xl:col-span-3 2xl:col-span-3 items-center cursor-pointer">
                   {user.phone ? user.phone : 'N/A'}
