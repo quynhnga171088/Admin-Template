@@ -2,17 +2,17 @@ import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import './MainLayout.scss';
-import Sidebar from 'src/layouts/sidebar/sidebar.tsx';
-import Header from '@/layouts/header/Header.tsx';
-import Footer from '@/layouts/footer/Footer.tsx';
-import Breadcrumbs from '@/layouts/breadcrumbs/Breadcrumbs.tsx';
-import ModalWrapper from '@/components/ui/ModalWrapper.tsx';
-import ModalProcessing from '@/components/ui/ModalProcessing.tsx';
-import { authStore } from '@/stores/auth.store.ts';
+import Sidebar from 'src/layouts/sidebar/sidebar';
+import Header from '@/layouts/header/Header';
+import Footer from '@/layouts/footer/Footer';
+import Breadcrumbs from '@/layouts/breadcrumbs/Breadcrumbs';
+import ModalWrapper from '@/components/ui/ModalWrapper';
+import ModalProcessing from '@/components/ui/ModalProcessing';
+import { authStore } from '@/stores/auth.store';
 import {
   ROLES_FOR_ADMIN,
   SCREENS_PATH
-} from '@/config/constant.ts';
+} from '@/config/constant';
 
 const MainLayout = () => {
   const isAuthenticated = authStore(state => state.isAuthenticated);
