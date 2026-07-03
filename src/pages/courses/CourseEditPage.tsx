@@ -21,24 +21,24 @@ import '@/pages/courses/CourseAddNew.scss';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 
 const CourseEditPage = () => {
-  const navigate   = useNavigate();
-  const { id }     = useParams<{ id: string }>();
-  const courseId   = Number(id);
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const courseId = Number(id);
 
   const setProcessing = modalStore((s: IModalState) => s.setProcessing);
-  const setOpen       = modalStore((s: IModalState) => s.setOpen);
-  const setTitle      = modalStore((s: IModalState) => s.setTitle);
-  const setMessage    = modalStore((s: IModalState) => s.setMessage);
-  const setCallback   = modalStore((s: IModalState) => s.setCallback);
+  const setOpen = modalStore((s: IModalState) => s.setOpen);
+  const setTitle = modalStore((s: IModalState) => s.setTitle);
+  const setMessage = modalStore((s: IModalState) => s.setMessage);
+  const setCallback = modalStore((s: IModalState) => s.setCallback);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const isIdInvalid  = !courseId || isNaN(courseId);
+  const isIdInvalid = !courseId || isNaN(courseId);
 
   /* Course detail */
   const { data: courseDetail, isLoading, isError } = useQuery({
     queryKey: queryKeys.courses.detail(courseId),
-    queryFn:  () => coursesApi.detail(courseId).then(r => r.data),
-    enabled:  !isIdInvalid
+    queryFn: () => coursesApi.detail(courseId).then(r => r.data),
+    enabled: !isIdInvalid
   });
 
   /* TanStack Form */
@@ -53,37 +53,37 @@ const CourseEditPage = () => {
     }
   });
 
-  /* Track selected category for cascading level select */
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  /* Track selected category for cascading level select.
+   * undefined = not yet overridden by user → fall back to courseDetail value */
+  const [categoryIdOverride, setCategoryIdOverride] = useState<number | null | undefined>(undefined);
+  const selectedCategoryId = categoryIdOverride !== undefined ? categoryIdOverride : (courseDetail?.categoryId ?? null);
 
   /* All categories */
   const { data: categories = [] } = useQuery({
     queryKey: queryKeys.categories.list(),
-    queryFn:  () => categoriesApi.getAll().then(r => r.data)
+    queryFn: () => categoriesApi.getAll().then(r => r.data)
   });
 
   /* Levels for selected category */
   const { data: levels = [], isFetching: levelsLoading } = useQuery({
     queryKey: queryKeys.levels.byCategory(selectedCategoryId as number),
-    queryFn:  () => levelsApi.getByCategory(selectedCategoryId as number).then(r => r.data),
-    enabled:  !!selectedCategoryId
+    queryFn: () => levelsApi.getByCategory(selectedCategoryId as number).then(r => r.data),
+    enabled: !!selectedCategoryId
   });
 
   /* Pre-fill form when courseDetail arrives */
   useEffect(() => {
     if (!courseDetail) return;
     form.reset({
-      title:            courseDetail.title ?? '',
+      title: courseDetail.title ?? '',
       shortDescription: courseDetail.shortDescription ?? '',
-      description:      courseDetail.description ?? '',
-      thumbnailUrl:     courseDetail.thumbnailUrl ?? '',
-      price:            courseDetail.price ?? 0,
-      status:           (courseDetail.status ?? STATE.DRAFT) as CourseFormData['status'],
-      categoryId:       courseDetail.categoryId ?? null,
-      levelId:          courseDetail.levelId ?? null
+      description: courseDetail.description ?? '',
+      thumbnailUrl: courseDetail.thumbnailUrl ?? '',
+      price: courseDetail.price ?? 0,
+      status: (courseDetail.status ?? STATE.DRAFT) as CourseFormData['status'],
+      categoryId: (courseDetail.categoryId ?? null) as unknown as number,
+      levelId: (courseDetail.levelId ?? null) as unknown as number
     });
-    // Sync local state so level select loads automatically
-    setSelectedCategoryId(courseDetail.categoryId ?? null);
   }, [courseDetail, form]);
 
   useEffect(() => { setProcessing(isLoading); }, [isLoading, setProcessing]);
@@ -276,10 +276,10 @@ const CourseEditPage = () => {
                         value={field.state.value ?? ''}
                         onChange={e => {
                           const val = e.target.value ? Number(e.target.value) : null;
-                          field.handleChange(val);
-                          setSelectedCategoryId(val);
-                          // Reset level when category changes
-                          form.setFieldValue('levelId', null);
+                          field.handleChange(val as number);
+                          setCategoryIdOverride(val);
+                          /* Reset level when category changes */
+                          form.setFieldValue('levelId', null as unknown as number);
                         }}
                         onBlur={field.handleBlur}
                       >
@@ -302,7 +302,7 @@ const CourseEditPage = () => {
                       <select id={field.name} name={field.name}
                         className={`form-control form-select ${field.state.meta.errors.length ? 'error' : ''}`}
                         value={field.state.value ?? ''}
-                        onChange={e => field.handleChange(e.target.value ? Number(e.target.value) : null)}
+                        onChange={e => field.handleChange(e.target.value ? Number(e.target.value) : null as unknown as number)}
                         onBlur={field.handleBlur}
                         disabled={!selectedCategoryId || levelsLoading}
                       >
