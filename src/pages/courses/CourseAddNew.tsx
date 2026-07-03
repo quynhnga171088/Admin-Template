@@ -54,7 +54,7 @@ const CourseAddNew = () => {
 
   /* Helpers */
   const validateField = (fieldName: keyof CourseFormData) =>
-    ({ value }: { value: any }) => {
+    ({ value }: { value: unknown }) => {
       const result = courseSchema.shape[fieldName].safeParse(value);
       if (!result.success) {
         return result.error.issues.map(i => i.message).join(', ');
@@ -98,8 +98,8 @@ const CourseAddNew = () => {
               <div className="card-body can-card-body">
 
                 {/* Title */}
-                <form.Field name="title" validators={{ onChange: validateField('title') }}
-                  children={field => (
+                <form.Field name="title" validators={{ onChange: validateField('title') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
                         Course Title <span className="can-required">*</span>
@@ -113,11 +113,12 @@ const CourseAddNew = () => {
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <span className="can-char-count">{field.state.value.length}/200</span>
                     </div>
-                  )} />
+                  )}
+                </form.Field>
 
                 {/* Short Description */}
-                <form.Field name="shortDescription" validators={{ onChange: validateField('shortDescription') }}
-                  children={field => (
+                <form.Field name="shortDescription" validators={{ onChange: validateField('shortDescription') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
                         Short Description <span className="can-required">*</span>
@@ -131,11 +132,12 @@ const CourseAddNew = () => {
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <span className="can-char-count">{(field.state.value ?? '').length}/500</span>
                     </div>
-                  )} />
+                  )}
+                </form.Field>
 
                 {/* Full Description */}
-                <form.Field name="description" validators={{ onChange: validateField('description') }}
-                  children={field => (
+                <form.Field name="description" validators={{ onChange: validateField('description') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
                         Full Description <span className="can-required">*</span>
@@ -149,7 +151,8 @@ const CourseAddNew = () => {
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                       <span className="can-char-count">{(field.state.value ?? '').length}/5000</span>
                     </div>
-                  )} />
+                  )}
+                </form.Field>
               </div>
             </div>
 
@@ -161,8 +164,8 @@ const CourseAddNew = () => {
                 </div>
               </div>
               <div className="card-body can-card-body">
-                <form.Field name="thumbnailUrl"
-                  children={field => (
+                <form.Field name="thumbnailUrl">
+                  {field => (
                     <Fragment>
                       {field.state.value ? (
                         <div className="can-thumbnail-preview-wrapper">
@@ -194,7 +197,8 @@ const CourseAddNew = () => {
                         </button>
                       )}
                     </Fragment>
-                  )} />
+                  )}
+                </form.Field>
               </div>
             </div>
           </div>
@@ -210,8 +214,8 @@ const CourseAddNew = () => {
               <div className="card-body can-card-body">
 
                 {/* Status */}
-                <form.Field name="status" validators={{ onChange: validateField('status') }}
-                  children={field => (
+                <form.Field name="status" validators={{ onChange: validateField('status') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
                         Status <span className="can-required">*</span>
@@ -224,11 +228,12 @@ const CourseAddNew = () => {
                         hasError={field.state.meta.errors.length > 0} />
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                     </div>
-                  )} />
+                  )}
+                </form.Field>
 
                 {/* Category */}
-                <form.Field name="categoryId" validators={{ onChange: validateField('categoryId') }}
-                  children={field => (
+                <form.Field name="categoryId" validators={{ onChange: validateField('categoryId') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
                         Category <span className="can-required">*</span>
@@ -239,10 +244,10 @@ const CourseAddNew = () => {
                         value={field.state.value ?? ''}
                         onChange={e => {
                           const val = e.target.value ? Number(e.target.value) : null;
-                          field.handleChange(val);
+                          field.handleChange(val as number);
                           setSelectedCategoryId(val);
                           /* Reset level when category changes */
-                          form.setFieldValue('levelId', null);
+                          form.setFieldValue('levelId', null as unknown as number);
                         }}
                         onBlur={field.handleBlur}
                       >
@@ -253,11 +258,12 @@ const CourseAddNew = () => {
                       </select>
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                     </div>
-                  )} />
+                  )}
+                </form.Field>
 
                 {/* Level — disabled until category is chosen */}
-                <form.Field name="levelId" validators={{ onChange: validateField('levelId') }}
-                  children={field => (
+                <form.Field name="levelId" validators={{ onChange: validateField('levelId') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">
                         Level <span className="can-required">*</span>
@@ -266,7 +272,7 @@ const CourseAddNew = () => {
                         id={field.name} name={field.name}
                         className={`form-control form-select ${field.state.meta.errors.length ? 'error' : ''}`}
                         value={field.state.value ?? ''}
-                        onChange={e => field.handleChange(e.target.value ? Number(e.target.value) : null)}
+                        onChange={e => field.handleChange((e.target.value ? Number(e.target.value) : null) as number)}
                         onBlur={field.handleBlur}
                         disabled={!selectedCategoryId || levelsLoading}
                       >
@@ -283,11 +289,12 @@ const CourseAddNew = () => {
                       </select>
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                     </div>
-                  )} />
+                  )}
+                </form.Field>
 
                 {/* Price */}
-                <form.Field name="price" validators={{ onChange: validateField('price') }}
-                  children={field => (
+                <form.Field name="price" validators={{ onChange: validateField('price') }}>
+                  {field => (
                     <div className="can-field">
                       <label htmlFor={field.name} className="form-label can-label">Price (VND)</label>
                       <div className="input-group">
@@ -307,7 +314,8 @@ const CourseAddNew = () => {
                       )}
                       {field.state.value === 0 && <span className="can-price-free">Free course</span>}
                     </div>
-                  )} />
+                  )}
+                </form.Field>
               </div>
             </div>
 
@@ -321,7 +329,8 @@ const CourseAddNew = () => {
                 categoryId: s.values.categoryId,
                 levelId: s.values.levelId
               })}
-              children={({ title, status, price, thumbnailUrl, categoryId, levelId }) => (
+            >
+              {({ title, status, price, thumbnailUrl, categoryId, levelId }) => (
                 <div className="card can-card can-summary-card">
                   <div className="card-header">
                     <div className="card-header-title can-card-title">
@@ -371,7 +380,8 @@ const CourseAddNew = () => {
                     </ul>
                   </div>
                 </div>
-              )} />
+              )}
+            </form.Subscribe>
           </div>
         </div>
 
@@ -382,7 +392,8 @@ const CourseAddNew = () => {
               <div className="card-body can-card-body">
                 <form.Subscribe
                   selector={s => ({ canSubmit: s.canSubmit, isSubmitting: s.isSubmitting })}
-                  children={({ canSubmit, isSubmitting }) => (
+                >
+                  {({ canSubmit, isSubmitting }) => (
                     <div className="can-layout-action">
                       <button type="button" className="btn btn-light can-btn-cancel" onClick={handleCancel} disabled={isSubmitting}>
                         <i className="fa-regular fa-xmark" /> Cancel
@@ -396,7 +407,8 @@ const CourseAddNew = () => {
                           : <span><i className="fa-regular fa-floppy-disk" /> Save Course</span>}
                       </button>
                     </div>
-                  )} />
+                  )}
+                </form.Subscribe>
               </div>
             </div>
           </div>
