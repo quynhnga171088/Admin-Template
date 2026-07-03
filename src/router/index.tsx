@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     ]
   }, {
     path: '*',
-    lazy: () => import('@/pages/NotFound')
+    lazy: () => import('src/pages/notFound')
   }
 ]);
 

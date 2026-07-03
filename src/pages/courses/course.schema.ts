@@ -8,7 +8,9 @@ export const initialCourseFormValues: ICourseCreateRequest = {
   description: '',
   thumbnailUrl: '',
   price: 0,
-  status: STATE.DRAFT as ICourseStatus
+  status: STATE.DRAFT as ICourseStatus,
+  categoryId: null,
+  levelId: null
 };
 
 export const courseSchema = z.object({
@@ -34,7 +36,19 @@ export const courseSchema = z.object({
   status: z.enum(
     [STATE.DRAFT, STATE.PUBLISHED, STATE.ARCHIVED] as [ICourseStatus, ...ICourseStatus[]],
     { error: 'Invalid status value.' }
-  )
+  ),
+  categoryId: z
+    .number({ error: 'Category is required.' })
+    .int()
+    .positive('Category is required.')
+    .nullable()
+    .refine(val => val !== null, { message: 'Category is required.' }),
+  levelId: z
+    .number({ error: 'Level is required.' })
+    .int()
+    .positive('Level is required.')
+    .nullable()
+    .refine(val => val !== null, { message: 'Level is required.' })
 });
 
 export type CourseFormData = z.infer<typeof courseSchema>;

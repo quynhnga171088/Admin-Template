@@ -11,7 +11,7 @@ import type {
   IAuthState,
   ICourseItem,
   IPagination,
-  IUserState,
+  IUserState
 } from '@/types/types';
 import {
   getPagination,
@@ -25,7 +25,7 @@ import {
   DATE_TIME_FORMAT,
   AVATAR_DEFAULT,
   SCREENS_PATH,
-  QUERY_CONFIG, ROLES_FOR_ADMIN,
+  QUERY_CONFIG, ROLES_FOR_ADMIN
 } from '@/config/constant';
 import Pagination from '@/components/ui/Pagination';
 import { userStore } from '@/stores/user.store';

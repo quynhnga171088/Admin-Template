@@ -102,6 +102,9 @@ export const API_URL = {
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
 
+  GET_LEVELS: '/levels',
+  GET_CATEGORIES: '/categories',
+
   GET_ENROLLMENTS: '/enrollments',
   GET_ENROLLMENT_DETAIL: (enrollmentId: number) => `/enrollments/${enrollmentId}`,
   APPROVE_ENROLLMENT: (enrollmentId: number) => `/enrollments/${enrollmentId}/approve`,

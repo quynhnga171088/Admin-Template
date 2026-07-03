@@ -51,5 +51,13 @@ export const queryKeys = {
   bankInfo: {
     all: ['bankInfo'] as const,
     detail: () => [...queryKeys.bankInfo.all, 'detail'] as const
+  },
+  categories: {
+    all: ['categories'] as const,
+    list: () => [...queryKeys.categories.all, 'list'] as const
+  },
+  levels: {
+    all: ['levels'] as const,
+    byCategory: (categoryId: number) => [...queryKeys.levels.all, 'byCategory', categoryId] as const
   }
 } as const;

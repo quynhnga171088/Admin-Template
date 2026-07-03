@@ -81,10 +81,29 @@ export interface ICourseItem {
   publishedAt?: string;
   enrollmentCount?: number;
   lessons: ILesson[];
+  categoryId?: number;
+  categoryName?: string;
+  levelId?: number;
+  levelName?: string;
 }
 
 export interface ICourseDetail extends ICourseItem {
   description?: string
+}
+
+export interface ICategory {
+  id: number;
+  categoryName: string;
+  description?: string;
+  createdDate: string;
+}
+
+export interface ILevel {
+  id: number;
+  levelName: string;
+  description?: string;
+  categoryId: number;
+  createdDate: string;
 }
 
 export interface ICourseCreateRequest {
@@ -94,6 +113,8 @@ export interface ICourseCreateRequest {
   thumbnailUrl?: string
   price: number
   status: ICourseStatus
+  categoryId: number | null
+  levelId: number | null
 }
 
 export type ICourseUpdateRequest = Partial<ICourseCreateRequest>
