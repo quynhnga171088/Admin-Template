@@ -8,6 +8,7 @@ import {
   deleteCourse
 } from './courses.services';
 import type {
+  IAuthState,
   ICourseItem,
   IPagination,
   IUserState
@@ -20,13 +21,15 @@ import {
 import { queryKeys } from '@/lib/queryKeys';
 import '@/pages/courses/CoursesList.scss';
 import {
+  COURSE_DEFAULT_IMAGE,
   DATE_TIME_FORMAT,
   AVATAR_DEFAULT,
   SCREENS_PATH,
-  QUERY_CONFIG
+  QUERY_CONFIG, ROLES_FOR_ADMIN
 } from '@/config/constant';
 import Pagination from '@/components/ui/Pagination';
 import { userStore } from '@/stores/user.store';
+import { authStore } from '@/stores/auth.store';
 import { modalStore } from '@/stores/modal.store';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -35,6 +38,7 @@ const CoursesList = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const user = authStore((state: IAuthState) => state.user);
   const search = userStore((state: IUserState) => state.search);
   const setAction = userStore((state: IUserState) => state.setAction);
   const action = userStore((state: IUserState) => state.action);
@@ -103,11 +107,7 @@ const CoursesList = () => {
         <div className="card">
           <div className="card-header flex justify-between items-center">
             <div className="card-header-title">Courses</div>
-            <button
-              type="button"
-              className="btn btn-sm btn-primary ml-auto"
-              onClick={() => navigate(SCREENS_PATH.COURSE_ADD_NEW)}
-            >
+            <button type="button" className="btn btn-sm btn-primary ml-auto" onClick={() => navigate(SCREENS_PATH.COURSE_ADD_NEW)}>
               <i className="fa-regular fa-plus" /> Add Course
             </button>
           </div>
@@ -128,18 +128,15 @@ const CoursesList = () => {
             {courses.map((course: ICourseItem) => (
               <div key={course.id} className="grid grid-cols-24 gap-4 courses-item cursor-pointer" onClick={() => navigate(SCREENS_PATH.COURSE_PREVIEW(course.id))}>
                 <div className="col-span-9 md:col-span-8 lg:col-span-7 xl:col-span-4 2xl:col-span-4 courses-item-full-name flex items-center cursor-pointer">
-                  <div
-                    className="courses-item-avatar"
-                    style={{ backgroundImage: `url(${course.teacher.avatarUrl || AVATAR_DEFAULT})` }}
-                    title={course.teacher.fullName}
-                  />
+                  <img className="img-fluid" src={course.teacher.avatarUrl || AVATAR_DEFAULT} alt={course.teacher.fullName} />
+
                   <span className="ml-2!">{course.teacher.fullName}</span>
                 </div>
                 <div className="col-span-7 md:col-span-6 lg:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer">
                   <div
                     className="courses-item-bg-img"
                     style={{
-                      backgroundImage: `url(${course.thumbnailUrl || '/public/images/image-default-course-item.jpg'})`
+                      backgroundImage: `url(${course.thumbnailUrl || COURSE_DEFAULT_IMAGE})`
                     }}
                   />
                 </div>
@@ -170,9 +167,11 @@ const CoursesList = () => {
                   <Link className="btn btn-light-warning btn-icon btn-sm ml-0.5! no-underline" title="Edit" to={SCREENS_PATH.COURSE_EDIT(course.id)}>
                     <i className="fa-regular fa-pen text-sm" aria-hidden="true" />
                   </Link>
-                  <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" title="Delete" onClick={() => confirmDeleteAction(course)}>
-                    <i className="fa-regular fa-trash text-sm" aria-hidden="true" />
-                  </button>
+                  {user && user.role && user.role === ROLES_FOR_ADMIN.ADMIN ?
+                    <button className="btn btn-light-danger btn-icon btn-sm ml-0.5! no-underline" title="Delete" onClick={() => confirmDeleteAction(course)}>
+                      <i className="fa-regular fa-trash text-sm" aria-hidden="true" />
+                    </button>
+                    : ''}
                 </div>
               </div>
             ))}

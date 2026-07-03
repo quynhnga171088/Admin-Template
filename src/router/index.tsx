@@ -40,10 +40,19 @@ const router = createBrowserRouter([
         lazy: () => import('@/pages/courses/chapter/lesson/SectionEditPage')
       }, {
         path: 'enrollments',
-        lazy: () => import('@/pages/enrollment/Enrollments.tsx')
+        lazy: () => import('@/pages/enrollment/Enrollments')
       }, {
         path: 'users',
         lazy: () => import('@/pages/users/UsersList')
+      }, {
+        path: 'profile',
+        lazy: () => import('@/pages/users/profile/ProfilePage')
+      }, {
+        path: 'change-password',
+        lazy: () => import('@/pages/users/profile/ChangePasswordPage')
+      }, {
+        path: 'settings',
+        lazy: () => import('@/pages/settings/SettingsPage')
       }
     ]
   }, {
@@ -51,15 +60,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: SCREENS_PATH.LOGIN,
-        lazy: () => import('@/pages/login/Login.tsx')
+        lazy: () => import('@/pages/login/Login')
       }, {
         path: SCREENS_PATH.REGISTER,
-        lazy: () => import('@/pages/register/Register.tsx')
+        lazy: () => import('@/pages/register/Register')
       }
     ]
   }, {
     path: '*',
-    lazy: () => import('@/pages/NotFound')
+    lazy: () => import('src/pages/notFound')
   }
 ]);
 

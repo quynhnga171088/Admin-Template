@@ -4,6 +4,9 @@ import favicon from '@/assets/logo/favicon.svg';
 import type { IDropdownOption } from '@/types/types';
 
 export const SCREENS_PATH = {
+  USER_PROFILE: '/profile',
+  CHANGE_PASSWORD: '/change-password',
+  SETTINGS: '/settings',
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
@@ -36,7 +39,8 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
   COURSE_ADD_NEW: '/courses/add',
   COURSE_CHAPTERS: '/chapters',
   COURSE_REGISTRATION: '/course-registration',
-  COURSE_PREVIEW: '/preview'
+  COURSE_PREVIEW: '/preview',
+  SETTINGS: '/settings'
 };
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -91,11 +95,15 @@ export const LOGO_WHITE = logoWhite;
 export const FAVICON = favicon;
 
 export const API_URL = {
+  VIETQR_BANKS_URL: 'https://api.vietqr.io/v2/banks',
   LOGIN: '/auth/login',
   TEACH_REGISTER: '/auth/teach/register',
   STUDENT_REGISTER: '/auth/register',
   GET_COURSES_LIST: '/courses',
   GET_COURSE_DETAIL: '/courses',
+
+  GET_LEVELS: '/levels',
+  GET_CATEGORIES: '/categories',
 
   GET_ENROLLMENTS: '/enrollments',
   GET_ENROLLMENT_DETAIL: (enrollmentId: number) => `/enrollments/${enrollmentId}`,
@@ -110,12 +118,19 @@ export const API_URL = {
   ADMIN_UPDATE_USER: (userId: number) => `/admin/users/${userId}`,
   ADMIN_DELETE_USER: (userId: number) => `/admin/users/${userId}`,
   ADMIN_GET_USER_DETAIL: (userId: number) => `/admin/users/${userId}`,
+  ADMIN_UPDATE_USER_INFO: (userId: number) => `/admin/users/info/${userId}`,
+  ADMIN_CHANGE_PASSWORD: '/admin/users/password',
 
   ADMIN_REPORT_OVERVIEW: '/admin/reports/overview',
   ADMIN_REPORT_COURSES: '/admin/reports/courses/',
   ADMIN_REPORT_STUDENT: '/admin/reports/students/',
   UPLOAD_IMAGE: '/upload/image',
   UPLOAD_VIDEO: '/upload/video',
+
+  GET_SETTINGS: '/admin/config',
+  UPDATE_SETTINGS: (key: string) => `/admin/config/${key}`,
+  GET_BANK_INFO: '/admin/config/bank-info',
+  UPDATE_BANK_INFO: '/admin/config/bank-info',
 
   /* chapters */
   CHAPTERS: (courseId: number | string) => `/courses/${courseId}/chapters`,

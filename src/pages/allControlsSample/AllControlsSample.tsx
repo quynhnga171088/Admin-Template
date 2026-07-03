@@ -26,7 +26,6 @@ const FormControlsDemoPage = () => {
   return (
     <div className="grid grid-cols-12 gap-6">
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── INPUT TEXT ──────────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">Input Text</div>
@@ -117,7 +116,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── SELECT ──────────────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">Select / Dropdown</div>
@@ -181,7 +179,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── FILE INPUT ──────────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">File Input & Color</div>
@@ -214,7 +211,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── CHECKBOX ────────────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">Checkbox</div>
@@ -249,7 +245,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── TOGGLE SWITCH ───────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">Toggle Switch</div>
@@ -277,7 +272,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── RANGE SLIDER ────────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">Range Slider</div>
@@ -312,7 +306,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── INPUT GROUP ─────────────────────────────── */}
         <div className="card lg:col-span-2">
           <div className="card-header">
             <div className="card-header-title">Input Group (Kết hợp input với text/button)</div>
@@ -360,7 +353,6 @@ const FormControlsDemoPage = () => {
         </div>
       </div>
       <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4 2xl:col-span-3">
-        {/* ── TEXTAREA ────────────────────────────────── */}
         <div className="card">
           <div className="card-header">
             <div className="card-header-title">Textarea</div>

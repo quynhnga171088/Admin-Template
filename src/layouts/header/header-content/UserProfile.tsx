@@ -1,16 +1,19 @@
+import { Navigate, useNavigate, Link } from 'react-router-dom';
+
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import { useDetectOutsideClick } from 'src/components/useDetectOutsideClick';
-import { authStore } from '@/stores/auth.store.ts';
+import { authStore } from '@/stores/auth.store';
 import { clearAllDataWhenLogout } from '@/layouts/header/header-content/userProfile.services';
-import type { IAuthState } from '@/types/types.ts';
-import { Navigate } from 'react-router-dom';
+import type { IAuthState } from '@/types/types';
 import {
   SCREENS_PATH,
-  AVATAR_DEFAULT
-} from '@/config/constant.ts';
+  AVATAR_DEFAULT,
+  ROLES_FOR_ADMIN
+} from '@/config/constant';
 
 const UserProfile = () => {
   const { ref, isOpen, setIsOpen } = useDetectOutsideClick(false);
+  const navigate = useNavigate();
 
   const user = authStore((state: IAuthState) => state.user);
 
@@ -34,7 +37,7 @@ const UserProfile = () => {
           <div className="dropdown-header bg-linear-gradient-primary flex items-center justify-between px-[1.25rem]! py-[1rem]!">
             <div className="mb-1 flex items-center">
               <div className="shrink-0">
-                <img src={user.avatarUrl || AVATAR_DEFAULT} alt="user-image" className="rounded-full" width={40} height={40} />
+                <img src={user.avatarUrl || AVATAR_DEFAULT} alt={user.fullName} className="img-fluid" />
               </div>
               <div className="ms-3 grow">
                 <h6 className="mb-1 text-white">{user.fullName}</h6>
@@ -44,24 +47,32 @@ const UserProfile = () => {
           </div>
           <div className="dropdown-body px-[1.25rem]! py-[1rem]!">
             <SimpleBarScroll className="profile-notification-scroll position-relative" style={{ maxHeight: 'calc(100vh - 225px)' }}>
-              <div className="dropdown-item cursor-pointer">
-                <span>
-                  <i className="fa-thin fa-gear me-2 align-middle" />
-                  <span>Settings</span>
-                </span>
-              </div>
-              <div className="dropdown-item cursor-pointer">
-                <span>
-                  <i className="fa-thin fa-share-all me-2 align-middle" />
-                  <span>Share</span>
-                </span>
-              </div>
-              <div className="dropdown-item cursor-pointer">
-                <span>
-                  <i className="fa-thin fa-lock me-2 align-middle" />
-                  <span>Change Password</span>
-                </span>
-              </div>
+              {(user.role === ROLES_FOR_ADMIN.ADMIN || user.role === ROLES_FOR_ADMIN.TEACHER) && (
+                <div
+                  className="dropdown-item cursor-pointer"
+                  onClick={() => { setIsOpen(false); navigate(SCREENS_PATH.USER_PROFILE); }}
+                >
+                  <span>
+                    <i className="fa-thin fa-user-pen me-2 align-middle" />
+                    <span>Edit Profile</span>
+                  </span>
+                </div>
+              )}
+              {(user.role === ROLES_FOR_ADMIN.ADMIN || user.role === ROLES_FOR_ADMIN.TEACHER) && (
+                <Link className="dropdown-item" onClick={() => setIsOpen(false)} to={SCREENS_PATH.CHANGE_PASSWORD}>
+                  <span>
+                    <i className="fa-thin fa-lock me-2 align-middle" />
+                    <span>Change Password</span>
+                  </span>
+                </Link>
+              )}
+              {user.role === ROLES_FOR_ADMIN.ADMIN &&
+                <Link className="dropdown-item" onClick={() => setIsOpen(false)} to={SCREENS_PATH.SETTINGS}>
+                  <span>
+                    <i className="fa-thin fa-gear me-2 align-middle" />
+                    <span>Settings</span>
+                  </span>
+                </Link>}
               <div className="my-3 grid">
                 <button className="btn btn-primary flex items-center justify-center" onClick={() => clearAllDataWhenLogout()}>
                   <i className="fa-thin fa-arrow-left-from-arc" /> Logout

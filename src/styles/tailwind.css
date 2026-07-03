@@ -204,6 +204,7 @@
   --color-primary-950: var(--primary-950, #070b0d);
 
   /* ── Color scale: secondary ───────────────────────────────────────── */
+  --color-secondary-10: #e5e8ec;
   --color-secondary-50:  #bec6ce;
   --color-secondary-100: #b2bcc5;
   --color-secondary-200: #9ba8b4;

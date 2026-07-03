@@ -169,6 +169,13 @@ html {
 }
 
 .img-fluid {
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  object-fit: cover;
   border-radius: 50%;
   border: 2px solid var(--color-info-700);
 }
@@ -220,4 +227,9 @@ html {
   justify-content: center;
   border-radius: 5px;
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+
+.can-required {
+  color: #ff4d4f;
+  margin-left: 2px;
 }

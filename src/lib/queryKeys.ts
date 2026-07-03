@@ -43,5 +43,21 @@ export const queryKeys = {
     all: ['sections'] as const,
     byLesson: (courseId: number | string, chapterId: number | string, lessonId: number | string) =>
       [...queryKeys.sections.all, 'course', courseId, 'chapter', chapterId, 'lesson', lessonId] as const
+  },
+  settings: {
+    all: ['settings'] as const,
+    list: () => [...queryKeys.settings.all, 'list'] as const
+  },
+  bankInfo: {
+    all: ['bankInfo'] as const,
+    detail: () => [...queryKeys.bankInfo.all, 'detail'] as const
+  },
+  categories: {
+    all: ['categories'] as const,
+    list: () => [...queryKeys.categories.all, 'list'] as const
+  },
+  levels: {
+    all: ['levels'] as const,
+    byCategory: (categoryId: number) => [...queryKeys.levels.all, 'byCategory', categoryId] as const
   }
 } as const;

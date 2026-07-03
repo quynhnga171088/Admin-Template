@@ -81,10 +81,29 @@ export interface ICourseItem {
   publishedAt?: string;
   enrollmentCount?: number;
   lessons: ILesson[];
+  categoryId?: number;
+  categoryName?: string;
+  levelId?: number;
+  levelName?: string;
 }
 
 export interface ICourseDetail extends ICourseItem {
   description?: string
+}
+
+export interface ICategory {
+  id: number;
+  categoryName: string;
+  description?: string;
+  createdDate: string;
+}
+
+export interface ILevel {
+  id: number;
+  levelName: string;
+  description?: string;
+  categoryId: number;
+  createdDate: string;
 }
 
 export interface ICourseCreateRequest {
@@ -94,6 +113,8 @@ export interface ICourseCreateRequest {
   thumbnailUrl?: string
   price: number
   status: ICourseStatus
+  categoryId: number | null
+  levelId: number | null
 }
 
 export type ICourseUpdateRequest = Partial<ICourseCreateRequest>
@@ -339,6 +360,7 @@ export interface IStudentReport {
 /* For Dropdown controls */
 export interface IDropdownOption {
   icon?: string;
+  imgUrl?: string;
   label: string;
   value: string | number;
   className?: string | null | undefined
@@ -386,4 +408,57 @@ export interface IRecentEnrollment {
 export interface IUserDetail {
   user: IUser,
   recentEnrollments: IRecentEnrollment[]
+}
+
+export interface IUpdateUserInfoRequest {
+  fullName?: string;
+  phone?: string;
+  avatarUrl?: string;
+}
+
+export interface IChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ISetting {
+  key: string;
+  value: string;
+  description: string;
+}
+
+export interface ISettingUpdateRequest {
+  value: string;
+}
+
+export interface IBankInfo {
+  id: number
+  bankName: string
+  accountNumber: string
+  accountName: string
+  branch?: string
+  transferTemplate?: string
+  qrImageUrl?: string
+  updatedAt: string
+}
+
+export interface IUpdateBankInfoRequest {
+  bankName: string
+  accountNumber: string
+  accountName: string
+  branch?: string
+  transferTemplate?: string
+  qrImageUrl?: string
+}
+
+export interface IVietQRBank {
+  id: number
+  name: string
+  code: string
+  bin: string
+  shortName: string
+  logo: string
+  transferSupported: number
+  lookupSupported: number
 }
