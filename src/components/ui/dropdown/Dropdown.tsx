@@ -27,7 +27,7 @@ export const Dropdown = ({
   hasError,
   portal = false
 }: {
-  dataSelected: string | null;
+  dataSelected: string | number | null;
   setDataSelected: (dataSelected: any) => void;
   itemData: IDropdownOption[];
   id?: string;
@@ -138,15 +138,15 @@ export const Dropdown = ({
           menu
         ))}
 
-      {getItemDataByValue && (
-        <div className="can-status-preview text-right">
-          <span className={`can-status-badge can-status-badge--${(getItemDataByValue.value as ICourseStatus).toLowerCase()}`}>
-            {getItemDataByValue.value === STATE.DRAFT && 'Draft'}
-            {getItemDataByValue.value === STATE.PUBLISHED && 'Published'}
-            {getItemDataByValue.value === STATE.ARCHIVED && 'Archived'}
-          </span>
-        </div>
-      )}
+      {/*{getItemDataByValue && (*/}
+      {/*  <div className="can-status-preview text-right">*/}
+      {/*    <span className={`can-status-badge can-status-badge--${(getItemDataByValue.value as ICourseStatus).toLowerCase()}`}>*/}
+      {/*      {getItemDataByValue.value === STATE.DRAFT && 'Draft'}*/}
+      {/*      {getItemDataByValue.value === STATE.PUBLISHED && 'Published'}*/}
+      {/*      {getItemDataByValue.value === STATE.ARCHIVED && 'Archived'}*/}
+      {/*    </span>*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
   );
 };

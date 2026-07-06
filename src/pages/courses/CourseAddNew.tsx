@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { createCourse, uploadImage } from './courses.services';
 import { courseSchema, initialCourseFormValues, type CourseFormData } from '@/pages/courses/course.schema';
-import type { ICourseStatus } from '@/types/types';
+import type { ICategory, ICourseStatus, IDropdownOption } from '@/types/types';
 import {
   STATE,
   SCREENS_PATH,
@@ -74,6 +74,14 @@ const CourseAddNew = () => {
   };
 
   const handleCancel = () => navigate(SCREENS_PATH.COURSE_LIST);
+
+  const convertCategoryDataForDropdown = (): IDropdownOption[] => {
+    return categories.map((category: ICategory) => ({
+      label: `${category.categoryName}`,
+      value: category.id,
+      className: 'dropdown-item-status default'
+    }));
+  };
 
   return (
     <div className="course-add-new">
@@ -238,24 +246,13 @@ const CourseAddNew = () => {
                       <label htmlFor={field.name} className="form-label can-label">
                         Category <span className="can-required">*</span>
                       </label>
-                      <select
-                        id={field.name} name={field.name}
-                        className={`form-control form-select ${field.state.meta.errors.length ? 'error' : ''}`}
-                        value={field.state.value ?? ''}
-                        onChange={e => {
-                          const val = e.target.value ? Number(e.target.value) : null;
-                          field.handleChange(val as number);
-                          setSelectedCategoryId(val);
-                          /* Reset level when category changes */
-                          form.setFieldValue('levelId', null as unknown as number);
-                        }}
+                      <Dropdown id={field.name} name={field.name}
+                        dataSelected={field.state.value}
+                        itemData={convertCategoryDataForDropdown()}
+                        setDataSelected={val => field.handleChange(val as number)}
                         onBlur={field.handleBlur}
-                      >
-                        <option value="">-- Select category --</option>
-                        {categories.map(cat => (
-                          <option key={cat.id} value={cat.id}>{cat.categoryName}</option>
-                        ))}
-                      </select>
+                        hasError={field.state.meta.errors.length > 0} />
+
                       {field.state.meta.errors.length > 0 && <span className="error-message can-error-msg">{field.state.meta.errors.join(', ')}</span>}
                     </div>
                   )}

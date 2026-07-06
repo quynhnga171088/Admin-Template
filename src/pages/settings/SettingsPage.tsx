@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useSettingsQuery, useUpdateSettingMutation } from '@/lib/queries/settings.queries';
 import { useBankInfoQuery, useUpdateBankInfoMutation, useVietQRBanksQuery } from '@/lib/queries/bank.queries';
 import { buildVietQRUrl } from '@/lib/api/bank.api';
-import type { IBankInfo, IDropdownOption, ISetting, IUpdateBankInfoRequest, IVietQRBank } from '@/types/types';
+import type { IDropdownOption, ISetting, IUpdateBankInfoRequest, IVietQRBank } from '@/types/types';
 import '@/pages/settings/SettingsPage.scss';
 import { modalStore } from '@/stores/modal.store';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
@@ -48,16 +48,6 @@ const SettingItem = ({ setting, saving, onSave }: SettingItemProps) => {
   );
 };
 
-/* Bank Info Card */
-const EMPTY_FORM: IUpdateBankInfoRequest = {
-  bankName: '',
-  accountNumber: '',
-  accountName: '',
-  branch: '',
-  transferTemplate: '',
-  qrImageUrl: ''
-};
-
 /** Stable empty reference — prevents false !== when React Query hasn't loaded yet */
 const EMPTY_BANKS: IVietQRBank[] = [];
 
@@ -85,11 +75,32 @@ const BankInfoCard = () => {
     setOpen(true);
   }, [setMessage, setEnableCancelButton, setEnableOkButton, setTitle, setOpen]);
 
-  const [form, setForm] = useState<IUpdateBankInfoRequest>(EMPTY_FORM);
-  const [selectedBank, setSelectedBank] = useState<IVietQRBank | null>(null);
+  /* Base form synced from server — fully derived, no state or effect needed */
+  const baseForm = useMemo<IUpdateBankInfoRequest>(() => ({
+    bankName: bankInfo?.bankName ?? '',
+    accountNumber: bankInfo?.accountNumber ?? '',
+    accountName: bankInfo?.accountName ?? '',
+    branch: bankInfo?.branch ?? '',
+    transferTemplate: bankInfo?.transferTemplate ?? '',
+    qrImageUrl: bankInfo?.qrImageUrl ?? ''
+  }), [bankInfo]);
+
+  /* Only the fields the user has explicitly edited are stored as state */
+  const [overrides, setOverrides] = useState<Partial<IUpdateBankInfoRequest>>({});
   const [savedOk, setSavedOk] = useState(false);
-  const [prevBankInfo, setPrevBankInfo] = useState<IBankInfo | undefined>(bankInfo);
-  const [prevVietQRBanks, setPrevVietQRBanks] = useState<IVietQRBank[]>(vietQRBanks);
+
+  /* Merged view: server defaults + local edits */
+  const form = useMemo(() => ({ ...baseForm, ...overrides }), [baseForm, overrides]);
+
+  /* selectedBank fully derived from form.bankName — no state or effect needed */
+  const selectedBank = useMemo(() => {
+    if (!vietQRBanks.length || !form.bankName) return null;
+    return vietQRBanks.find(
+      b =>
+        b.shortName.toLowerCase() === form.bankName.toLowerCase() ||
+        b.code.toLowerCase() === form.bankName.toLowerCase()
+    ) ?? null;
+  }, [vietQRBanks, form.bankName]);
 
   /* Auto-clear savedOk banner */
   useEffect(() => {
@@ -99,58 +110,25 @@ const BankInfoCard = () => {
     return () => clearTimeout(timer);
   }, [openInfoModal, savedOk]);
 
-  /* Populate form from fetched data — derived state during render */
-  if (bankInfo !== prevBankInfo || (bankInfo && !form.bankName)) {
-    setPrevBankInfo(bankInfo);
-    if (bankInfo) {
-      setForm({
-        bankName: bankInfo.bankName ?? '',
-        accountNumber: bankInfo.accountNumber ?? '',
-        accountName: bankInfo.accountName ?? '',
-        branch: bankInfo.branch ?? '',
-        transferTemplate: bankInfo.transferTemplate ?? '',
-        qrImageUrl: bankInfo.qrImageUrl ?? ''
-      });
-    }
-  }
-
-  /* Auto-match saved bankName to VietQR bank list — derived state during render */
-  if (vietQRBanks !== prevVietQRBanks || bankInfo !== prevBankInfo || !selectedBank) {
-    setPrevVietQRBanks(vietQRBanks);
-    if (vietQRBanks.length && bankInfo?.bankName) {
-      const matched = vietQRBanks.find(b => b.shortName.toLowerCase() === bankInfo.bankName.toLowerCase() || b.code.toLowerCase() === bankInfo.bankName.toLowerCase()) ?? null;
-      setSelectedBank(matched);
-    }
-  }
-
-  const set = (field: keyof IUpdateBankInfoRequest, value: string) => setForm(prev => ({ ...prev, [field]: value }));
+  const set = (field: keyof IUpdateBankInfoRequest, value: string) =>
+    setOverrides(prev => ({ ...prev, [field]: value }));
 
   const handleBankSelect = (bin: string) => {
     const bank = vietQRBanks.find(b => b.bin === bin) ?? null;
-    setSelectedBank(bank);
-    if (bank) set('bankName', bank.shortName);
+    set('bankName', bank?.shortName ?? '');
   };
 
   const handleSave = () => {
     updateBankInfo(form, {
       onSuccess: () => {
+        setOverrides({}); // Clear local edits; baseForm will auto-update from React Query refetch
         setSavedOk(true);
       }
     });
   };
 
-  /* Dirty check */
-  const snapshot = bankInfo
-    ? {
-      bankName: bankInfo.bankName ?? '',
-      accountNumber: bankInfo.accountNumber ?? '',
-      accountName: bankInfo.accountName ?? '',
-      branch: bankInfo.branch ?? '',
-      transferTemplate: bankInfo.transferTemplate ?? '',
-      qrImageUrl: bankInfo.qrImageUrl ?? ''
-    }
-    : null;
-  const isDirty = snapshot && JSON.stringify(form) !== JSON.stringify(snapshot);
+  /* Dirty check: compare merged form against server snapshot */
+  const isDirty = bankInfo !== null && JSON.stringify(form) !== JSON.stringify(baseForm);
 
   /* QR preview URL */
   const qrUrl = selectedBank && form.accountNumber ? buildVietQRUrl(selectedBank.bin, form.accountNumber, form.accountName, 0, form.transferTemplate ?? '') : null;
