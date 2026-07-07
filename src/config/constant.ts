@@ -39,6 +39,8 @@ export const SCREENS_PATH_FOR_SIDEBAR = {
   TYPOGRAPHY: '/typography',
   COURSE_LIST: '/courses',
   ENROLLMENTS: '/enrollments',
+  USERS: '/users',
+  CATEGORIES: '/categories',
   COURSE_ADD_NEW: '/courses/add',
   COURSE_CHAPTERS: '/chapters',
   COURSE_REGISTRATION: '/course-registration',

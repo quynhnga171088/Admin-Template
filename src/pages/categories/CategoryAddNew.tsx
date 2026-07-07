@@ -50,8 +50,8 @@ const CategoryAddNew = () => {
             {/* Category Name */}
             <form.Field name="categoryName" validators={{ onChange: validateField('categoryName') }}>
               {field => (
-                <div className="mb-3">
-                  <label htmlFor={field.name} className="form-label">
+                <div className="mb-5!">
+                  <label htmlFor={field.name} className="form-label font-semibold">
                     Category Name <span className="text-danger">*</span>
                   </label>
                   <input
@@ -75,14 +75,14 @@ const CategoryAddNew = () => {
             {/* Avatar */}
             <form.Field name="avatar" validators={{ onChange: validateField('avatar') }}>
               {field => (
-                <div className="mb-3">
-                  <label htmlFor={field.name} className="form-label">Avatar</label>
+                <div className="mb-5!">
+                  <label htmlFor={field.name} className="form-label font-semibold">Avatar</label>
                   <input
                     id={field.name}
                     name={field.name}
                     type="text"
                     className={`form-control ${field.state.meta.errors.length ? 'is-invalid' : ''}`}
-                    placeholder="e.g. fa-code, 🎓 or icon class name (max 50 chars)"
+                    placeholder="Input fa-icon (max 50 chars)"
                     value={field.state.value ?? ''}
                     onChange={e => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
@@ -101,8 +101,8 @@ const CategoryAddNew = () => {
             {/* Description */}
             <form.Field name="description" validators={{ onChange: validateField('description') }}>
               {field => (
-                <div className="mb-3">
-                  <label htmlFor={field.name} className="form-label">Description</label>
+                <div className="mb-5!">
+                  <label htmlFor={field.name} className="form-label font-semibold">Description</label>
                   <textarea
                     id={field.name}
                     name={field.name}
@@ -119,9 +119,8 @@ const CategoryAddNew = () => {
                 </div>
               )}
             </form.Field>
-
           </div>
-          <div className="card-footer d-flex gap-2 justify-content-end">
+          <div className="card-footer flex gap-2 justify-end">
             <button type="button" className="btn btn-light" onClick={handleCancel}>
               <i className="fa-regular fa-xmark" /> Cancel
             </button>

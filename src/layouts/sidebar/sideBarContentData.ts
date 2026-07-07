@@ -74,7 +74,13 @@ const mainFunctions = {
       title: 'Users Management',
       type: 'item',
       icon: 'fa-regular fa-users',
-      url: '/users'
+      url: SCREENS_PATH_FOR_SIDEBAR.USERS
+    }, {
+      id: 'categories',
+      title: 'Categories Management',
+      type: 'item',
+      icon: 'fa-regular fa-tags',
+      url: SCREENS_PATH_FOR_SIDEBAR.CATEGORIES
     }, {
       id: 'settings',
       title: 'System Configuration',
