@@ -28,7 +28,10 @@ export const SCREENS_PATH = {
   /** @todo Route not yet implemented — no matching entry in router/index.tsx */
   VERIFY_EMAIL: '/verify-email',
   /** @todo Route not yet implemented — no matching entry in router/index.tsx */
-  VERIFY_OTP: '/verify-otp'
+  VERIFY_OTP: '/verify-otp',
+  CATEGORY_LIST: '/categories',
+  CATEGORY_ADD_NEW: '/categories/add',
+  CATEGORY_EDIT: (id: number | string) => `/categories/${id}/edit`
 };
 
 export const SCREENS_PATH_FOR_SIDEBAR = {
@@ -104,6 +107,10 @@ export const API_URL = {
 
   GET_LEVELS: '/levels',
   GET_CATEGORIES: '/categories',
+  ADD_CATEGORY: '/categories',
+  GET_CATEGORY: (categoryId: number) => `/categories/${categoryId}`,
+  UPDATE_CATEGORY: (categoryId: number) => `/categories/${categoryId}`,
+  REMOVE_CATEGORY: (categoryId: number) => `/categories/${categoryId}`,
 
   GET_ENROLLMENTS: '/enrollments',
   GET_ENROLLMENT_DETAIL: (enrollmentId: number) => `/enrollments/${enrollmentId}`,

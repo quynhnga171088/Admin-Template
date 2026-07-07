@@ -79,6 +79,7 @@ const CourseAddNew = () => {
     return categories.map((category: ICategory) => ({
       label: `${category.categoryName}`,
       value: category.id,
+      icon: category.avatar,
       className: 'dropdown-item-status default'
     }));
   };

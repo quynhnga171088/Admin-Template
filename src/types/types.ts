@@ -91,10 +91,17 @@ export interface ICourseDetail extends ICourseItem {
   description?: string
 }
 
+export interface ICategoryCreateRequest {
+  categoryName: string;
+  description?: string;
+  avatar?: string;
+}
+
 export interface ICategory {
   id: number;
   categoryName: string;
   description?: string;
+  avatar?: string;
   createdDate: string;
 }
 

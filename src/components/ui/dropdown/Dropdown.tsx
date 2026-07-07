@@ -14,8 +14,7 @@ import {
 import { useDetectOutsideClick } from '@/components/useDetectOutsideClick';
 import SimpleBarScroll from '@/components/SimpleBarScroll';
 import '@/components/ui/dropdown/Dropdown.scss';
-import type { ICourseStatus, IDropdownOption } from '@/types/types';
-import { STATE } from '@/config/constant';
+import type { IDropdownOption } from '@/types/types';
 
 export const Dropdown = ({
   dataSelected,

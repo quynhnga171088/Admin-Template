@@ -53,6 +53,15 @@ const router = createBrowserRouter([
       }, {
         path: 'settings',
         lazy: () => import('@/pages/settings/SettingsPage')
+      }, {
+        path: 'categories',
+        lazy: () => import('@/pages/categories/CategoriesList')
+      }, {
+        path: 'categories/add',
+        lazy: () => import('@/pages/categories/CategoryAddNew')
+      }, {
+        path: 'categories/:id/edit',
+        lazy: () => import('@/pages/categories/CategoryEditPage')
       }
     ]
   }, {
