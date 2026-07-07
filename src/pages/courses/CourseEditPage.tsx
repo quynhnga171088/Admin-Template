@@ -74,16 +74,14 @@ const CourseEditPage = () => {
   /* Pre-fill form when courseDetail arrives */
   useEffect(() => {
     if (!courseDetail) return;
-    form.reset({
-      title: courseDetail.title ?? '',
-      shortDescription: courseDetail.shortDescription ?? '',
-      description: courseDetail.description ?? '',
-      thumbnailUrl: courseDetail.thumbnailUrl ?? '',
-      price: courseDetail.price ?? 0,
-      status: (courseDetail.status ?? STATE.DRAFT) as CourseFormData['status'],
-      categoryId: (courseDetail.categoryId ?? null) as unknown as number,
-      levelId: (courseDetail.levelId ?? null) as unknown as number
-    });
+    form.setFieldValue('title', courseDetail.title ?? '');
+    form.setFieldValue('shortDescription', courseDetail.shortDescription ?? '');
+    form.setFieldValue('description', courseDetail.description ?? '');
+    form.setFieldValue('thumbnailUrl', courseDetail.thumbnailUrl ?? '');
+    form.setFieldValue('price', courseDetail.price ?? 0);
+    form.setFieldValue('status', (courseDetail.status ?? STATE.DRAFT) as CourseFormData['status']);
+    form.setFieldValue('categoryId', (courseDetail.categoryId ?? null) as unknown as number);
+    form.setFieldValue('levelId', (courseDetail.levelId ?? null) as unknown as number);
   }, [courseDetail, form]);
 
   useEffect(() => { setProcessing(isLoading); }, [isLoading, setProcessing]);
