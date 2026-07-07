@@ -249,7 +249,10 @@ const CourseAddNew = () => {
                       <Dropdown id={field.name} name={field.name}
                         dataSelected={field.state.value}
                         itemData={convertCategoryDataForDropdown()}
-                        setDataSelected={val => field.handleChange(val as number)}
+                        setDataSelected={val => {
+                          field.handleChange(val as number);
+                          setSelectedCategoryId(val as number);
+                        }}
                         onBlur={field.handleBlur}
                         hasError={field.state.meta.errors.length > 0} />
 
