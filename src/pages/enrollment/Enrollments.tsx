@@ -18,10 +18,11 @@ import {
 import {
   COURSE_DEFAULT_IMAGE,
   ENROLLMENT_STATE,
+  DATE_TIME_FORMAT,
   AVATAR_DEFAULT,
   QUERY_CONFIG,
   SCREENS_PATH,
-  DATE_FORMAT, DATE_TIME_FORMAT,
+  DATE_FORMAT
 } from '@/config/constant';
 import '@/pages/enrollment/Enrollments.scss';
 import dayjs from 'dayjs';

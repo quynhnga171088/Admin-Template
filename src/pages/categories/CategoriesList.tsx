@@ -23,8 +23,7 @@ const CategoriesList = () => {
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteCategory(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all });
-      setDeletingId(null);
+      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all }).then(() => setDeletingId(null));
     }
   });
 

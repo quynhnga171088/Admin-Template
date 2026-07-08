@@ -170,8 +170,8 @@ const Login = () => {
               <div className="login-redirect" style={{ textAlign: 'center', fontSize: '0.875rem', color: '#6b7280', marginTop: '0.5rem' }}>
                 Don't have an account?{' '}
                 <span
-                  style={{ color: '#41c3df', fontWeight: 600, cursor: 'pointer' }}
                   onClick={() => navigate(SCREENS_PATH.REGISTER)}
+                  className="login-redirect-button"
                   role="button"
                   tabIndex={0}
                   onKeyDown={e => e.key === 'Enter' && navigate(SCREENS_PATH.REGISTER)}
