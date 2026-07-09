@@ -114,7 +114,7 @@ export const Dropdown = ({
         {...(portal ? getReferenceProps({ onBlur }) : { onClick: () => setLegacyOpen(!legacyOpen), onBlur })}
       >
         <div className="flex justify-between items-center">
-          <span className="dropdown-selected-text-content flex">
+          <span className="dropdown-selected-text-content flex items-center">
             {getItemDataByValue && getItemDataByValue.icon ? <i className={`fa-regular ${getItemDataByValue.icon} mr-2!`} /> : null}
             {getItemDataByValue && getItemDataByValue.imgUrl ? <img src={getItemDataByValue.imgUrl} alt={getItemDataByValue.label} style={{ height: '25px' }} /> : null}
             {getItemDataByValue ? <div className="truncate">{getItemDataByValue.label}</div> : 'Select Status'}
@@ -136,16 +136,6 @@ export const Dropdown = ({
         ) : (
           menu
         ))}
-
-      {/*{getItemDataByValue && (*/}
-      {/*  <div className="can-status-preview text-right">*/}
-      {/*    <span className={`can-status-badge can-status-badge--${(getItemDataByValue.value as ICourseStatus).toLowerCase()}`}>*/}
-      {/*      {getItemDataByValue.value === STATE.DRAFT && 'Draft'}*/}
-      {/*      {getItemDataByValue.value === STATE.PUBLISHED && 'Published'}*/}
-      {/*      {getItemDataByValue.value === STATE.ARCHIVED && 'Archived'}*/}
-      {/*    </span>*/}
-      {/*  </div>*/}
-      {/*)}*/}
     </div>
   );
 };

@@ -34,7 +34,7 @@ const UserProfile = () => {
       </a>
       {isOpen && (
         <div className="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown overflow-hidden p-2">
-          <div className="dropdown-header bg-linear-gradient-primary flex items-center justify-between px-[1.25rem]! py-[1rem]!">
+          <div className="bg-linear-gradient-primary flex items-center justify-between px-[1.25rem]! py-[1rem]!">
             <div className="mb-1 flex items-center">
               <div className="shrink-0">
                 <img src={user.avatarUrl || AVATAR_DEFAULT} alt={user.fullName} className="img-fluid" />
