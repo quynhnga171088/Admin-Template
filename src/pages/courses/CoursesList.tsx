@@ -17,7 +17,7 @@ import {
   getPagination,
   getColorByState,
   getFormatVNCurrency
-} from '@/util/util.tsx';
+} from '@/util/util';
 import { queryKeys } from '@/lib/queryKeys';
 import '@/pages/courses/CoursesList.scss';
 import {
