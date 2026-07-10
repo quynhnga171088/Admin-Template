@@ -1,6 +1,5 @@
-import { categoriesApi } from '@/lib/api/categories.api';
-import type { ICategoryCreateRequest, ICategoryUpdateRequest } from '@/lib/api/categories.api';
-import type { ICategory } from '@/types/types';
+import { type ICategoryUpdateRequest, categoriesApi } from '@/lib/api/categories.api';
+import type { ICategory, ICategoryCreateRequest } from '@/types/types';
 
 export const fetchAllCategories = (): Promise<ICategory[]> =>
   categoriesApi.getAll().then(r => r.data);

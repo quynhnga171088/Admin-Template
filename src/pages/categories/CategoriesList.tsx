@@ -5,9 +5,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import '@/pages/categories/CategoriesList.scss';
 import { ROLES_FOR_ADMIN, SCREENS_PATH } from '@/config/constant';
 import { queryKeys } from '@/lib/queryKeys';
-import { fetchAllCategories, deleteCategory } from './categories.services';
+import { fetchAllCategories, deleteCategory } from '@/pages/categories/categories.services';
 import type { IAuthState, ICategory } from '@/types/types';
-import { authStore } from '@/stores/auth.store.ts';
+import { authStore } from '@/stores/auth.store';
 
 const CategoriesList = () => {
   const queryClient = useQueryClient();
